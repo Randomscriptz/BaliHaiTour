@@ -1,0 +1,131 @@
+<!-- View list of planned and scheduled cruises -->
+<!--  file:///home/drshelby/MyDocuments/HTML/BaliHai/Upkeep/ViewSchedule.html -->
+<!--  http://www.balihitours.com/Upkeep/ViewSchedule.html -->
+<html>
+
+<head>
+
+<meta name="resource-type" content="document" />
+
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+
+   <title>Bali Hai Tours: Website & Schedule Maintenance: View & Delete</title>
+
+</head>
+
+<body bgcolor="#FFFFFF" lang=UTF-8 text="#000000" link="#007799" vlink="#00AA00">
+<form name="frm" action="ViewSchedule.html" method="post">
+<font size="5">Cruise Schedule:</font>
+<?php
+
+echo "test"
+?>
+
+<?php
+
+require ".../php/outines.html";
+
+//  PasswordCheck();
+
+  // take care of any deletes
+  if (!empty($_POST["DeleteChecked"]))
+  {
+    $deletes = $_POST['Delete'];
+//echo ' deletes = ' . $deletes;
+    if (count($deletes))
+    {
+      $MySql = DBOpen();
+      for ($a = 0; $a < count($deletes); $a++ )
+      {
+        $query = "DELETE FROM schedule WHERE TripTime='" . $deletes[$a] . "';";
+        mysql_query($query) or die('Delete error: ' . mysql_error());
+      }
+      mysql_close($MySql);
+    }
+  }
+
+  // delete olds
+  if (!empty($_POST["DeleteOld"]))
+  {
+    $MySql = DBOpen();
+    $query = "DELETE FROM schedule WHERE TripTime \074= NOW();";
+    mysql_query($query) or die('Delete error: ' . mysql_error());
+    mysql_close($MySql);
+  }
+?>
+<p>A portion of each of the following records shows for the customer to select from available cruises. Be sure these accurately reflect the actual cruises planned.
+<p>Click to delete record:
+<P>
+ <table border="1" cellspacing="0" cellpadding="2" width="100%">
+    <tr><th></th>
+    <th align="center">Departure<br>Time</th>
+    <th align="center">Entry<br>Time</th>
+    <th align="center">Departure<br>Location</th>
+    <th align="center">Max<br>Passengers</th>
+    <th align="center">Brief<br>Description</th>
+    <th align="center">Adult<br>cost</th>
+    <th align="center">Child<br>cost</th>
+    <th align="center">Web<br>discount</th>
+    <th align="center">Extra<br>discount</th>
+<!--   <th align="center">Marina<br>fees</th>
+    <th align="center">Credit<br>card fee</th> -->
+<?php
+   echo "test"
+
+  $query = "SELECT * from schedule WHERE TripTime \076= NOW() ORDER BY TripTime;";
+  $MySql = DBOpen();
+  $result = mysql_query($query,$MySql);
+
+while($row = mysql_fetch_array($result))
+{
+    echo '\074tr height="20"\076';
+    echo '\074td\076\074input type="checkbox" name="Delete[]" value="' . $row['TripTime'] . '"\076\074/td\076';
+    $date = DBGetDate($row['TripTime']);
+    $time = DBGetTime($row['TripTime']);
+    echo '\074td align="center"\076' . $date . ' ' . $time . '\074/td\076';
+    $date = DBGetDate($row['RecTime']);
+    $time = DBGetTime($row['RecTime']);
+    echo '\074td align="center"\076' . $date . ' ' . $time . '\074/td\076';
+    echo '\074td align="center"\076' . $row['DepartLoc'] . '\074/td\076';
+    echo '\074td align="center"\076' . $row['MaxPeople'] . '\074/td\076';
+    echo '\074td align="center"\076' . $row['Descript'] . '\074/td\076';
+    echo '\074td align="center"\076$' . $row['AdultCost'] . '\074/td\076';
+    echo '\074td align="center"\076$' . $row['ChildCost'] . '\074/td\076';
+    echo '\074td align="center"\076' . $row['WebDisc'] . '%\074/td\076';
+    echo '\074td align="center"\076' . $row['ExDisc'] . '%\074/td\076';
+//    echo '\074td align="center"\076$' . $row['MarinaFee'] . '\074/td\076';
+//    echo '\074td align="center"\076$' . $row['CCFee'] . '\074/td\076';
+    echo '\074/tr\076';
+}
+echo '\074/table\076';
+mysql_close($MySql);
+?>
+
+<P>  <input type="submit" name=DeleteChecked value="Delete checked records"
+     onclick='javascript: document.forms.frm.action="ViewSchedule.html";' />
+
+<P>Once in a while, to keep the database managable, you should
+<input type="submit" name=DeleteOld value="Delete old records"
+     onclick='javascript: document.forms.frm.action="ViewSchedule.html";' />
+
+<P>  <input type="submit" name=Add value="Add records"
+    onclick='javascript: document.forms.frm.action="Maintenance.html";' />
+
+<P> <input type=submit name=Selected value="Go to View Schedule"
+    onclick='javascript: document.forms.frm.action="ViewSchedule.html";' />
+
+<input type="submit" name=View value="Go to Add/View Passenger Info"
+    onclick='javascript: document.forms.frm.action="WhichCruise.html";' />
+
+<input type="submit" name=View value="Go to Who Booked report"
+    onclick='javascript: document.forms.frm.action="WhoBooked.html";' />
+
+<input type="submit" name=View value="Go to Billing report"
+    onclick='javascript: document.forms.frm.action="BillingInfo.html";' />
+
+<input type="submit" name=View value="Go to Password Maintenance"
+    onclick='javascript: document.forms.frm.action="Passwords.html";' />
+</form>
+</FONT>
+</BODY>
+</HTML>

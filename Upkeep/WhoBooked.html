@@ -1,0 +1,99 @@
+<!-- View a sorted list of passengers by who booked the reservation -->
+<!--  file:///home/drshelby/MyDocuments/HTML/BaliHai/Upkeep/ViewPassengers.html -->
+<!--  http://www.balihitours.com/Upkeep/ViewPassengers.html -->
+<html>
+
+<head>
+<meta name="resource-type" content="document" />
+
+<meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+
+   <title>Bali Hai Tours: Website & Schedule Maintenance: View & Delete Passenger Records</title>
+
+   <script language="JavaScript" src="PrintPassengerRecords.js" type="text/javascript"></script>
+</head>
+
+<body bgcolor="#FFFFFF" lang=EN-US text="#000000" link="#007799" vlink="#00AA00">
+
+<form name="frm" action="GO TO page selected.html" method="post">
+
+
+<?php
+include("../php/routines.php");
+
+PasswordCheck();
+
+
+?>
+<font size="5">Who Booked Report</font>
+<P>
+
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+    <tr>
+    <th align="center">Booking<br>Company</th>
+    <th align="center">Booking Agent<br>Full Name</th>
+    <th align="center">Group<br>Name</th>
+    <th align="center">#<br>Adults</th>
+    <th align="center">#<br>Children</th>
+    <th align="center">Web<br>Discount</th>
+    <th align="center">Extra<br>Discount</th>
+    <th align="center">Total<br>Amount*</th>
+    <th align="center">Credit<br>Card Name</th>
+    <th align="center">Departure<br>Date/Time</th>
+    <th align="center">Departure<br>Location</th>
+    <th align="center">Brief<br>Description</th>
+   </tr>
+    <tr height="20">
+<?php
+  $MySql = DBOpen();
+  $query = "select Company, FullName, GroupName, AdultQty, ChildQty, Flags, Cost, CCNameOnCard, bookings.TripTime, DepartLoc, Descript
+   from bookings, schedule, passwords where bookings.TripTime = schedule.TripTime and bookings.BookedBy = passwords.LoginName order by passwords.Company;";
+  $result = mysql_query($query);
+  while ($row = mysql_fetch_array($result))
+  {
+    echo('/074td align=center/076/074font size=2/076' . $row['Company'] . '/074/td/076');
+    echo('/074td align=center/076/074font size=2/076' . $row['FullName'] . '/074/td/076');
+    echo('/074td align=center/076/074font size=2/076' . $row['GroupName'] . '/074/td/076');
+    echo('/074td align=center/076/074font size=2/076' . $row['AdultQty'] . '/074/td/076');
+    echo('/074td align=center/076/074font size=2/076' . $row['ChildQty'] . '/074/td/076');
+    $Flags = $row['Flags'];
+    $hold = '';
+    if ($Flags & Flag_WebDisc) $hold = "Yes";
+    echo('/074td align=center/076/074font size=2/076' . $hold . '/074/td/076');
+    $hold = '';
+    if ($Flags & Flag_ExtraDisc) $hold = "Yes";
+    echo('/074td align=center/076/074font size=2/076' . $hold . '/074/td/076');
+    echo('/074td align=center/076/074font size=2/076');
+    printf("$%8.2f",$row['Cost']);
+    echo('/074/td/076');
+    echo('/074td align=center/076/074font size=2/076' . $row['CCNameOnCard'] . '/074/td/076');
+    $date = DBGetDate($row['TripTime']);
+    $time = DBGetTime($row['TripTime']);
+    echo '/074td align="center"/076' . $date . ' ' . $time . '/074/td/076';
+    echo('/074td align=center/076/074font size=2/076' . $row['DepartLoc'] . '/074/td/076');
+    echo('/074td align=center/076/074font size=2/076' . $row['Descript'] . '/074/td/076/074/tr/076
+');
+  }
+  mysql_close($MySql);
+?>
+  </table>
+<p><b>*</b>
+ Total Amount <u>does not</u> reflect discount given at departure location
+<p><input type=submit name=Selected value="Go to View Schedule"
+    onclick='javascript: document.forms.frm.action="ViewSchedule.html";' />
+
+<input type="submit" name=View value="Go to Add/View Passenger Info"
+    onclick='javascript: document.forms.frm.action="WhichCruise.html";' />
+
+<input type="submit" name=View value="Go to Who Booked report"
+    onclick='javascript: document.forms.frm.action="WhoBooked.html";' />
+
+<input type="submit" name=View value="Go to Billing report"
+    onclick='javascript: document.forms.frm.action="BillingInfo.html";' />
+
+<input type="submit" name=View value="Go to Password Maintenance"
+    onclick='javascript: document.forms.frm.action="Passwords.html";' />
+</form>
+</FONT>
+</BODY>
+</HTML>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!--  Login screen for BaliHai Activities desk -->
+<!--  file:///home/drshelby/MyDocuments/HTML/BaliHai/Desk/index.php -->
+<!--  http://www.balihitours.com/Desk/index.php -->
+
+<html>
+<head>
+<title>Bali Hai Activities Desk: Log in</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body {
+    color: #333;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: verdana;
+    font-size: 14px;
+}
+
+div.center{
+    color: #333;
+    position: absolute;
+    margin: auto;
+    margin-top: -363px;
+    margin-left: -376;
+    left: 25%;
+    top: 50%;
+    width: 650px;
+    height: 392px;
+    font-color: white;
+}
+
+div.bottom{
+    position: absolute;
+    margin: auto;
+    margin-top: -363px;
+    margin-left: -376;
+    left: 25%;
+    top: 110%;
+    font-color: black;
+}
+
+label{
+font-weight: bold;
+}
+label.username{
+color: #fff;
+}
+
+div.UpperText{
+    position: absolute;
+    top: 172px;
+    right: -240px;
+    width: 650px;
+    height: 39px;
+    padding: 0px;
+}
+
+div.CenterText{
+    position: absolute;
+    top: 85px;
+    right: 290px;
+    width: 650px;
+    height: 39px;
+    background: url(../Pics/BaliHaiMaintMid_02.gif) 0px 0px  no-repeat;
+    padding: 0px;
+}
+
+img.left{
+    position: absolute;
+    top: 50px;
+    left: -50px;
+}
+img.center{
+    position: absolute;
+    top: 80px;
+    right: 20px;
+}
+img.bottom{
+    position: absolute;
+    top: 120px;
+    right: 290px;
+}
+
+.input {
+    border: 1px solid #green;
+}
+
+div.mainForm{
+    text-align: center;
+    margin: 5px ;
+}
+
+</style>
+</head>
+
+<body bgcolor="#FFFFFF" lang=EN-US text="#FFFFFF">
+<form method="get" name="frm" action="AddCustomerTest.php">
+
+   <div class="center">
+
+      <img class="left" src="../Pics/BaliHaiADLoginMid_01a.gif" alt="">
+
+      <div class="UpperText">
+         <input type="hidden" name="mode" value="logIn">
+
+         <label for="username" class="username">Username</label>
+         <input type="text" class="input" name="LoginName" id="username" size="8">
+         <P>
+         <label for="username" class="username">Password</label>
+         <input type="password" class="input" name="password" id="password" size="8">
+         <div class="CenterText">
+
+            <div class="mainForm">
+               <input type="submit" name="AddCustomer" value="Schedule Customer"
+                  onclick='document.forms.frm.action="../ReserveSeatTest.php";'>
+               <input type="submit" name="ChangePW" value="Change Password"
+                  onclick='document.forms.frm.action="ChangePWTest.php";'>
+            </div>
+
+         </div>
+      <img class="bottom" src="../Pics/BaliHaiMaintMid_03.gif" alt="">
+
+      </div>
+   </div>
+   <div class="bottom">
+   <P>
+   <P>For WEB questions or issues, contact Dave Klemer dklemer@yahoo.com 808 823-0502
+   <P>For tour questions or issues, contact Joe Licona jlicona@hawaii.rr.com 808 634-2317
+   </div>
+
+</form>
+</body>
+</html>

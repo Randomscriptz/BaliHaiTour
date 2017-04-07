@@ -1,0 +1,1093 @@
+
+[21-Jan-2017 19:30:44 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[21-Jan-2017 19:30:44 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[21-Jan-2017 19:30:44 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[21-Jan-2017 19:30:44 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[21-Jan-2017 19:30:44 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[21-Jan-2017 19:30:44 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[21-Jan-2017 19:30:44 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[21-Jan-2017 19:30:44 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[21-Jan-2017 19:31:01 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[21-Jan-2017 19:31:01 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[21-Jan-2017 19:31:01 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[21-Jan-2017 19:31:01 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[21-Jan-2017 19:31:01 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[21-Jan-2017 19:31:01 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[21-Jan-2017 19:31:01 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:14 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:14 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[22-Jan-2017 23:42:14 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[22-Jan-2017 23:42:14 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:14 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:14 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:14 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:14 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[22-Jan-2017 23:42:14 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[22-Jan-2017 23:42:27 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:27 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[22-Jan-2017 23:42:27 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[22-Jan-2017 23:42:27 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:27 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:27 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:27 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[22-Jan-2017 23:42:27 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[22-Jan-2017 23:42:27 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[23-Jan-2017 18:38:43 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:43 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[23-Jan-2017 18:38:43 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[23-Jan-2017 18:38:43 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:43 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:43 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:43 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:43 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[23-Jan-2017 18:38:43 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[23-Jan-2017 18:38:58 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:58 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[23-Jan-2017 18:38:58 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[23-Jan-2017 18:38:58 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:58 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:58 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:58 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:38:58 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[23-Jan-2017 18:38:58 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[23-Jan-2017 18:39:31 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:31 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[23-Jan-2017 18:39:31 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[23-Jan-2017 18:39:31 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:31 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:31 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:31 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:31 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[23-Jan-2017 18:39:32 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[23-Jan-2017 18:39:35 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:35 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[23-Jan-2017 18:39:35 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[23-Jan-2017 18:39:35 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:35 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:35 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:35 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[23-Jan-2017 18:39:35 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[23-Jan-2017 18:39:35 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[25-Jan-2017 18:45:06 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:06 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 18:45:06 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 18:45:06 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:06 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:06 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:06 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:06 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[25-Jan-2017 18:45:06 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[25-Jan-2017 18:45:11 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:11 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 18:45:11 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 18:45:11 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:11 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:11 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:11 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:11 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[25-Jan-2017 18:45:11 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[25-Jan-2017 18:45:13 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:13 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 18:45:13 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 18:45:13 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:13 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:13 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:13 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 18:45:13 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[25-Jan-2017 18:45:13 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[25-Jan-2017 23:21:57 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:21:57 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 23:21:57 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 23:21:57 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:21:57 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:21:57 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:21:57 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:21:57 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[25-Jan-2017 23:21:57 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[25-Jan-2017 23:22:00 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:00 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 23:22:00 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 23:22:00 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:00 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:00 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:00 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:00 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[25-Jan-2017 23:22:00 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[25-Jan-2017 23:22:10 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:10 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 23:22:10 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[25-Jan-2017 23:22:10 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:10 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:10 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:10 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[25-Jan-2017 23:22:10 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[25-Jan-2017 23:22:10 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[01-Feb-2017 20:32:05 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:05 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[01-Feb-2017 20:32:05 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[01-Feb-2017 20:32:05 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:05 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:05 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:05 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:05 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[01-Feb-2017 20:32:05 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[01-Feb-2017 20:32:50 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:50 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[01-Feb-2017 20:32:50 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[01-Feb-2017 20:32:50 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:50 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:50 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:50 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 20:32:50 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[01-Feb-2017 20:32:50 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[01-Feb-2017 21:29:58 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:29:58 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[01-Feb-2017 21:29:58 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[01-Feb-2017 21:29:58 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:29:58 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:29:58 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:29:58 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:29:58 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[01-Feb-2017 21:29:58 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[01-Feb-2017 21:30:01 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:30:02 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[01-Feb-2017 21:30:02 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[01-Feb-2017 21:30:02 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:30:02 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:30:02 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:30:02 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[01-Feb-2017 21:30:02 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[01-Feb-2017 21:30:02 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[02-Feb-2017 23:15:39 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:39 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[02-Feb-2017 23:15:39 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[02-Feb-2017 23:15:39 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:39 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:39 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:39 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:40 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[02-Feb-2017 23:15:40 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[02-Feb-2017 23:15:50 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:50 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[02-Feb-2017 23:15:50 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[02-Feb-2017 23:15:50 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:50 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:50 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:50 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[02-Feb-2017 23:15:50 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[02-Feb-2017 23:15:50 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[03-Feb-2017 13:43:42 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:42 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[03-Feb-2017 13:43:42 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[03-Feb-2017 13:43:42 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:42 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:42 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:42 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:42 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[03-Feb-2017 13:43:42 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[03-Feb-2017 13:43:48 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:48 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[03-Feb-2017 13:43:48 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[03-Feb-2017 13:43:48 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:48 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:48 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:48 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 13:43:48 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[03-Feb-2017 13:43:48 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[03-Feb-2017 18:19:44 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:44 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[03-Feb-2017 18:19:44 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[03-Feb-2017 18:19:44 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:44 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:44 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:44 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:44 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[03-Feb-2017 18:19:44 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[03-Feb-2017 18:19:47 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:47 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[03-Feb-2017 18:19:47 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[03-Feb-2017 18:19:47 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:47 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:47 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:47 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[03-Feb-2017 18:19:47 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[03-Feb-2017 18:19:47 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[07-Feb-2017 21:06:27 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:27 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:06:27 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:06:27 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:27 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:27 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:27 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:27 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[07-Feb-2017 21:06:27 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[07-Feb-2017 21:06:33 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:33 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:06:33 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:06:33 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:33 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:33 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:33 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:06:33 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[07-Feb-2017 21:06:33 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[07-Feb-2017 21:09:28 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:28 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:09:28 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:09:28 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:28 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:28 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:28 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:28 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[07-Feb-2017 21:09:28 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[07-Feb-2017 21:09:35 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:35 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:09:35 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:09:35 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:35 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:35 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:35 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:35 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[07-Feb-2017 21:09:35 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[07-Feb-2017 21:09:55 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:55 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:09:55 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:09:55 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:55 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:55 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:55 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:09:55 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[07-Feb-2017 21:09:55 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[07-Feb-2017 21:12:50 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:50 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:12:50 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:12:50 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:50 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:50 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:50 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:50 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[07-Feb-2017 21:12:50 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[07-Feb-2017 21:12:54 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:54 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:12:54 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:12:54 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:54 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:54 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:54 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:12:54 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[07-Feb-2017 21:12:54 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[07-Feb-2017 21:13:15 America/New_York] PHP Warning:  PHP Startup: suhosin: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:13:15 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/timezonedb.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:13:15 America/New_York] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so' - /usr/local/lib/php/extensions/no-debug-non-zts-20100525/imagick.so: cannot open shared object file: No such file or directory in Unknown on line 0
+[07-Feb-2017 21:13:15 America/New_York] PHP Warning:  PHP Startup: PDO: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:13:15 America/New_York] PHP Warning:  PHP Startup: pdo_sqlite: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:13:15 America/New_York] PHP Warning:  PHP Startup: pdo_mysql: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:13:15 America/New_York] PHP Warning:  PHP Startup: SourceGuardian: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20131226
+These options need to match
+ in Unknown on line 0
+[07-Feb-2017 21:13:15 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 54
+[07-Feb-2017 21:13:15 America/New_York] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/shelmerc/public_html/balihaitours/php/routines.php on line 352
+[17-Mar-2017 00:25:51 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/dev/public_html/balihaitours/php/routines.php on line 14
+[17-Mar-2017 00:25:51 UTC] PHP Warning:  mysql_connect(): php_network_getaddresses: getaddrinfo failed: Name or service not known in /home/balihaitours/public_html/dev/public_html/balihaitours/php/routines.php on line 14
+[17-Mar-2017 00:25:51 UTC] PHP Warning:  mysql_connect(): php_network_getaddresses: getaddrinfo failed: Name or service not known in /home/balihaitours/public_html/dev/public_html/balihaitours/php/routines.php on line 14
+[17-Mar-2017 01:30:30 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[17-Mar-2017 01:30:30 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 52
+[17-Mar-2017 01:30:42 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[17-Mar-2017 01:30:42 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 52
+[06-Apr-2017 17:40:22 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:40:22 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:40:41 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:40:41 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:41:34 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:41:34 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:42:21 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:42:21 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:43:30 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:43:30 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:45:03 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:45:03 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:45:36 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:45:36 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:46:09 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:46:09 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:47:51 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:47:51 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:47:52 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:47:52 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:48:13 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:48:13 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:48:26 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:48:26 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:48:41 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:48:41 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:50:29 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:50:29 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:50:29 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:52:56 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:52:56 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:53:06 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:53:06 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:54:19 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:54:19 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:54:30 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:54:30 UTC] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, boolean given in /home/balihaitours/public_html/php/routines.php on line 54
+[06-Apr-2017 17:56:17 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:56:17 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:56:17 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:56:17 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:56:43 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:56:43 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:56:43 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:56:44 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:56:44 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:56:44 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:56:44 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:56:48 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:56:48 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:56:48 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:56:48 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:56:48 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:57:50 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:50 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:57:50 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:50 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:50 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:57:51 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:51 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:57:51 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:51 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:57:52 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:52 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:57:52 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:52 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:57:54 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:54 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:57:54 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:54 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:54 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:57:58 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:58 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:57:58 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:57:58 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:58:09 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:58:09 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:58:09 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:58:09 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:58:12 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:58:12 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:58:12 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:58:12 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 17:58:14 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:58:14 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 17:58:14 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:58:14 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 17:58:14 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:00:50 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:00:50 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:00:50 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:00:50 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:01:05 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:05 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:01:05 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:05 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:01:12 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:12 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:01:12 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:12 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:01:16 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:16 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:01:16 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:16 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:16 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:01:18 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:18 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:01:18 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:01:20 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:20 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:01:20 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:20 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:01:23 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:23 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:01:23 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:23 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:01:25 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:01:25 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:01:25 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:06:16 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:06:16 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:06:16 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:06:16 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:20:01 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:20:01 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:20:01 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:20:01 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:20:01 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:20:42 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:20:42 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:20:42 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:20:42 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:20:42 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:20:52 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:20:52 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:20:52 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:21:05 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:21:05 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:21:05 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:21:05 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:21:05 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:22:46 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:22:46 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:22:46 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:22:46 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:22:46 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:22:47 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:22:47 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:22:47 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:23:01 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:23:01 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:23:01 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:23:02 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:23:02 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:23:02 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:23:02 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353
+[06-Apr-2017 18:23:06 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:23:06 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 56
+[06-Apr-2017 18:23:06 UTC] PHP Deprecated:  mysql_connect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead in /home/balihaitours/public_html/php/routines.php on line 14
+[06-Apr-2017 18:23:06 UTC] PHP Warning:  mysql_close() expects parameter 1 to be resource, null given in /home/balihaitours/public_html/php/routines.php on line 353

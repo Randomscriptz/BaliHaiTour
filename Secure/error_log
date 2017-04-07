@@ -1,0 +1,7 @@
+
+[17-Mar-2017 00:20:00 UTC] PHP Warning:  include(php/routines.php): failed to open stream: No such file or directory in /home/balihaitours/public_html/dev/public_html/balihaitours/Secure/CCInfo.php on line 137
+[17-Mar-2017 00:20:00 UTC] PHP Warning:  include(): Failed opening 'php/routines.php' for inclusion (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/balihaitours/public_html/dev/public_html/balihaitours/Secure/CCInfo.php on line 137
+[17-Mar-2017 00:20:00 UTC] PHP Fatal error:  Call to undefined function DBOpen() in /home/balihaitours/public_html/dev/public_html/balihaitours/Secure/CCInfo.php on line 186
+[17-Mar-2017 00:29:41 UTC] PHP Warning:  include(php/routines.php): failed to open stream: No such file or directory in /home/balihaitours/public_html/Secure/CCInfo.php on line 137
+[17-Mar-2017 00:29:41 UTC] PHP Warning:  include(): Failed opening 'php/routines.php' for inclusion (include_path='.:/opt/cpanel/ea-php56/root/usr/share/pear') in /home/balihaitours/public_html/Secure/CCInfo.php on line 137
+[17-Mar-2017 00:29:41 UTC] PHP Fatal error:  Call to undefined function DBOpen() in /home/balihaitours/public_html/Secure/CCInfo.php on line 186

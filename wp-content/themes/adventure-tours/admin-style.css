@@ -1,0 +1,67 @@
+/****************** HIDING EXTRA INFORMATION FOR JOE AND CHRIS  START*************************************/
+#woocommerce-product-data > div > div > ul > li.linked_product_options.linked_product_tab > a {
+ display: none !important;
+}
+
+#woocommerce-product-data > div > div > ul > li.attribute_options.attribute_tab > a {
+ display: none !important;
+}
+
+li.additional_information_tab {
+display: none !important;
+}
+li.attribute_options.attribute_tab {
+    display: none !important;
+}
+li.variations_options.variations_tab.variations_tab.show_if_variable.show_if_tour {
+    display: none !important;
+}
+#footer-left {
+display:none;
+}
+#woocommerce-product-data > div > div > ul > li.linked_product_options.linked_product_tab.active {
+    display: none !important;
+}
+body.post-type-product div#postdivrich {
+    display: none !important;
+}
+body.post-type-product div#wp-content-wrap {
+    display: none !important;
+}
+li.advanced_options.show_if_tour{
+    font-size: 34px !important;
+}
+
+#woocommerce-product-data > div > div > ul > li.advanced_options.show_if_tour.active > a#woocommerce-product-data > div > div > ul > li.advanced_options.show_if_tour > a {
+    font-size: 34px !important;
+}
+#local-storage-notice{
+display:none !important
+}
+#wpbody-content > div.wrap > div.updated.fade{
+display:none !important
+}
+
+
+
+body.post-type-product div#visibility {
+    display: none;
+}
+
+body.post-type-product  .misc-pub-section.curtime.misc-pub-curtime {
+    display: none;
+}
+
+body.post-type-product  #catalog-visibility {
+    display: none;
+}
+body.post-type-product  #content-score,#keyword-score {
+    display: none;
+}
+body.post-type-product  #duplicate-action,#delete-action {
+    display: none;
+}
+
+#woocommerce-product-data > div > div > ul > li.general_options.general_tab.hide_if_grouped > a, #woocommerce-product-data > div > div > ul > li.inventory_options.inventory_tab.show_if_simple.show_if_variable.show_if_grouped.show_if_external.show_if_tour > a, #woocommerce-product-data > div > div > ul > li.variations_options.variations_tab.variations_tab.show_if_variable.show_if_tour.active > a, #woocommerce-product-data > div > div > ul > li.advanced_options.advanced_tab > a,#woocommerce-product-data > div > div > ul > li.linked_product_options.linked_product_tab.active > a, #woocommerce-product-data > div > div > ul > li.linked_product_options.linked_product_tab > a, #woocommerce-product-data > div > div > ul > li.attribute_options.attribute_tab > a, #woocommerce-product-data > div > div > ul > li.variations_options.variations_tab.variations_tab.show_if_variable.show_if_tour > a{
+    display: none !important;
+}

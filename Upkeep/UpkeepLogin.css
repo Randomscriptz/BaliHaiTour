@@ -1,0 +1,156 @@
+/*
+body {
+    color: #333;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: verdana;
+    font-size: 14px;
+}
+
+div.center{
+    color: #333;
+    position: absolute;
+    margin: auto;
+    margin-top: -363px;
+    margin-left: -376;
+    left: 50%;
+    top: 50%;
+    width: 650px;
+    height: 392px;
+}
+
+label{
+font-weight: bold;
+}
+label.username{
+color: #fff;
+}
+
+div.UpperText{
+    position: absolute;
+    top: 172px;
+    right: -240px;
+    width: 650px;
+    height: 39px;
+    padding: 0px;
+}
+
+div.CenterText{
+    position: absolute;
+    top: 85px;
+    right: 290px;
+    width: 650px;
+    height: 39px;
+    background: url(../Pics/BaliHaiMaintMid_02.gif) 0px 0px  no-repeat;
+    padding: 0px;
+}
+
+img.left{
+    position: absolute;
+    top: 50px;
+    left: -50px;
+}
+img.center{
+    position: absolute;
+    top: 80px;
+    right: 20px;
+}
+img.bottom{
+    position: absolute;
+    top: 120px;
+    right: 290px;
+}
+
+.input {
+    border: 1px solid #green;
+}
+
+div.mainForm{
+    text-align: center;
+    margin: 5px ;
+} */
+body {
+    background: rgba(90, 164, 172, 0.61);
+}
+#login  h1  a {
+    background-image: url(https://balihaitours.com/wp-content/uploads/2017/03/Bali-Hai-Logo-PNG-low-res-1000x.png);
+    background-image: none,url(https://balihaitours.com/wp-content/uploads/2017/03/Bali-Hai-Logo-PNG-low-res-1000x.png);
+    -webkit-background-size: 100%;
+    background-size: 100%;
+    background-position: center top;
+    background-repeat: no-repeat;
+    color: #444;
+    height: 330px;
+    font-size: 20px;
+    line-height: 1.3em;
+    margin: 0 auto 25px;
+    padding: 0;
+    width: auto;
+    text-indent: -9999px;
+    outline: 0;
+    display: block;
+}
+#login form {
+    box-shadow: none;
+    margin-top: 15px;
+    padding: 0;
+    background: 0 0;
+}
+#login form#loginform #username {
+    border-radius: 4px 4px 0 0;
+}
+#login form#loginform #user_pass {
+    border-radius: 0 0 4px 4px;
+}
+#login form p label input[type=email], #login form p label input[type=number], #login form p label input[type=password], #login form p label input[type=search], #login form p label input[type=tel], #login form p label input[type=text], #login form p label input[type=url], #login form p label select, #login form p label textarea {
+    margin: 0;
+    margin-top: 0!important;
+    margin-bottom: 0!important;
+    box-shadow: none!important;
+    border-width: 1px;
+    transition: border-color .15s;
+    max-width: 100%;
+    padding: 17.4px 21px!important;
+    font-size: 18px!important;
+    height: 60px!important;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    border-radius: 0;
+    width: 100%;
+    background-color: #fff!important;
+    border-color: #e8e8e8!important;
+    color: #333 !important;
+}
+#username, #password{
+    display: inline-block;
+    border-radius: 3px!important;
+    transition: color .15s,background-color .15s,border-color .15s;
+    box-shadow: none!important;
+    height: auto!important;
+    text-decoration: none;
+    text-shadow: none!important;
+    font-weight: 400!important;
+    font-style: normal!important;
+    color: #fff!important;
+    background: #52bde6!important;
+    border: 0!important;
+}
+input[type="submit"] {
+    padding: 14px 22.5px!important;
+    font-size: 15px!important;
+    line-height: 22px!important;
+    float: none;
+    width: 100%;
+}
+#login {
+    width: 320px;
+    padding: 4% 0 0;
+    margin: auto;
+}
+label.username, #loginform > p:nth-child(3) > label {
+    text-align: center;
+    font-size: 15px;
+    display: block;
+}
