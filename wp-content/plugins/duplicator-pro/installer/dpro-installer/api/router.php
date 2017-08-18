@@ -1,14 +1,20 @@
 <?php
+/** IDE HELPERS */
+/* @var $GLOBALS['DUPX_AC'] DUPX_ArchiveConfig */
 
-$API['BaseRootPath'] =  str_ireplace('api', '', dirname(__FILE__));
+$GLOBALS['DUPX_INIT']  = str_replace("\\", '/', (realpath(dirname(__FILE__) . '/..')));
+$API['BaseRootPath']   = rtrim(str_replace("\\", '/', str_ireplace('api', '', dirname(__FILE__))), '/');
+
+//echo $GLOBALS['DUPX_INIT']. '<br/>';
+//echo $API['BaseRootPath']. '<br/>';
 
 require_once("{$API['BaseRootPath']}/classes/config/class.constants.php");
 require_once("{$API['BaseRootPath']}/classes/config/class.archive.config.php");
 
-DUPX_Archive_Config::init_config_globals();
+$GLOBALS['DUPX_AC'] = DUPX_ArchiveConfig::getInstance();
 
 
-require_once("{$API['BaseRootPath']}/classes/util/class.u.php");
+require_once("{$API['BaseRootPath']}/classes/utilities/class.u.php");
 require_once("{$API['BaseRootPath']}/classes/class.http.php");
 require_once("{$API['BaseRootPath']}/classes/class.server.php");
 require_once('class.api.php');
@@ -76,7 +82,7 @@ $API_Server->process_request(false);
 	</tr>
 	<tr>
 		<td><div style="margin:4px 0px 10px 15px;"></div></td>
-		<td class="wiz-dupx-version">version:	<?php echo $GLOBALS['FW_VERSION_DUP'] ?> </td>
+		<td class="wiz-dupx-version">version:	<?php echo $GLOBALS['DUPX_AC']->version_dup ?> </td>
 	</tr>
 </table>	
 

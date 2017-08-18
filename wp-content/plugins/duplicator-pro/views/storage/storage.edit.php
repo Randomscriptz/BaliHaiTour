@@ -209,7 +209,7 @@ if(DUP_PRO_U::PHP53())
 		catch (Exception $e)
 		{
 			// This is an oddball recommendation - don't queue it in system global entity
-			$error_text = 'Error retreving Google Client' . $e->getMessage();
+			$error_text = 'Error retrieving  Google Client' . $e->getMessage();
 			$fix_text = "Delete the Google endpoint and recreate.";
 			
 			echo DUP_PRO_U::__("$error_text: ** RECOMMENDATION: $fix_text");		
@@ -289,7 +289,7 @@ $storage_count = count($storages);
 				<?php endif; ?>
             </td>
             <td>
-                <a href="<?php echo $storage_tab_url; ?>" class="add-new-h2"> <i class="fa fa-database"></i> <?php DUP_PRO_U::_e('All Providers'); ?></a>
+                <a href="<?php echo $storage_tab_url; ?>" class="add-new-h2"> <i class="fa fa-database"></i> <?php DUP_PRO_U::_e('Providers'); ?></a>
                 <span><?php echo $edit_create_text; ?></span>
             </td>
         </tr>

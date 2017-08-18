@@ -24,6 +24,7 @@ class DUP_PRO_Settings_U
 	public function runExport()
 	{
 		$global = DUP_PRO_Global_Entity::get_instance();
+        $sglobal = DUP_PRO_Secure_Global_Entity::getInstance();
 									
 		$export_data = new StdClass();
 		
@@ -31,6 +32,7 @@ class DUP_PRO_Settings_U
 		$export_data->schedules = DUP_PRO_Schedule_Entity::get_all();		
 		$export_data->storages = DUP_PRO_Storage_Entity::get_all();		
 		$export_data->settings = $global;
+        $export_data->secure_settings = $sglobal;
 					
 		$json_file_data = json_encode($export_data);
 				
@@ -132,6 +134,10 @@ class DUP_PRO_Settings_U
 				case 'settings':
 					$this->importSettings($import_data);
 					break;
+
+                case 'secure_settings':
+                    $this->importSecureSettings($import_data);
+                    break;
 				
 				default:
 					throw new Exception("Unknown import type {$import_type} detected.");					
@@ -145,7 +151,16 @@ class DUP_PRO_Settings_U
 					
 		$global->set_from_data($import_data->settings);
 
-		$global->save();
+		$global->save();;
+	}
+
+    private function importSecureSettings(&$import_data)
+	{
+        $sglobal = DUP_PRO_Secure_Global_Entity::getInstance();
+
+        $sglobal->setFromData($import_data->settings);
+
+        $sglobal->save();
 	}
 	
 	private function importTemplates(&$import_data)

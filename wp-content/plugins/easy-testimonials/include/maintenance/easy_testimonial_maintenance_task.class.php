@@ -12,7 +12,7 @@ class Easy_Testimonials_Maintenance_Task
 		add_action('easy_testimonials_maintenance_tasks', array($this, 'run'));
 	}
 	
-	function run($version)
+	function run($version = '')
 	{
 	
 	}

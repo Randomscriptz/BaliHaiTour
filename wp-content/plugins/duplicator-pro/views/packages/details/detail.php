@@ -51,6 +51,7 @@ $lang_notset = DUP_PRO_U::__("- not set -");
 	div#dpro-filter-file-userlist,	
 	div#dpro-filter-file-warning,	
 	div#dpro-filter-file-unreadable {display:none; margin-left:20px}
+	textarea.file-info {width:100%; height:100px; font-size:12px }
 	
 	/*INSTALLER*/
 	div#dpro-pass-toggle {position: relative; margin: 0 0 0 15px; width:273px}
@@ -307,30 +308,26 @@ ARCHIVE -->
 			<td><?php DUP_PRO_U::_e("Build Mode") ?>: </td>
 			<td>
 				<?php 
-					$zip_mode_string = DUP_PRO_U::__('Unknown');
-					
-					if (isset($package->ZipMode)) 
-					{
-						if($package->ZipMode == DUP_PRO_Archive_Build_Mode::ZipArchive)
-						{
-							$zip_mode_string = DUP_PRO_U::__("Zip Archive");
-							
-							if(isset($package->ziparchive_mode))
-							{
-								if($package->ziparchive_mode == DUP_PRO_ZipArchive_Mode::SingleThread)
-								{
-									$zip_mode_string = DUP_PRO_U::__("Zip Archive ST");	
+					$zip_mode_string	 = DUP_PRO_U::__('Unknown');
+
+					if (isset($package->ZipMode)) {
+						if ($package->ZipMode === DUP_PRO_Archive_Build_Mode::ZipArchive) {
+							$zip_mode_string = DUP_PRO_U::__("ZipArchive");
+
+							if (isset($package->ziparchive_mode)) {
+								if ($package->ziparchive_mode === DUP_PRO_ZipArchive_Mode::SingleThread) {
+									$zip_mode_string = DUP_PRO_U::__("ZipArchive ST");
 								}
 							}
-						}
-						else
-						{
+						} else if ($package->ZipMode === DUP_PRO_Archive_Build_Mode::Shell_Exec) {
 							$zip_mode_string = DUP_PRO_U::__("Shell Exec");
+						} else {
+							$zip_mode_string = DUP_PRO_U::__("DupArchive");
 						}
 					}
-					
+
 					echo $zip_mode_string;
-				?>
+					?>
 			</td>
 		</tr>			
 		<tr>
@@ -347,7 +344,8 @@ ARCHIVE -->
 					echo "<a href='javascript:void(0)' onclick=\"jQuery('#dpro-filter-dir-userlist').toggle(200)\" title='{$title}'><i class='fa fa-filter'></i>" . DUP_PRO_U::__('User Defined') . "</a>  <sup>({$count})</sup><br/>";
 					echo ($count == 0) 
 						 ? "<div id='dpro-filter-dir-userlist'>" . DUP_PRO_U::__('- filter type not found -') . "</div>"
-						 : "<div id='dpro-filter-dir-userlist'>" . implode('<br/>', $package->Archive->FilterInfo->Dirs->Instance) . "</div>";		
+						 : "<div id='dpro-filter-dir-userlist'><textarea class='file-info' readonly='true'>"
+							. implode(";\n", $package->Archive->FilterInfo->Dirs->Instance) . "</textarea></div>";
 					
 					//UNREADABLE
 					$title = DUP_PRO_U::__("These paths are filtered because they are unreadable by the system");
@@ -355,7 +353,7 @@ ARCHIVE -->
 					echo "<a href='javascript:void(0)' onclick=\"jQuery('#dpro-filter-dir-unreadable').toggle(200)\" title='{$title}'><i class='fa fa-filter'></i>" . DUP_PRO_U::__('Unreadable') . "</a> <sup>({$count})</sup><br/>";
 					echo ($count == 0) 
 						 ? "<div id='dpro-filter-dir-unreadable'>" . DUP_PRO_U::__('- filter type not found -') . "</div>"
-						 : "<div id='dpro-filter-dir-unreadable'>" . implode('<br/>', $package->Archive->FilterInfo->Dirs->Unreadable) . "</div>";	
+						 : "<div id='dpro-filter-dir-unreadable'><textarea class='file-info' readonly='true'>" . implode(";\n", $package->Archive->FilterInfo->Dirs->Unreadable) . "</textarea></div>";
 					
 					//WARNING: This may lead to more questions, hold off on release
 					/*$title = DUP_PRO_U::__("These paths are NOT filtered, but could be filtered on some operating systems");
@@ -379,7 +377,8 @@ ARCHIVE -->
 					echo "<a href='javascript:void(0)' onclick=\"jQuery('#dpro-filter-file-userlist').toggle(200)\" title='{$title}'><i class='fa fa-filter'></i>" . DUP_PRO_U::__('User Defined') . "</a> <sup>({$count})</sup><br/>";
 					echo ($count == 0) 
 						 ? "<div id='dpro-filter-file-userlist'>" . DUP_PRO_U::__('- filter type not found -') . "</div>"
-						 : "<div id='dpro-filter-file-userlist'>" . implode('<br/>', $package->Archive->FilterInfo->Files->Instance) . "</div>";
+						 : "<div id='dpro-filter-file-userlist'><textarea class='file-info' readonly='true'>"
+								. implode(";\n", $package->Archive->FilterInfo->Files->Instance) . "</textarea></div>";
 					
 					//UNREADABLE
 					$title = DUP_PRO_U::__("These paths are filtered because they are unreadable by the system");
@@ -387,7 +386,8 @@ ARCHIVE -->
 					echo "<a href='javascript:void(0)' onclick=\"jQuery('#dpro-filter-file-unreadable').toggle(200)\" title='{$title}'><i class='fa fa-filter'></i>" . DUP_PRO_U::__('Unreadable') . "</a> <sup>({$count})</sup><br/>";
 					echo ($count == 0) 
 						 ? "<div id='dpro-filter-file-unreadable'>" . DUP_PRO_U::__('- filter type not found -') . "</div>"
-						 : "<div id='dpro-filter-file-unreadable'>" . implode('<br/>', $package->Archive->FilterInfo->Files->Unreadable) . "</div>";	
+						 : "<div id='dpro-filter-file-unreadable'><textarea class='file-info' readonly='true'>"
+								. implode(";\n", $package->Archive->FilterInfo->Files->Unreadable) . "</textarea></div>";
 					
 					//WARNING: This may lead to more questions, hold off on release unless needed
 					/*$count = count($package->Archive->FilterInfo->Files->Warning);
@@ -551,13 +551,6 @@ INSTALLER -->
 	<b><?php DUP_PRO_U::_e('ADVANCED'); ?></b>
 	<table class='dpro-dtl-data-tbl sub-table'>
 		<tr class="sub-item">
-			<td><?php DUP_PRO_U::_e("SSL") ?>:</td>
-			<td>
-				<?php echo ($package->Installer->OptsSSLAdmin) ? DUP_PRO_U::_e("Admin Enabled") : DUP_PRO_U::_e("Admin Disabled") ?>,
-				<?php echo ($package->Installer->OptsSSLLogin) ? DUP_PRO_U::_e("Logins Enabled") : DUP_PRO_U::_e("Logins Disabled") ?>
-			</td>
-		</tr>
-		<tr class="sub-item">
 			<td><?php DUP_PRO_U::_e("Cache") ?>:</td>
 			<td>
 				<?php echo ($package->Installer->OptsCacheWP) ? DUP_PRO_U::_e("Enabled") : DUP_PRO_U::_e("Disabled") ?>,
@@ -565,19 +558,10 @@ INSTALLER -->
 			</td>
 		</tr>		
 	</table><br/><br/>-->
-	
-<!--	<div class="dpro-box-panel-hdr"><i class="fa fa-caret-square-o-right"></i> <?php DUP_PRO_U::_e('STEP 2 - INPUTS'); ?></div>
-	<table class='dpro-dtl-data-tbl'>
-		<tr>
-			<td><?php DUP_PRO_U::_e("New URL") ?>:</td>
-			<td><?php echo strlen($package->Installer->OptsURLNew) ? $package->Installer->OptsURLNew : $lang_notset ?></td>
-		</tr>	
-	</table>-->
-	
 </div>
 </div>
 
-<?php if ($global->package_debug) : ?>
+<?php if ($global->debug_on) : ?>
 	<div style="margin:0">
 		<a href="javascript:void(0)" onclick="jQuery(this).parent().find('.dup-pack-debug').toggle()">[<?php DUP_PRO_U::_e("View Package Object") ?>]</a><br/>
 		<pre class="dup-pack-debug" style="display:none"><?php @print_r($package); ?> </pre>
@@ -585,7 +569,7 @@ INSTALLER -->
 <?php endif; ?>	
 
 
-<script type="text/javascript">
+<script>
 jQuery(document).ready(function ($) 
 {
 	

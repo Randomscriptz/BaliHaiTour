@@ -7295,3 +7295,31 @@
 [31-Mar-2017 03:00:25 UTC] PHP Warning:  Creating default object from empty value in /home/balihaitours/public_html/wp-content/plugins/booking-calendar-pro-payment/includes/booking_class.php on line 1551
 [31-Mar-2017 03:07:11 UTC] PHP Warning:  Creating default object from empty value in /home/balihaitours/public_html/wp-content/plugins/booking-calendar-pro-payment/includes/booking_class.php on line 1551
 [31-Mar-2017 03:19:36 UTC] PHP Warning:  Creating default object from empty value in /home/balihaitours/public_html/wp-content/plugins/booking-calendar-pro-payment/includes/booking_class.php on line 1551
+[10-Apr-2017 01:15:04 UTC] PHP Warning:  strpos() expects parameter 1 to be string, array given in /home/balihaitours/public_html/wp-content/plugins/easy-testimonials/include/lib/easy_testimonials_custom_columns.php on line 131
+[10-Apr-2017 01:16:05 UTC] PHP Warning:  strpos() expects parameter 1 to be string, array given in /home/balihaitours/public_html/wp-content/plugins/easy-testimonials/include/lib/easy_testimonials_custom_columns.php on line 131
+[10-Apr-2017 01:18:03 UTC] PHP Warning:  strpos() expects parameter 1 to be string, array given in /home/balihaitours/public_html/wp-content/plugins/easy-testimonials/include/lib/easy_testimonials_custom_columns.php on line 131
+[10-Apr-2017 02:07:03 UTC] PHP Notice:  Undefined variable: products in /home/balihaitours/public_html/wp-content/themes/adventure-tours/functions.php on line 940
+[10-Apr-2017 02:07:15 UTC] PHP Notice:  Undefined variable: products in /home/balihaitours/public_html/wp-content/themes/adventure-tours/functions.php on line 940
+[27-Jul-2017 00:07:18 UTC] not setting sglobal
+[29-Jul-2017 08:21:48 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'WordFence API error: The Wordfence API key you're using is already being used by: greeleyhomesearch.com. If you have changed your blog URL, please sign-in to Wordfence, purchase a new key or reset an existing key, and then enter that key on this site's Wordfence Options page.' in /home/balihaitours/public_html/wp-content/plugins/wordfence/lib/wfAPI.php:69
+Stack trace:
+#0 /home/balihaitours/public_html/wp-content/plugins/wordfence/lib/wfScan.php(132): wfAPI->call('log_scan', Array, Array)
+#1 /home/balihaitours/public_html/wp-content/plugins/wordfence/lib/wordfenceClass.php(1041): wfScan::wfScanMain()
+#2 [internal function]: wordfence::ajax_doScan_callback('')
+#3 /home/balihaitours/public_html/wp-includes/class-wp-hook.php(298): call_user_func_array('wordfence::ajax...', Array)
+#4 /home/balihaitours/public_html/wp-includes/class-wp-hook.php(323): WP_Hook->apply_filters('', Array)
+#5 /home/balihaitours/public_html/wp-includes/plugin.php(453): WP_Hook->do_action(Array) in /home/balihaitours/public_html/wp-content/plugins/wordfence/lib/wfAPI.php on line 69
+[31-Jul-2017 08:06:08 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'WordFence API error: The Wordfence API key you're using is already being used by: greeleyhomesearch.com. If you have changed your blog URL, please sign-in to Wordfence, purchase a new key or reset an existing key, and then enter that key on this site's Wordfence Options page.' in /home/balihaitours/public_html/wp-content/plugins/wordfence/lib/wfAPI.php:69
+Stack trace:
+#0 /home/balihaitours/public_html/wp-content/plugins/wordfence/lib/wfScan.php(132): wfAPI->call('log_scan', Array, Array)
+#1 /home/balihaitours/public_html/wp-content/plugins/wordfence/lib/wordfenceClass.php(1041): wfScan::wfScanMain()
+#2 [internal function]: wordfence::ajax_doScan_callback('')
+#3 /home/balihaitours/public_html/wp-includes/class-wp-hook.php(298): call_user_func_array('wordfence::ajax...', Array)
+#4 /home/balihaitours/public_html/wp-includes/class-wp-hook.php(323): WP_Hook->apply_filters('', Array)
+#5 /home/balihaitours/public_html/wp-includes/plugin.php(453): WP_Hook->do_action(Array) in /home/balihaitours/public_html/wp-content/plugins/wordfence/lib/wfAPI.php on line 69
+[01-Aug-2017 01:07:52 UTC] PHP Notice:  Undefined property: stdClass::$slug in /home/balihaitours/public_html/wp-admin/includes/class-wp-plugin-install-list-table.php on line 52
+[01-Aug-2017 01:07:59 UTC] PHP Notice:  Undefined property: stdClass::$slug in /home/balihaitours/public_html/wp-admin/includes/class-wp-plugin-install-list-table.php on line 52
+[01-Aug-2017 01:08:04 UTC] PHP Notice:  Undefined property: stdClass::$slug in /home/balihaitours/public_html/wp-admin/includes/class-wp-plugin-install-list-table.php on line 52
+[01-Aug-2017 01:08:22 UTC] PHP Notice:  Undefined property: stdClass::$slug in /home/balihaitours/public_html/wp-admin/includes/class-wp-plugin-install-list-table.php on line 52
+[01-Aug-2017 01:08:42 UTC] PHP Notice:  Undefined property: stdClass::$slug in /home/balihaitours/public_html/wp-admin/includes/class-wp-plugin-install-list-table.php on line 52
+[18-Aug-2017 00:07:03 UTC] not setting sglobal

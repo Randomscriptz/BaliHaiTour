@@ -17,7 +17,7 @@ class DUP_PRO_Shell_U
      *
      * 	NOTES:
      * 		Provides a way to support shell args on Windows OS and allows %,! on Windows command line
-     * 		Safe if input is know such as a defined constant and not from user input escapeshellarg
+     * 		Safe if input is know such as a defined constant and not from user input escape shellarg
      * 		on Windows with turn %,! into spaces
      *
      * @return string

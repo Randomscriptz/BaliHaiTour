@@ -21,10 +21,11 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
     public $notes;
 
     //ARCHIVE:Files
-    public $archive_filter_on = 0;      // Enable File Filters
-    public $archive_filter_dirs = '';   // Filtered Directories
-    public $archive_filter_exts = '';   // Filtered Extensions
-    public $archive_filter_files = '';  // Filtered Files		
+	public $archive_export_onlydb = 0;
+    public $archive_filter_on = 0;      
+    public $archive_filter_dirs = '';   
+    public $archive_filter_exts = '';   
+    public $archive_filter_files = '';  	
 
     //ARCHIVE:Database
     public $database_filter_on = 0;					// Enable Table Filters
@@ -52,11 +53,9 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
     public $installer_opts_cpnl_db_user = '';
 
     //Adv Opts
-    public $installer_opts_ssl_admin;		// Enforce SSL on Admin
-    public $installer_opts_ssl_login;		// Enforce SSL for Logins
-    public $installer_opts_cache_wp;		// K??
-    public $installer_opts_cache_path;		// ??
-    public $installer_opts_url_new;			// New URL
+    public $installer_opts_cache_wp;		
+    public $installer_opts_cache_path;		
+
 
     public $is_default = false;
     public $is_manual = false;
@@ -77,10 +76,11 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
         $instance->notes;
 
         //ARCHIVE:Files
-        $instance->archive_filter_on = $template_data->archive_filter_on;      // Enable File Filters
-        $instance->archive_filter_dirs = $template_data->archive_filter_dirs;   // Filtered Directories
-        $instance->archive_filter_exts = $template_data->archive_filter_exts;   // Filtered Extensions
-        $instance->archive_filter_files = $template_data->archive_filter_files;  // Filtered Files
+        $instance->archive_export_onlydb = $template_data->archive_export_onlydb;
+		$instance->archive_filter_on = $template_data->archive_filter_on;     
+        $instance->archive_filter_dirs = $template_data->archive_filter_dirs;   
+        $instance->archive_filter_exts = $template_data->archive_filter_exts;   
+        $instance->archive_filter_files = $template_data->archive_filter_files;  
 
         //ARCHIVE:Database
         $instance->database_filter_on = $template_data->database_filter_on;					// Enable Table Filters
@@ -111,11 +111,8 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
         $instance->installer_opts_cpnl_db_user = $template_data->installer_opts_cpnl_db_user;
 
         //Adv Opts
-        $instance->installer_opts_ssl_admin = $template_data->installer_opts_ssl_admin;		// Enforce SSL on Admin
-        $instance->installer_opts_ssl_login = $template_data->installer_opts_ssl_login;		// Enforce SSL for Logins
         $instance->installer_opts_cache_wp = $template_data->installer_opts_cache_wp;		// K??
         $instance->installer_opts_cache_path = $template_data->installer_opts_cache_path;		// ??
-        $instance->installer_opts_url_new = $template_data->installer_opts_url_new;			// New URL
 
         $instance->is_default = $template_data->is_default;
         $instance->is_manual = $template_data->is_manual;
@@ -158,11 +155,12 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
             $template->notes = '';
             $template->is_manual = true;
 
-            // Copy over the old temporary template settings into this
+            // Copy over the old temporary template settings into this - required for legacy manual
             $temp_package = DUP_PRO_Package::get_temporary_package();
 
             if($temp_package != null)
             {
+				$template->archive_export_onlydb = $temp_package->Archive->ExportOnlyDB;
                 $template->archive_filter_on = $temp_package->Archive->FilterOn;
                 $template->archive_filter_dirs = $temp_package->Archive->FilterDirs;
                 $template->archive_filter_exts = $temp_package->Archive->FilterExts;
@@ -180,9 +178,6 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
                 $template->installer_opts_secure_on = $temp_package->Installer->OptsSecureOn;
                 $template->installer_opts_secure_pass = $temp_package->Installer->OptsSecurePass;
                 $template->installer_opts_skip_scan = $temp_package->Installer->OptsSkipScan;
-                $template->installer_opts_ssl_admin = $temp_package->Installer->OptsSSLAdmin;
-                $template->installer_opts_ssl_login = $temp_package->Installer->OptsSSLLogin;
-                $template->installer_opts_url_new = $temp_package->Installer->OptsURLNew;
 
                 /* @var $global DUP_PRO_Global_Entity */
                 $global = DUP_PRO_Global_Entity::get_instance();
@@ -210,20 +205,22 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
     public function set_post_variables($post)
     {   
         //Archive
+		$this->set_checkbox_variable($post, '_archive_export_onlydb', 'archive_export_onlydb');
         $this->set_checkbox_variable($post, '_archive_filter_on', 'archive_filter_on');
         $this->set_checkbox_variable($post, '_database_filter_on', 'database_filter_on');
 
         //Installer
         $this->set_checkbox_variable($post, '_installer_opts_secure_on', 'installer_opts_secure_on');
         $this->set_checkbox_variable($post, '_installer_opts_skip_scan', 'installer_opts_skip_scan');
-        $this->set_checkbox_variable($post, '_installer_opts_cpnl_enable', 'installer_opts_cpnl_enable');
-        $this->set_checkbox_variable($post, '_installer_opts_ssl_admin', 'installer_opts_ssl_admin');            
-        $this->set_checkbox_variable($post, '_installer_opts_ssl_login', 'installer_opts_ssl_login');
+        $this->set_checkbox_variable($post, '_installer_opts_cpnl_enable', 'installer_opts_cpnl_enable');         
         $this->set_checkbox_variable($post, '_installer_opts_cache_wp', 'installer_opts_cache_wp');
         $this->set_checkbox_variable($post, '_installer_opts_cache_path', 'installer_opts_cache_path');         
-        $this->set_checkbox_variable($post, '_installer_opts_url_new', 'installer_opts_url_new');
 
         $this->installer_opts_secure_pass = base64_encode($post['_installer_opts_secure_pass']);
+
+        // Replaces any \n \r or \n\r from the package notes
+        $unwanted_chars = array("\n","\r","\n\r");
+        $post['notes'] = str_replace($unwanted_chars,'',esc_html($post['notes']));
 
         parent::set_post_variables($post);
 
@@ -245,10 +242,12 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
     {
         $source_template = self::get_by_id($source_template_id);
 
-        $this->archive_filter_dirs = $source_template->archive_filter_dirs;
+		$this->archive_export_onlydb = $source_template->archive_export_onlydb;
+        $this->archive_filter_on = $source_template->archive_filter_on;
+		$this->archive_filter_dirs = $source_template->archive_filter_dirs;
         $this->archive_filter_exts = $source_template->archive_filter_exts;
         $this->archive_filter_files = $source_template->archive_filter_files;
-        $this->archive_filter_on = $source_template->archive_filter_on;			
+        	
 
         $this->database_filter_on = $source_template->database_filter_on;
         $this->database_filter_tables = $source_template->database_filter_tables;
@@ -258,10 +257,7 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
         $this->installer_opts_cache_wp = $source_template->installer_opts_cache_wp;
         $this->installer_opts_db_host = $source_template->installer_opts_db_host;
         $this->installer_opts_db_name = $source_template->installer_opts_db_name;
-        $this->installer_opts_db_user = $source_template->installer_opts_db_user;
-        $this->installer_opts_ssl_admin = $source_template->installer_opts_ssl_admin;
-        $this->installer_opts_ssl_login = $source_template->installer_opts_ssl_login;
-        $this->installer_opts_url_new = $source_template->installer_opts_url_new;            
+        $this->installer_opts_db_user = $source_template->installer_opts_db_user;     
 
         //CPANEL
         $this->installer_opts_cpnl_host = $source_template->installer_opts_cpnl_host;
@@ -290,7 +286,8 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
         $compatlist		= isset($post['dbcompat']) ? implode(',', $post['dbcompat']) : '';
 
         // Archive
-        $this->archive_filter_on = isset($post['filter-on']) ? 1 : 0;
+        $this->archive_export_onlydb = isset($post['export-onlydb']) ? 1 : 0;
+		$this->archive_filter_on = isset($post['filter-on']) ? 1 : 0;
         $this->archive_filter_dirs = esc_html($filter_dirs);
         $this->archive_filter_exts = str_replace(array('.', ' '), "", esc_html($filter_exts));
         $this->archive_filter_files = str_replace(array('.', ' '), "", esc_html($filter_files));			
@@ -299,11 +296,9 @@ class DUP_PRO_Package_Template_Entity extends DUP_PRO_JSON_Entity_Base
         $this->installer_opts_db_host = esc_html($post['dbhost']);
         $this->installer_opts_db_name = esc_html($post['dbname']);
         $this->installer_opts_db_user = esc_html($post['dbuser']);
-        $this->installer_opts_ssl_admin = isset($post['ssl-admin']) ? 1 : 0;
-        $this->installer_opts_ssl_login = isset($post['ssl-login']) ? 1 : 0;
         $this->installer_opts_cache_wp = isset($post['cache-wp']) ? 1 : 0;
         $this->installer_opts_cache_path = isset($post['cache-path']) ? 1 : 0;
-        $this->installer_opts_url_new = esc_html($post['url-new']);
+
         //CPANEL
         $this->installer_opts_cpnl_host = esc_html($post['installer_opts_cpnl_host']);
         $this->installer_opts_cpnl_user = esc_html($post['installer_opts_cpnl_user']);

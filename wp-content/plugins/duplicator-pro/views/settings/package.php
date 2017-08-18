@@ -1,83 +1,95 @@
 <?php
+require_once(DUPLICATOR_PRO_PLUGIN_PATH.'/classes/entities/class.secure.global.entity.php');
+
 global $wp_version;
 global $wpdb;
 
-$nonce_action = 'duppro-settings-package-edit';
-$action_updated = null;
-$action_response = DUP_PRO_U::__("Package Settings Saved");
-
-/* @var $global DUP_PRO_Global_Entity */
 $global = DUP_PRO_Global_Entity::get_instance();
+$sglobal = DUP_PRO_Secure_Global_Entity::getInstance();
 
-$is_zip_available = (DUP_PRO_Zip_U::getShellExecZipPath() != null);
+$nonce_action		= 'duppro-settings-package-edit';
+$action_updated		= null;
+$action_response	= DUP_PRO_U::__("Package Settings Saved");
+$is_zip_available	= (DUP_PRO_Zip_U::getShellExecZipPath() != null);
 $max_execution_time = ini_get("max_execution_time");
-if (empty($max_execution_time))
-{
-	$max_execution_time = 30;
-}
-
+$max_execution_time = empty($max_execution_time) ? 30 : $max_execution_time;
+$beta_display		=  ($global->debug_beta) ? '' : 'display:none;';
 $max_worker_cap_in_sec = (int) (0.7 * (float) $max_execution_time);
 
 //SAVE RESULTS
-if (isset($_POST['action']) && $_POST['action'] == 'save')
-{
-    check_admin_referer($nonce_action);
+if (isset($_POST['action']) && $_POST['action'] == 'save') {
+	check_admin_referer($nonce_action);
 
-	//---------------------------
-    //BUILD MODES
-    $enable_mysqldump = isset($_REQUEST['_package_dbmode']) && $_REQUEST['_package_dbmode'] == 'mysql' ? "1" : "0";
-    $global->package_mysqldump = $enable_mysqldump ? 1 : 0;
-    $global->package_phpdump_qrylimit = isset($_REQUEST['_package_phpdump_qrylimit']) ? (int) $_REQUEST['_package_phpdump_qrylimit'] : 100;
-    $global->package_mysqldump_path = trim($_REQUEST['_package_mysqldump_path']);
-	$global->archive_build_mode =  ($is_zip_available) 
-			? (int)$_REQUEST['archive_build_mode']
-			: DUP_PRO_Archive_Build_Mode::ZipArchive;
+	//VISUAL
+	$global->package_ui_created			 = isset($_REQUEST['package_ui_created']) ? (int) $_REQUEST['package_ui_created'] : 1;
 
-    $global->max_package_runtime_in_min = (int)$_REQUEST['max_package_runtime_in_min'];
-	$global->server_load_reduction = (int)$_REQUEST['server_load_reduction'];
-	$global->archive_compression = isset($_REQUEST['archive_compression']) ? (bool)$_REQUEST['archive_compression'] : true;
-	$global->package_ui_created = isset($_REQUEST['package_ui_created']) ? (int) $_REQUEST['package_ui_created'] : 1;
+	//DATABASE
+	$enable_mysqldump					 = isset($_REQUEST['_package_dbmode']) && $_REQUEST['_package_dbmode'] == 'mysql' ? "1" : "0";
+	$global->package_mysqldump			 = $enable_mysqldump ? 1 : 0;
+	$global->package_phpdump_qrylimit	 = isset($_REQUEST['_package_phpdump_qrylimit']) ? (int) $_REQUEST['_package_phpdump_qrylimit'] : 100;
+	$global->package_mysqldump_path		 = trim($_REQUEST['_package_mysqldump_path']);
 
-	//---------------------------
-	//ADVANCED
-    DUP_PRO_U::initStorageDirectory();
-	if(isset($_REQUEST['ziparchive_chunk_size_in_mb']))
-	{
-		$global->ziparchive_chunk_size_in_mb = (int)$_REQUEST['ziparchive_chunk_size_in_mb'];
+	//ARCHIVE	
+	DUP_PRO_U::initStorageDirectory();
+	$global->archive_compression = isset($_REQUEST['archive_compression']) ? (bool) $_REQUEST['archive_compression'] : true;
+	$prelim_build_mode = (int) $_REQUEST['archive_build_mode'];
+
+	if (!$is_zip_available && ($prelim_build_mode == DUP_PRO_Archive_Build_Mode::Shell_Exec)) {
+		// Something has changed which invalidates Shell exec so move it to ZA
+		$global->archive_build_mode = DUP_PRO_Archive_Build_Mode::ZipArchive;
+	} else {
+		$global->archive_build_mode = $prelim_build_mode;
 	}
 	
-	$global->ziparchive_mode = (int)$_REQUEST['ziparchive_mode'];
-	$global->lock_mode = (int)$_REQUEST['lock_mode'];
-	$global->json_mode = (int)$_REQUEST['json_mode'];
-    $global->php_max_worker_time_in_sec = $_REQUEST['php_max_worker_time_in_sec'];  
-	$global->ajax_protocol = $_REQUEST['ajax_protocol'];
-    $global->custom_ajax_url = $_REQUEST['custom_ajax_url'];
-	$global->clientside_kickoff = isset($_REQUEST['_clientside_kickoff']);
-    $global->basic_auth_enabled = isset($_REQUEST['_basic_auth_enabled']) ? 1 : 0;
-    if($global->basic_auth_enabled == true)
-    {    
-        $global->basic_auth_user = trim($_REQUEST['basic_auth_user']);
-        $global->basic_auth_password = $_REQUEST['basic_auth_password'];
-    }
-    else
-    {
-        $global->basic_auth_user = '';
-        $global->basic_auth_password = '';
-    }    
-	$global->basic_auth_enabled = isset($_REQUEST['_basic_auth_enabled']) ? 1 : 0;
-	$global->installer_base_name = isset($_REQUEST['_installer_base_name']) ? $_REQUEST['_installer_base_name'] : 'installer.php';
+	$global->ziparchive_mode		= isset($_REQUEST['ziparchive_mode']) ? (int) $_REQUEST['ziparchive_mode'] : 0;
+	$global->ziparchive_validation	= isset($_REQUEST['ziparchive_validation']);
+	if (isset($_REQUEST['ziparchive_chunk_size_in_mb'])) {
+		$global->ziparchive_chunk_size_in_mb = (int) $_REQUEST['ziparchive_chunk_size_in_mb'];
+	}
 	
-	          
-    $action_updated = $global->save();
-	$global->adjust_settings_for_system();	
+	//PROCESSING
+	$global->max_package_runtime_in_min	 = (int) $_REQUEST['max_package_runtime_in_min'];
+	$global->server_load_reduction		 = (int) $_REQUEST['server_load_reduction'];
+
+	//ADVANCED
+	$global->lock_mode					 = (int) $_REQUEST['lock_mode'];
+	$global->json_mode					 = (int) $_REQUEST['json_mode'];
+	$global->php_max_worker_time_in_sec	 = $_REQUEST['php_max_worker_time_in_sec'];
+	$global->ajax_protocol				 = $_REQUEST['ajax_protocol'];
+	$global->custom_ajax_url			 = $_REQUEST['custom_ajax_url'];
+	$global->clientside_kickoff			 = isset($_REQUEST['_clientside_kickoff']);
+
+    // Auto setting the max package runtime in case of client kickoff is turned off and the max package runtime is less than 180 minutes - 3 hours
+	if($global->clientside_kickoff && $global->max_package_runtime_in_min < 180 ) {
+		$global->max_package_runtime_in_min = 180;
+	}
+
+	$global->basic_auth_enabled			 = isset($_REQUEST['_basic_auth_enabled']) ? 1 : 0;
+	if ($global->basic_auth_enabled == true) {
+		$global->basic_auth_user	 = trim($_REQUEST['basic_auth_user']);
+		$sglobal->basic_auth_password = $_REQUEST['basic_auth_password'];
+	} else {
+		$global->basic_auth_user	 = '';
+		$sglobal->basic_auth_password = '';
+	}
+	$global->basic_auth_enabled	 = isset($_REQUEST['_basic_auth_enabled']) ? 1 : 0;
+	$global->installer_base_name = isset($_REQUEST['_installer_base_name']) ? $_REQUEST['_installer_base_name'] : 'installer.php';
+
+
+	$action_updated = $global->save();
+    $sglobal->save();
+    
+	$global->adjust_settings_for_system();
 }
 
-$phpdump_chunkopts = array("20", "100", "500", "1000", "2000");
-$mysqlDumpPath = DUP_PRO_DB::getMySqlDumpPath();
-$mysqlDumpFound = ($mysqlDumpPath) ? true : false;
-$archive_compression_disabled = ($global->archive_build_mode == DUP_PRO_Archive_Build_Mode::ZipArchive);
-$package_ui_created = is_numeric($global->package_ui_created) ? $global->package_ui_created : 1;
-		
+$phpdump_chunkopts				 = array("20", "100", "500", "1000", "2000");
+$mysqlDumpPath					 = DUP_PRO_DB::getMySqlDumpPath();
+$mysqlDumpFound					 = ($mysqlDumpPath) ? true : false;
+$archive_compression_disabled	 = ($global->archive_build_mode == DUP_PRO_Archive_Build_Mode::ZipArchive);
+$package_ui_created				 = is_numeric($global->package_ui_created) ? $global->package_ui_created : 1;
+
+//var_dump($global);
+//var_dump($GLOBALS);
 ?>
 
 <style>    
@@ -86,6 +98,7 @@ $package_ui_created = is_numeric($global->package_ui_created) ? $global->package
     div.dup-feature-notfound {padding:5px; border:1px solid silver; background: #fcf3ef; border-radius: 3px; width:550px; font-size:13px; line-height: 18px}	
 	select#package_ui_created {font-family: monospace}
 	input#_package_mysqldump_path {width:500px}
+	#dpro-ziparchive-mode-st, #dpro-ziparchive-mode-mt {height: 28px; padding-top:5px; display: none}
 	i.description {font-size: 12px}
 </style>
 
@@ -137,34 +150,34 @@ $package_ui_created = is_numeric($global->package_ui_created) ? $global->package
                 </p>
             </td>
         </tr>	
-    </table><br/>		
-		
-    <!-- ===============================
-    BUILD MODES -->
-    <h3 class="title"><?php DUP_PRO_U::_e("Processing") ?> </h3>
+    </table>
+
+
+	<!-- ===============================
+    DATABASE -->
+    <h3 class="title"><?php DUP_PRO_U::_e("Database") ?> </h3>
     <hr size="1" />
-    <table class="form-table">       
-         <tr>
-            <th scope="row"><label><?php DUP_PRO_U::_e("Database Script"); ?></label></th>
+    <table class="form-table">
+		<tr>
+            <th scope="row"><label><?php DUP_PRO_U::_e("SQL Script"); ?></label></th>
             <td>
-				
 				<!-- MYSQLDUMP IN-ACTIVE -->
                 <?php if (! DUP_PRO_Shell_U::isShellExecEnabled()) : ?>
 					<input type="radio" disabled="true"/>
-                    <label><?php DUP_PRO_U::_e("mysqldump"); ?> <i class="description"><?php DUP_PRO_U::_e("(recommended)"); ?></i></label>
+                    <label><?php DUP_PRO_U::_e("Mysqldump"); ?> <i class="description"><?php DUP_PRO_U::_e("(recommended)"); ?></i></label>
 					<div class="sub-opts">
 						<div class="dup-feature-notfound">
 							<?php
 								DUP_PRO_U::_e("In order to use mysqldump the PHP function shell_exec needs to be enabled. This server currently does not allow shell_exec to run. ");
 								DUP_PRO_U::_e("Please contact your host or server admin to enable this feature. For a list of approved providers that support shell_exec ");
-								echo "<a href='https://snapcreek.com/wordpress-hosting/' target='_blank'>" . DUP_PRO_U::__("click here") . "</a>.";	
+								echo "<a href='https://snapcreek.com/wordpress-hosting/' target='_blank'>" . DUP_PRO_U::__("click here") . "</a>.";
 							?>
 						</div>
 					</div><br/>
-				<!-- MYSQLDUMP ACTIVE -->					
+				<!-- MYSQLDUMP ACTIVE -->
                 <?php else : ?>
                     <input type="radio" name="_package_dbmode" value="mysql" id="package_mysqldump" <?php echo DUP_PRO_UI::echoChecked($global->package_mysqldump); ?> />
-                    <label for="package_mysqldump"><?php DUP_PRO_U::_e("mysqldump"); ?> <i class="description"><?php DUP_PRO_U::_e("(recommended)"); ?></i></label>
+                    <label for="package_mysqldump"><?php DUP_PRO_U::_e("Mysqldump"); ?> <i class="description"><?php DUP_PRO_U::_e("(recommended)"); ?></i></label>
                     <div class="sub-opts">
                         <?php if ( $mysqlDumpFound) : ?>
                             <div class="dup-feature-found">
@@ -176,31 +189,31 @@ $package_ui_created = is_numeric($global->package_ui_created) ? $global->package
                                 <?php
 									DUP_PRO_U::_e('The mysqldump program was not found at its default location or the custom path below.  Please enter a valid path where mysqldump can run. ');
 									DUP_PRO_U::_e("If the problem persist contact your server admin for the correct path. For a list of approved providers that support mysqldump ");
-									echo "<a href='https://snapcreek.com/wordpress-hosting/' target='_blank'>" . DUP_PRO_U::__("click here") . "</a>.";								
+									echo "<a href='https://snapcreek.com/wordpress-hosting/' target='_blank'>" . DUP_PRO_U::__("click here") . "</a>.";
                                 ?>
                             </div><br/>
                         <?php endif; ?>
-						
-						
+
+
                         <label><?php DUP_PRO_U::_e("Custom Path"); ?></label>
-                        <i class="fa fa-question-circle" 
-				data-tooltip-title="<?php DUP_PRO_U::_e("mysqldump"); ?>" 
-				data-tooltip="<?php DUP_PRO_U::_e('An optional path to the mysqldump program.  Add a custom path if the path to mysqldump is not properly detected or needs to be changed.'); ?>"></i>
+                        <i class="fa fa-question-circle"
+							data-tooltip-title="<?php DUP_PRO_U::_e("mysqldump"); ?>"
+							data-tooltip="<?php DUP_PRO_U::_e('An optional path to the mysqldump program.  Add a custom path if the path to mysqldump is not properly detected or needs to be changed.   For all paths including Windows use a forward slash.'); ?>"></i>
                         <br/>
-                        <input class="wide-input" type="text" name="_package_mysqldump_path" id="_package_mysqldump_path" value="<?php echo $global->package_mysqldump_path; ?> " />
+                        <input class="wide-input" type="text" name="_package_mysqldump_path" id="_package_mysqldump_path" value="<?php echo $global->package_mysqldump_path; ?>"  placeholder="<?php DUP_PRO_U::_e("/usr/bin/mypath/mysqldump.exe"); ?>" />
 						<br/><br/>
-       
+
                     </div>
                 <?php endif; ?>
-				
+
 				<!-- PHP OPTION -->
 				<input type="radio" name="_package_dbmode" id="package_phpdump" value="php" <?php echo DUP_PRO_UI::echoChecked(!$global->package_mysqldump); ?> />
                 <label for="package_phpdump"><?php DUP_PRO_U::_e("PHP Code"); ?></label> &nbsp;
                 <div class="sub-opts">
-					
+
                     <label for="_package_phpdump_qrylimit"><?php DUP_PRO_U::_e("Query Limit Size"); ?></label>
                     <i style="margin-right:7px" class="fa fa-question-circle"
-					   data-tooltip-title="<?php DUP_PRO_U::_e("PHP Query Limit Size"); ?>" 
+					   data-tooltip-title="<?php DUP_PRO_U::_e("PHP Query Limit Size"); ?>"
 					   data-tooltip="<?php DUP_PRO_U::_e('A higher limit size will speed up the database build time, however it will use more memory.  If your host has memory caps start off low.'); ?>"></i>
                     <select name="_package_phpdump_qrylimit" id="_package_phpdump_qrylimit">
                         <?php
@@ -211,102 +224,133 @@ $package_ui_created = is_numeric($global->package_ui_created) ? $global->package
                         }
                         ?>
                     </select>
-                </div><br/>	
-					
+                </div>
+
             </td>
         </tr>
-        	<tr>
-            <th scope="row"><label><?php DUP_PRO_U::_e("Archive Compression"); ?></label></th>
-            <td>
-                						
-						<?php DUP_PRO_U::_e("Archive Compression"); ?>
-                                                <i style="margin-right:7px;" class="fa fa-question-circle"
-							data-tooltip-title="<?php DUP_PRO_U::_e("Shell Exec Archive Compression:"); ?>"
-							data-tooltip="<?php DUP_PRO_U::_e('Controls  archive compression. Turning compression off can improve build stability and speed but packages will be larger. Can be toggled when using ZipArchive on a PHP 7+ system of Shell Exec Zip.'); ?>"></i>
-          <!--      <span style="margin-right:7px;">: &nbsp;</span>-->
-						<input type="radio" name="archive_compression" id="archive_compression_off" value="0" <?php echo DUP_PRO_UI::echoChecked($global->archive_compression == false); ?> />
-						<label for="archive_compression_off"><?php DUP_PRO_U::_e("Off"); ?></label> &nbsp;
-						<input type="radio" name="archive_compression"  id="archive_compression_on" value="1" <?php echo DUP_PRO_UI::echoChecked($global->archive_compression == true); ?>  />
-						<label for="archive_compression_on"><?php DUP_PRO_U::_e("On"); ?></label>
-            </td>
-                </tr>
+    </table>
+
+	<!-- ===============================
+    ARCHIVE -->
+    <h3 class="title"><?php DUP_PRO_U::_e("Archive") ?> </h3>
+    <hr size="1" />
+    <table class="form-table">
 		<tr>
-            <th scope="row"><label><?php DUP_PRO_U::_e("Archive Engine"); ?></label></th>
+            <th scope="row">
+				<label><?php DUP_PRO_U::_e("Compression"); ?></label>
+			</th>
             <td>
-				
+				<input type="radio" name="archive_compression" id="archive_compression_off" value="0" <?php echo DUP_PRO_UI::echoChecked($global->archive_compression == false); ?> />
+				<label for="archive_compression_off"><?php DUP_PRO_U::_e("Off"); ?></label> &nbsp;
+				<input type="radio" name="archive_compression"  id="archive_compression_on" value="1" <?php echo DUP_PRO_UI::echoChecked($global->archive_compression == true); ?>  />
+				<label for="archive_compression_on"><?php DUP_PRO_U::_e("On"); ?></label>
+				<i style="margin-right:7px;" class="fa fa-question-circle"
+					data-tooltip-title="<?php DUP_PRO_U::_e("Shell Exec Archive Compression:"); ?>"
+					data-tooltip="<?php DUP_PRO_U::_e('Controls archive compression. This setting can be toggled when using ZipArchive on a PHP 7+ system or Shell Exec Zip.'); ?>"></i>
+            </td>
+		</tr>
+		<tr>
+            <th scope="row"><label><?php DUP_PRO_U::_e("Engine"); ?></label></th>
+            <td>
+
 				<!-- SHELL EXEC: ENABLED  -->
                 <?php if ($is_zip_available) : ?>
 					<input onclick="DupPro.UI.SetArchiveOptionStates();" type="radio" name="archive_build_mode" id="archive_build_mode1" value="<?php echo DUP_PRO_Archive_Build_Mode::Shell_Exec; ?>" <?php echo DUP_PRO_UI::echoChecked($global->archive_build_mode == DUP_PRO_Archive_Build_Mode::Shell_Exec); ?> />
-					<label for="archive_build_mode1"><?php DUP_PRO_U::_e("Shell Exec Zip"); ?> <i class="description"><?php DUP_PRO_U::_e("(recommended)"); ?></i></label> <br/>
-					
+					<label for="archive_build_mode1"><?php DUP_PRO_U::_e("Shell Zip"); ?> <i class="description"><?php DUP_PRO_U::_e("(recommended)"); ?></i></label> <br/>
+
 					<br/>
-					
+
 				<!-- SHELL EXEC: DISABLED  -->
                 <?php else : ?>
-					
-					<input id="archive_build_mode1" type="radio" disabled="true"/><label><?php DUP_PRO_U::_e("Shell Exec Zip"); ?> <i class="description"><?php DUP_PRO_U::_e("(recommended)"); ?></i></label> <br/>
+
+					<input id="archive_build_mode1" type="radio" disabled="true"/><label><?php DUP_PRO_U::_e("Shell Zip"); ?> <i class="description"><?php DUP_PRO_U::_e("(recommended)"); ?></i></label> <br/>
 					<div class="sub-opts">
 						<p class="description" >
-							<?php 																								
+							<?php
+                            
 								$problem_fixes = DUP_PRO_Zip_U::getShellExecZipProblems();
-								
-								$shell_exec_zip_tooltip = null;
-								
-								if(count($problem_fixes) > 0)
+								$shell_exec_zip_tooltip = '';
+								if(count($problem_fixes) > 0 && ((strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN')))
 								{
-									$shell_exec_zip_tooltip = DUP_PRO_U::__('To get Shell Exec zip working ask your host:');
-									$shell_exec_zip_tooltip .= '<br/>';
+                                    $shell_exec_zip_tooltip .= DUP_PRO_U::__("Server doesn't support more powerful Shell Zip engine - only older ZipArchive engine can be used.<br/><br/>To make Shell Zip available, ask your host to:<br/>");
+                            
 									$i = 1;
 									foreach($problem_fixes as $problem_fix)
 									{
 										$shell_exec_zip_tooltip .= "{$i}. {$problem_fix->fix}<br/>";
 										$i++;
-									}														
-								}
-							
-								DUP_PRO_U::_e("ZipArchive has been auto-selected as Shell Exec zip is not available on this server.");								
+									}
+                                    $shell_exec_zip_tooltip .= '<br/>';
+								} else {
+                                    $shell_exec_zip_tooltip .= DUP_PRO_U::__("Server doesn't support more powerful Shell Zip engine - only older ZipArchive engine can be used.<br/>");
+                                }
 								?>
-								<i class="fa fa-question-circle" 
-									data-tooltip-title="<?php DUP_PRO_U::_e("Get Shell Exec Zip Working"); ?>" 
-									data-tooltip="<?php echo $shell_exec_zip_tooltip; ?>"></i>															
 								<?php
-                                                                echo '<br/>';
-								echo '<br/>';
-//								$providers = "<a href='https://snapcreek.com/wordpress-hosting/' target='_blank'>" . DUP_PRO_U::__("this page") . "</a>.";//								
-//								DUP_PRO_U::_e("If your host is not able or willing to enable Shell Exec zip and you wish to use it please refer to {$providers} for recommended hosts");
-								
-								DUP_PRO_U::_e("For a list of approved providers that support Shell Exec zip ");
-								echo "<a href='https://snapcreek.com/wordpress-hosting/' target='_blank'>" . DUP_PRO_U::__("click here") . "</a>.";
+  
+                                 echo "{$shell_exec_zip_tooltip}";
+                                 
+                                 DUP_PRO_U::_e("<a href='https://snapcreek.com/wordpress-hosting/' target='_blank'>List of providers that support Shell Zip by default.</a>");							
 							?>
 						</p>
 					</div><br/>
                 <?php endif; ?>
-					
+
 				<!-- ZIP ARCHIVE  -->
 				<input onclick="DupPro.UI.SetArchiveOptionStates();" type="radio" name="archive_build_mode" id="archive_build_mode2"  value="<?php echo DUP_PRO_Archive_Build_Mode::ZipArchive; ?>" <?php echo DUP_PRO_UI::echoChecked($global->archive_build_mode == DUP_PRO_Archive_Build_Mode::ZipArchive); ?> />
 				<label for="archive_build_mode2"><?php DUP_PRO_U::_e("PHP ZipArchive"); ?></label> &nbsp;
 
 				<div class="sub-opts">
-					<input type="radio" name="ziparchive_mode" id="ziparchive_mode_1" value="<?php echo DUP_PRO_ZipArchive_Mode::Multithreaded ?>" <?php echo DUP_PRO_UI::echoChecked($global->ziparchive_mode == DUP_PRO_ZipArchive_Mode::Multithreaded); ?> onclick="DupPro.UI.SetBufferSizeState();" />
-					<label for="ziparchive_mode_1"><?php DUP_PRO_U::_e("Multi-Threaded"); ?></label> &nbsp; 
+					<label>Mode:</label> 
+					<select  name="ziparchive_mode" id="ziparchive_mode"  onchange="DupPro.UI.setZipArchiveMode();">
+						<option <?php echo DUP_PRO_UI::echoSelected($global->ziparchive_mode == DUP_PRO_ZipArchive_Mode::Multithreaded); ?> value="<?php echo DUP_PRO_ZipArchive_Mode::Multithreaded ?>">
+							<?php DUP_PRO_U::_e("Multi-Threaded"); ?>
+						</option>
+						<option <?php echo DUP_PRO_UI::echoSelected($global->ziparchive_mode == DUP_PRO_ZipArchive_Mode::SingleThread); ?> value="<?php echo DUP_PRO_ZipArchive_Mode::SingleThread ?>">
+							<?php DUP_PRO_U::_e("Single-Threaded"); ?>
+						</option>
+					</select>
 
-					<input type="radio" name="ziparchive_mode" id="ziparchive_mode_2" value="<?php echo DUP_PRO_ZipArchive_Mode::SingleThread ?>" <?php echo DUP_PRO_UI::echoChecked($global->ziparchive_mode == DUP_PRO_ZipArchive_Mode::SingleThread); ?> onclick="DupPro.UI.SetBufferSizeState();" />
-					<label for="ziparchive_mode_2"><?php DUP_PRO_U::_e("Single-Threaded"); ?></label> <br/><br/>
-
+					<div id="dpro-ziparchive-mode-st">
+						<input type="checkbox" id="ziparchive_validation" name="ziparchive_validation" <?php echo DUP_PRO_UI::echoChecked($global->ziparchive_validation); ?>>
+						<label for="ziparchive_validation">Enable file validation</label>
+					</div>
+	
+					<div id="dpro-ziparchive-mode-mt">
+						<label><?php DUP_PRO_U::_e("Buffer Size"); ?></label>
+						<input style="width:40px;" 
+							   data-parsley-required data-parsley-errors-container="#ziparchive_chunk_size_error_container" data-parsley-min="5" data-parsley-type="number"
+							   type="text" name="ziparchive_chunk_size_in_mb" id="ziparchive_chunk_size_in_mb" value="<?php echo $global->ziparchive_chunk_size_in_mb; ?>" />
+						<label><?php DUP_PRO_U::_e('MB'); ?></label>
+						<i style="margin-right:7px" class="fa fa-question-circle"
+							data-tooltip-title="<?php DUP_PRO_U::_e("PHP ZipArchive"); ?>"
+							data-tooltip="<?php DUP_PRO_U::_e('The buffer size only applies to multi-threaded requests.  The buffer indicates how large an archive will get before a close is registered with the ZipArchive call.  Higher values are faster but can be more unstable based on the hosts max_execution time.'); ?>"></i>
+						<div id="ziparchive_chunk_size_error_container" class="duplicator-error-container"></div>
+					</div>
 					
-					<label><?php DUP_PRO_U::_e("Buffer Size"); ?></label>
-                                        <i style="margin-right:7px" class="fa fa-question-circle"
-						data-tooltip-title="<?php DUP_PRO_U::_e("PHP ZipArchive"); ?>"
-						data-tooltip="<?php DUP_PRO_U::_e('The buffer size only applies to multi-threaded requets.  The buffer indicates how large an archive will get before a close is registered with the ZipArchive call.  Higer values are faster but can be more unstable based on the hosts max_execution time.'); ?>"></i>
-					<input style="width:40px;" <?php DUP_PRO_UI::echoDisabled($global->ziparchive_mode == DUP_PRO_ZipArchive_Mode::SingleThread); ?> 
-						   data-parsley-required data-parsley-errors-container="#ziparchive_chunk_size_error_container" data-parsley-min="5" data-parsley-type="number" 
-						   type="text" name="ziparchive_chunk_size_in_mb" id="ziparchive_chunk_size_in_mb" value="<?php echo $global->ziparchive_chunk_size_in_mb; ?>" /> 
-					<label><?php DUP_PRO_U::_e('MB'); ?></label>
-					<div id="ziparchive_chunk_size_error_container" class="duplicator-error-container"></div>
-				</div>	
+				</div>
+
+                <!-- DUPARCHIVE -->
+				<div style="<?php echo $beta_display; ?>">
+					<br/>
+					<input onclick="DupPro.UI.SetArchiveOptionStates();" type="radio" name="archive_build_mode" id="archive_build_mode3"  value="<?php echo DUP_PRO_Archive_Build_Mode::DupArchive; ?>" <?php echo DUP_PRO_UI::echoChecked($global->archive_build_mode == DUP_PRO_Archive_Build_Mode::DupArchive); ?> />
+					<label for="archive_build_mode3"><?php DUP_PRO_U::_e("DupArchive (BETA)"); ?></label> &nbsp;
+					<div class="sub-opts">
+						<p class="description">
+							<?php DUP_PRO_U::_e('Custom format geared at handling larger sites. <b>Do not use if you are using scheduled backups.</b>'); ?>
+						</p>
+					</div>
+				</div>
 
             </td>
         </tr>
+    </table>
+
+		
+    <!-- ===============================
+    PROCESSING -->
+    <h3 class="title"><?php DUP_PRO_U::_e("Processing") ?> </h3>
+    <hr size="1" />
+    <table class="form-table">       
         <tr>
             <th scope="row"><label><?php DUP_PRO_U::_e("Server Throttle"); ?></label></th>
             <td>
@@ -330,7 +374,20 @@ $package_ui_created = is_numeric($global->package_ui_created) ? $global->package
                 <div id="max_package_runtime_in_min_error_container" class="duplicator-error-container"></div>
                 <p class="description">  <?php DUP_PRO_U::_e('Max build and storage time until package is auto-cancelled. Set to 0 for no limit.'); ?>  </p>
             </td>
-        </tr>	
+        </tr>
+        <tr valign="top">
+            <th scope="row"><label><?php DUP_PRO_U::_e("Max Worker Time"); ?></label></th>
+            <td>
+                <input style="float:left;display:block;margin-right:6px;" data-parsley-required data-parsley-errors-container="#php_max_worker_time_in_sec_error_container" data-parsley-min="10" data-parsley-type="number" class="narrow-input" type="text" name="php_max_worker_time_in_sec" id="php_max_worker_time_in_sec" value="<?php echo $global->php_max_worker_time_in_sec; ?>" />
+                <p style="margin-left:4px;"><?php DUP_PRO_U::_e('Seconds'); ?></p>
+                <div id="php_max_worker_time_in_sec_error_container" class="duplicator-error-container"></div>
+                <p class="description">
+					<?php
+					DUP_PRO_U::_e("Lower is more reliable but slower. Recommended max is $max_worker_cap_in_sec sec based on PHP setting 'max_execution_time'.");
+					?>
+                </p>
+            </td>
+        </tr>
     </table><br/>
 
 
@@ -343,19 +400,7 @@ $package_ui_created = is_numeric($global->package_ui_created) ? $global->package
 	</p>
     <table class="form-table">	
 		
-        <tr valign="top">           
-            <th scope="row"><label><?php DUP_PRO_U::_e("Max Worker Time"); ?></label></th>
-            <td>
-                <input style="float:left;display:block;margin-right:6px;" data-parsley-required data-parsley-errors-container="#php_max_worker_time_in_sec_error_container" data-parsley-min="10" data-parsley-type="number" class="narrow-input" type="text" name="php_max_worker_time_in_sec" id="php_max_worker_time_in_sec" value="<?php echo $global->php_max_worker_time_in_sec; ?>" />                 
-                <p style="margin-left:4px;"><?php DUP_PRO_U::_e('Seconds'); ?></p>
-                <div id="php_max_worker_time_in_sec_error_container" class="duplicator-error-container"></div>
-                <p class="description">
-					<?php
-					DUP_PRO_U::_e("Lower is more reliable but slower. Recommended max is $max_worker_cap_in_sec sec based on PHP setting 'max_execution_time'.");
-					?>
-                </p>
-            </td>
-        </tr> 		
+	
 		<tr>
             <th scope="row"><label><?php DUP_PRO_U::_e("Thread Lock"); ?></label></th>
             <td>
@@ -394,7 +439,7 @@ $package_ui_created = is_numeric($global->package_ui_created) ? $global->package
 		<tr valign="top">
             <th scope="row"><label><?php DUP_PRO_U::_e('Client-side Kickoff'); ?></label></th>
             <td>
-                <input type="checkbox" name="_clientside_kickoff" id="_uninstall_settings" <?php DUP_PRO_UI::echoChecked($global->clientside_kickoff); ?> /> 
+                <input type="checkbox" name="_clientside_kickoff" id="_clientside_kickoff" <?php DUP_PRO_UI::echoChecked($global->clientside_kickoff); ?> />
                 <label for="_clientside_kickoff"><?php DUP_PRO_U::_e("Enabled") ?> </label><br/>
 				<p class="description">
 					<?php DUP_PRO_U::_e('Initiate package build from client. Only check this if instructed to by Snap Creek support.'); ?>
@@ -407,7 +452,7 @@ $package_ui_created = is_numeric($global->package_ui_created) ? $global->package
                 <input type="checkbox" name="_basic_auth_enabled" id="_basic_auth_enabled" <?php DUP_PRO_UI::echoChecked($global->basic_auth_enabled); ?> /> 
                 <label for="_basic_auth_enabled"><?php DUP_PRO_U::_e("Enabled") ?> </label><br/>
                 <input style="margin-top:8px;width:200px;" class="wide-input" autocomplete="off"  placeholder="<?php DUP_PRO_U::_e('User'); ?>" type="text" name="basic_auth_user" id="basic_auth_user" value="<?php echo $global->basic_auth_user; ?>" />
-                <input id='auth_password' autocomplete="off" style="width:200px;" class="wide-input"  placeholder="<?php DUP_PRO_U::_e('Password'); ?>" type="password" name="basic_auth_password" id="basic_auth_password" value="<?php echo $global->basic_auth_password; ?>" />
+                <input id='auth_password' autocomplete="off" style="width:200px;" class="wide-input"  placeholder="<?php DUP_PRO_U::_e('Password'); ?>" type="password" name="basic_auth_password" id="basic_auth_password" value="<?php echo $sglobal->basic_auth_password; ?>" />
                 <label for="auth_password">
                     <i class="dpro-edit-info">
                         <input type="checkbox" onclick="DupPro.UI.TogglePasswordDisplay(this.checked, 'auth_password');" /> <?php DUP_PRO_U::_e('Show Password') ?>
@@ -435,28 +480,30 @@ $package_ui_created = is_numeric($global->package_ui_created) ? $global->package
     </p>
 </form>
 
-<script type="text/javascript">
+<script>
 jQuery(document).ready(function ($) 
 {
-	DupPro.UI.SetBufferSizeState = function ()
+	DupPro.UI.setZipArchiveMode = function ()
 	{
-            var isSingleThreadSelected = $('#ziparchive_mode_1').is(':checked');
-            var isZipArchiveSelected =  $('#archive_build_mode2').is(':checked');
-
-            var bufferSizeEnabled = isSingleThreadSelected && isZipArchiveSelected;
-
-            $("#ziparchive_chunk_size_in_mb").prop("disabled", !bufferSizeEnabled);
+		$('#dpro-ziparchive-mode-st, #dpro-ziparchive-mode-mt').hide();
+		if ($('#ziparchive_mode').val() == 0) {
+			$('#dpro-ziparchive-mode-mt').show();
+		} else {
+			$('#dpro-ziparchive-mode-st').show();
+		}
 	}
 
         DupPro.UI.SetArchiveOptionStates = function() {
 
             var php70 = <?php DUP_PRO_UI::echoBoolean(DUP_PRO_U::PHP70()); ?>;
-            var isShellZipSelected = $('#archive_build_mode1').is(':checked');
+            var isShellZipSelected   = $('#archive_build_mode1').is(':checked');
+            var isDupArchiveSelected = $('#archive_build_mode3').is(':checked');
 
-            if(isShellZipSelected) {
+            if(isShellZipSelected || isDupArchiveSelected) {
                 $("[name='archive_compression']").prop('disabled', false);
                 $("[name='ziparchive_mode']").prop('disabled', true);
             } else {
+                
                 $("[name='ziparchive_mode']").prop('disabled', false);
 
                 if(php70) {
@@ -464,12 +511,12 @@ jQuery(document).ready(function ($)
                  } else {
                      $('#archive_compression_on').prop('checked', true);
                     $("[name='archive_compression']").prop('disabled', true);
-                    
+
                     console.log('archive compression on');
                 }
             }
 
-            DupPro.UI.SetBufferSizeState();
+            DupPro.UI.setZipArchiveMode();
         }
 
 	//INIT

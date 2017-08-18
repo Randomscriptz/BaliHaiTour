@@ -328,7 +328,10 @@ if (!class_exists('DUP_PRO_DropboxV2Client')) {
             $error_present = false;
 
             while (($end_of_file == false) && ($time_passed < $max_upload_time_in_sec) & ($error_present == false)) {
-                usleep($server_load_delay);
+
+                if($server_load_delay !== 0) {
+                    usleep($server_load_delay);
+                }
 
                 DUP_PRO_LOG::trace("3");
                 $content = fread($fh, $upload_chunk_size);

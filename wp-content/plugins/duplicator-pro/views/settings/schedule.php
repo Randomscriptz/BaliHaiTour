@@ -75,7 +75,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'save')
     </p>
 
 </form>
-<script type="text/javascript">
+<script>
     jQuery(document).ready(function ($) {
 
 

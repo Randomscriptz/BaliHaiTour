@@ -355,7 +355,9 @@ if (!class_exists('DUP_PRO_DropboxClient'))
 
             while (($end_of_file == false) && ($time_passed < $max_upload_time_in_sec) & ($error_present == false))
             {
-                usleep($server_load_delay);
+                if($server_load_delay !== 0) {
+                    usleep($server_load_delay);
+                }
                 
                 DUP_PRO_LOG::trace("Uploading offset $offset since timepassed=$time_passed");
                 $url = $this->cleanUrl(self::API_CONTENT_URL . "/chunked_upload") . '?' . http_build_query(compact('upload_id', 'offset'), '', '&');

@@ -1,5 +1,6 @@
 <?php
 require_once(DUPLICATOR_PRO_PLUGIN_PATH.'classes/utilities/class.u.low.php');
+require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/classes/entities/class.system.global.entity.php');
 
 /**
  * Used to generate a alert in the main WP admin screens
@@ -14,11 +15,11 @@ require_once(DUPLICATOR_PRO_PLUGIN_PATH.'classes/utilities/class.u.low.php');
  * @since 2.0.0
  *
  */
-class DUP_PRO_UI_ALERT
+class DUP_PRO_UI_Alert
 {
 
     /**
-     * Used by the WP action hook to detect the state of the endpoint licence
+     * Used by the WP action hook to detect the state of the endpoint license
      * which calls the various show* methods for which alert to display
      *
      * @return null
@@ -57,6 +58,25 @@ class DUP_PRO_UI_ALERT
             }
         }
     }
+    
+     /**
+     * Shows the scheduled failed alert
+     */
+    public static function failedScheduleCheck()
+    {
+        /* @var $system_global DUP_PRO_System_Global_Entity */
+        $system_global = DUP_PRO_System_Global_Entity::get_instance();
+        $img_url     = plugins_url('duplicator-pro/assets/img/warning.png');
+
+        if(($system_global !== null) && ($system_global->schedule_failed)) {
+
+            $clear_url = self_admin_url()."admin.php?page=".DUP_PRO_Constants::$SCHEDULES_SUBMENU_SLUG.'&dup_pro_clear_schedule_failure=1';
+
+            echo "<div style='padding-bottom:10px;' class='dpro-admin-notice error'><p><img src='{$img_url}' style='float:left; padding:0 10px 0 5px' />".
+            "<b>Warning! A Duplicator Pro scheduled backup has failed.</b> <br/>".
+            "This message will continue to be displayed until you <a href='{$clear_url}'>clear it</a> or a schedule builds successfully<br/></p></div>";
+        }    
+    }
 
     /**
      * Shows the expired message alert
@@ -69,14 +89,14 @@ class DUP_PRO_UI_ALERT
         $renewal_url = 'https://snapcreek.com/checkout?edd_license_key='.$license_key;
         $img_url     = plugins_url('duplicator-pro/assets/img/plug.png');
 
-        echo "<div class='update-nag dpro-admin-notice'><p><img src='{$img_url}' style='float:left; padding:0 10px 0 5px' />".
+        echo "<div class='error update-nag dpro-admin-notice'><p><img src='{$img_url}' style='float:left; padding:0 10px 0 5px' />".
         "<b>Warning! Your Duplicator Pro license has expired...</b> <br/>".
         "You're currently missing important updates for <b>security patches</b>, <i>bug fixes</i>, support requests, &amp; <u>new features</u>.<br/>".
         "<a target='_blank' href='{$renewal_url}'>Renew now to receive a 40% discount off the current price!</a> </p></div>";
     }
 
     /**
-     * Shows the licence count used up alert
+     * Shows the license count used up alert
      *
      * @return string	HTML alert message hook
      */
@@ -116,7 +136,7 @@ class DUP_PRO_UI_ALERT
     /**
      * Shows the larger super nag screen used for display after the trial period
      *
-     * @param int $daysInvalid The number of days the licence has been invalid
+     * @param int $daysInvalid The number of days the license has been invalid
      *
      * @return string	HTML alert message hook
      */

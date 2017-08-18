@@ -759,7 +759,7 @@ class Yikes_Inc_Easy_MailChimp_Extender_Process_Submission_Handler {
 			*	@param string | $form_id		| The ID of the current form being subscribed to
 			*	@param array  | $page_data		| An array of data related to the page the form is on
 			*/
-			$redirect_url = apply_filters( 'yikes-mailchimp-redirect-url', esc_url( $redirect_url ), $this->form_id, $page_data );
+			$redirect_url = apply_filters( 'yikes-mailchimp-redirect-url', $redirect_url, $this->form_id, $page_data );
 
 			/**
 			*	yikes-mailchimp-redirect-timer
@@ -772,7 +772,6 @@ class Yikes_Inc_Easy_MailChimp_Extender_Process_Submission_Handler {
 
 			$redirect_array['redirect_timer'] = $redirect_timer;
 
-			// Well this definitely has to change... why are we writing JavaScript in PHP?
 			$redirect_array['redirect'] = $redirect_url;
 		}
 
@@ -807,14 +806,27 @@ class Yikes_Inc_Easy_MailChimp_Extender_Process_Submission_Handler {
 			}
 
 			// check if this field is required
-			if (isset( $form_fields[ $merge_tag ] ) && isset( $form_fields[ $merge_tag ]['require'] ) && $form_fields[ $merge_tag ]['require'] === '1' ) {
+			if ( isset( $form_fields[ $merge_tag ] ) && isset( $form_fields[ $merge_tag ]['require'] ) && $form_fields[ $merge_tag ]['require'] === '1' ) {
 
 				// Check if the field(s) are empty
 				if ( is_array( $value ) ) {
 
 					// Loop through the data and check if any are empty
-					foreach( $value as $val ) {
-						if ( empty( $val ) ) {
+					foreach( $value as $field => $val ) {
+
+						/**
+						*	'yikes-mailchimp-ignore-required-array-field'
+						*
+						* 	Filter the default array of fields we're ignoring. As of now, this is only for address fields because no other field is an array.
+						*
+						*	@param array | Array of fields to ignore. Key of the array should be the field name.
+						*	@param int   | $form_id
+						*
+						*	@return Array of fields to ignore.
+						*/
+						$ignored_fields = apply_filters( 'yikes-mailchimp-ignore-required-array-field', array( 'addr2' => true ), $this->form_id );
+
+						if ( empty( $val ) && ! isset( $ignored_fields[ $field ] ) ) {
 							$field_is_missing = true;
 
 							// Set the merge label (e.g. MMERGE6) as the key so we don't get the same field multiple times
@@ -922,6 +934,20 @@ class Yikes_Inc_Easy_MailChimp_Extender_Process_Submission_Handler {
 	*/
 	public function handle_recaptcha( $recaptcha_response ) {
 
+		// Before we the hit the API, let's check that we actually got a response.
+		// If the user did not fill anything in (e.g. did not hit the checkbox), then the response will be empty.
+		if ( empty( $recaptcha_response ) ) {
+
+			/**
+			*	yikes-mailchimp-recaptcha-required-error
+			*
+			*	Catch the recaptcha errors before they're returned to the user
+			*	@param string | $recaptcha_errors | A string of recaptcha errors separated by a space
+			*/
+			$response = apply_filters( 'yikes-mailchimp-recaptcha-required-error', $this->handle_non_filled_recaptcha_message_message, $this->form_id );
+			return $this->yikes_fail( $hide = 0, $error = 1, $response, false, $return_response_non_ajax = true );
+		}
+
 		// Construct the API URL
 		$url           = esc_url_raw( 'https://www.google.com/recaptcha/api/siteverify?secret=' . get_option( 'yikes-mc-recaptcha-secret-key', '' ) . '&response=' . $recaptcha_response . '&remoteip=' . $_SERVER['REMOTE_ADDR'] );
 		$response      = wp_remote_get( $url );
@@ -969,8 +995,29 @@ class Yikes_Inc_Easy_MailChimp_Extender_Process_Submission_Handler {
 	* @param string | $nonce_name  | The name of the nonce
 	*/
 	public function handle_nonce( $nonce_value, $nonce_name ) {
-		if ( wp_verify_nonce( $nonce_value, $nonce_name ) === false ) {
-			return $this->yikes_fail( $hide = 0, $error = 1, $this->handle_nonce_message );
+
+		// First, check our option - this is set in the general settings page
+		if ( get_option( 'yikes-mailchimp-use-nonce' ) === '1' ) {
+
+			/**
+			*	yikes-mailchimp-use-nonce-verification
+			*
+			*	Decide if we're going to check the nonce value.
+			*	The reason we filter this is that some users are experiencing nonce issues repeatedly.
+			*	The default will always be to use the nonce.
+			*
+			*	@param  int  | $form_id  | The form id
+			*
+			*	@return bool | True if we should check the nonce
+			*/
+			$use_nonce = apply_filters( 'yikes-mailchimp-use-nonce-verification', true, $this->form_id );
+
+			// We let the filter override the option because the filter is on a per-form basis 
+			if ( $use_nonce === true ) {
+				if ( wp_verify_nonce( $nonce_value, $nonce_name ) === false ) {
+					return $this->yikes_fail( $hide = 0, $error = 1, $this->handle_nonce_message );
+				}
+			}
 		}
 	}
 
@@ -1233,8 +1280,10 @@ class Yikes_Inc_Easy_MailChimp_Extender_Process_Submission_Handler {
 
 			case 'general-error':
 
+				$original_response_text = $response_text;
+
 				if ( isset( $this->error_messages['general-error'] ) && ! empty( $this->error_messages['general-error'] ) ) {
-					$response_text = $this->error_messages['general-error'];
+					$user_defined_response_text = $this->error_messages['general-error'];
 				}
 
 				/**
@@ -1242,11 +1291,13 @@ class Yikes_Inc_Easy_MailChimp_Extender_Process_Submission_Handler {
 				*
 				*	Filter the error message displayed to the user
 				*
-				*	@param string | $response_text	| The response message that will be shown to the user
-				*	@param string | $form_id 		| The form ID
+				*	@param string | $original_response_text     | The original response message returned from the API
+				*	@param string | $user_defined_response_text | The response message defined by the user
+				*	@param string | $form_id                    | The form ID
 				*
+				* 	@return string | $response_text | The message that will be shown to the user 
 				*/
-				$response_text = apply_filters( 'yikes-mailchimp-general-error-response', $response_text, $this->form_id );
+				$response_text = apply_filters( 'yikes-mailchimp-general-error-response', $original_response_text, $user_defined_response_text, $this->form_id );
 
 				return $response_text;
 			break;

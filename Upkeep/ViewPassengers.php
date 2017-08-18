@@ -111,7 +111,7 @@ function CheckForm(form)
 <?php
    include("../php/routines.php");
    PasswordCheck("Administration");
-
+   $MySql = DBOpen();
    $TripTime = $_POST['TripTime'];
    echo('<input type=hidden name=TripTime value="' . $TripTime . '">');
 
@@ -126,7 +126,7 @@ function CheckForm(form)
          {
             $query = "DELETE FROM bookings WHERE BookTripTime='" . $TripTime . "' AND BookGroupName='" . $deletes[$a] . "';";
    //echo("query = " . $query);
-            mysql_query($query) or die('Delete error: ' . mysql_error());
+            mysql_query($query, $MySql) or die('Delete error: ' . mysql_error());
          }
       }
    }
@@ -140,7 +140,7 @@ function CheckForm(form)
       if (!strcmp($_POST['ExtraDisc'],"Yes")) $Flags |=  Flag_ExtraDisc;
       $query = "INSERT INTO bookings(BookTripTime,BookRecTime,BookGroupName,BookAdultQty,BookChildQty,BookFlags,BookCost,BookCCNameOnCard,CBookellPhone,BookLocalPhone,BookedBy) VALUES ('" . $TripTime . "',NOW(),'" . $_POST['GroupName'] . "'," . $_POST['AdultQty'] . "," . $_POST['ChildQty'] . "," . $Flags . "," . $_POST['TotalCost'] . ",'" . $_POST['CCNameOnCard'] . "','" . $_POST['CellPhone'] . "','" . $_POST['LocalPhone'] .  "','" . $LoginName  . "');";
    //echo("query = " . $query);
-      mysql_query($query) or die("Database insert error: " . mysql_error());
+      mysql_query($query, $MySql) or die("Database insert error: " . mysql_error());
    }
 ?>
 <font size="5">Passengers for cruise:</font>
@@ -157,7 +157,7 @@ function CheckForm(form)
 <?php
   $query = "SELECT * FROM schedule WHERE SchedTripTime = '" . $TripTime . "';";
 //echo ' query = ' . $query;
-  $result = mysql_query($query);
+  $result = mysql_query($query, $MySql);
   $row = mysql_fetch_array($result);
   $date = DBGetDate($TripTime);
   echo('<td align="center">' . $date . '</td>');
@@ -185,7 +185,7 @@ function CheckForm(form)
    </tr>
 <?php
   $query = "SELECT * FROM bookings WHERE BookTripTime = '" . $TripTime . "';";
-  $result = mysql_query($query);
+  $result = mysql_query($query, $MySql);
   while ($row = mysql_fetch_array($result))
   {
     echo('<tr height=20><td><input type="checkbox" name="Delete[]" value="' . $row['BookGroupName'] .'">');

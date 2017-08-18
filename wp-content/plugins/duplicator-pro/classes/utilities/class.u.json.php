@@ -66,17 +66,27 @@ class DUP_PRO_JSON_U
         throw new RuntimeException($message);
     }
 
-    public static function decode($json, $assoc = false)
+    public static function safeEncode($value)
     {
-        $result = json_decode($json, $assoc);
+        $jsonString = json_encode($value);
 
-        if ($result) {
-            return $result;
+        if(($jsonString === false) || trim($jsonString) == '')
+        {
+            $jsonString = self::customEncode($value);
+
+            if(($jsonString === false) || trim($jsonString) == '')
+            {
+                throw new Exception('Unable to generate JSON from object');
+            }
         }
 
-        throw new RuntimeException(self::$_messages[json_last_error()]);
+        return $jsonString;
     }
 
+    public static function decode($json, $assoc = false)
+    {
+        return json_decode($json, $assoc);
+    }
 
     /** ========================================================
 	 * PRIVATE METHODS

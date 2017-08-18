@@ -298,7 +298,7 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 		public function yikes_easy_forms_admin_disclaimer( $footer_text ) {
 			$page = get_current_screen();
 			$base = $page->base;
-			if ( strpos( $base, 'yikes-' ) !== false ) {
+			if ( strpos( $base, 'yikes-inc-easy-mailchimp' ) !== false || strpos( $base, 'yikes-mailchimp' ) !== false ) {
 				$disclaimer_text = sprintf( '<em>' . __( 'Disclaimer: <strong>Easy Forms for MailChimp</strong> is in no way endorsed, affiliated or backed by MailChimp, or its parent company Rocket Science Group.', 'yikes-inc-easy-mailchimp-extender' ), '<a href="https://wordpress.org/support/view/plugin-reviews/give?filter=5#postform" target="_blank" class="give-rating-link" data-rated="' . __( 'Thanks :)', 'yikes-inc-easy-mailchimp-extender' ) . '">', '</a></em>' );
 				return $disclaimer_text;
 			} else {
@@ -1125,6 +1125,8 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 
 		register_setting( 'yikes_inc_easy_mc_general_settings_page', 'yikes-mc-api-key', array( $this , 'yikes_mc_validate_api_key' ) );
 
+		register_setting( 'yikes_inc_easy_mc_general_settings_page', 'yikes-mailchimp-use-nonce' );
+
 		add_settings_section(
 			'yikes_easy_mc_settings_general_section_callback',
 			'',
@@ -1470,6 +1472,14 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 				$selected = $_REQUEST['section'];
 			}
 			$installed_addons = get_option( 'yikes-easy-mc-active-addons' , array() );
+
+			// Make sure we don't have any duplicates by mistake
+			$installed_addons = array_unique( $installed_addons );
+
+			// v1.2.6 of popups plugin had a bug that expanded the array indefinitely, so let's trim it in one place here.
+			// This can be removed within a few weeks
+			update_option( 'yikes-easy-mc-active-addons' , $installed_addons );
+
 			// sort our addons array alphabetically so they appear in similar orders across all sites
 			asort( $installed_addons );
 			?>
@@ -1631,7 +1641,7 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 					* 	@param array | $excluded_post_types | The array of default excluded post types
 					*	@return array| $excluded_post_types | The array of user-defined excluded post types
 					*/
-					$excluded_post_types = array( 'attachment' , 'revision' , 'nav_menu_item', 'shop_order', 'shop_order_refund', 'custom_css', 'customize_changeset' );
+					$excluded_post_types = array( 'attachment' , 'revision' , 'nav_menu_item', 'shop_order', 'shop_order_refund', 'custom_css', 'customize_changeset', 'forum', 'topic', 'reply' );
 					$excluded_post_types = apply_filters( 'yikes-mailchimp-excluded-redirect-post-types', $excluded_post_types );
 
 						// loop over registered post types, and query!
@@ -1898,12 +1908,12 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 										<!-- Placeholder -->
 										<tr valign="top">
 											<td scope="row">
-												<label for="placeholder">
+												<label for="placeholder_<?php echo esc_attr( $field['merge'] ); ?>">
 													<?php _e( 'Placeholder' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
-												<input type="text" class="widefat" name="field[<?php echo $field['merge']; ?>][placeholder]" value="<?php echo isset( $field['placeholder'] ) ? $field['placeholder'] : '' ; ?>" />
+												<input type="text" id="placeholder_<?php echo esc_attr( $field['merge'] ); ?>" class="widefat" name="field[<?php echo $field['merge']; ?>][placeholder]" value="<?php echo isset( $field['placeholder'] ) ? $field['placeholder'] : '' ; ?>" />
 												<p class="description"><small><?php _e( "Assign a placeholder value to this field.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
 											</td>
 										</tr>
@@ -1921,12 +1931,12 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 										?>
 											<tr valign="top">
 												<td scope="row">
-													<label for="placeholder">
+													<label for="default_value_<?php echo esc_attr( $field['merge'] ); ?>">
 														<?php _e( 'Default Value' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 													</label>
 												</td>
 												<td>
-													<input <?php if( $field['type'] != 'number' ) { ?> type="text" <?php } else { ?> type="number" <?php } ?> class="widefat" name="field[<?php echo $field['merge']; ?>][default]" <?php if( $field['type'] != 'url' ) { ?> value="<?php echo isset( $field['default'] ) ? stripslashes( wp_strip_all_tags( $field['default'] ) ) : ''; ?>" <?php } else { ?> value="<?php echo isset( $field['default'] ) ? stripslashes( wp_strip_all_tags( esc_url_raw( $field['default'] ) ) ) : ''; ?>" <?php } ?> />
+													<input id="default_value_<?php echo esc_attr( $field['merge'] ); ?>" <?php if( $field['type'] != 'number' ) { ?> type="text" <?php } else { ?> type="number" <?php } ?> class="widefat" name="field[<?php echo $field['merge']; ?>][default]" <?php if( $field['type'] != 'url' ) { ?> value="<?php echo isset( $field['default'] ) ? stripslashes( wp_strip_all_tags( $field['default'] ) ) : ''; ?>" <?php } else { ?> value="<?php echo isset( $field['default'] ) ? stripslashes( wp_strip_all_tags( esc_url_raw( $field['default'] ) ) ) : ''; ?>" <?php } ?> />
 													<p class="description"><small><?php _e( "Assign a default value to populate this field with on initial page load.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
 													<?php
 													switch( $field['type'] ) {
@@ -1989,78 +1999,88 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 													</td>
 												</tr>
 
-											<?php
+										<?php
 												break;
 
-												case "birthday":
-												case "address":
-													break;
+											case "birthday":
+											case "address":
+												break;
 
-										?>
-
-										<?php } // end Default Value ?>
+										} // end Default Value ?>
 
 
 										<!-- Field Description -->
 										<tr valign="top">
 											<td scope="row">
-												<label for="placeholder">
+												<label for="description_<?php echo esc_attr( $field['merge'] ); ?>">
 													<?php _e( 'Description' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
-												<textarea class="widefat field-description-input" name="field[<?php echo $field['merge']; ?>][description]"><?php echo isset( $field['description'] ) ? stripslashes( esc_html( $field['description'] ) ) : '' ; ?></textarea>
+												<textarea class="widefat field-description-input" id="description_<?php echo esc_attr( $field['merge'] ); ?>" name="field[<?php echo $field['merge']; ?>][description]"><?php echo isset( $field['description'] ) ? stripslashes( esc_html( $field['description'] ) ) : '' ; ?></textarea>
 												<p class="description"><small><?php _e( "Enter the description for the form field. This will be displayed to the user and will provide some direction on how the field should be filled out or selected.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
+											</td>
+										</tr>
+										<!-- Description Above Field -->
+										<tr valign="top">
+											<td scope="row">
+												<label for="description_above_<?php echo esc_attr( $field['merge'] ); ?>">
+													<?php _e( 'Description Above Field' , 'yikes-inc-easy-mailchimp-extender' ); ?>
+												</label>
+											</td>
+											<td>
+												<input type="checkbox" id="description_above_<?php echo esc_attr( $field['merge'] ); ?>" class="widefat field-description-input" name="field[<?php echo $field['merge']; ?>][description_above]" value="1" <?php echo isset( $field['description_above'] ) && $field['description_above'] === '1' ? 'checked="checked"' : ''; ?> />
+												<span class="description"><small><?php _e( "By default the description will appear undearneath the field. Check this box if you'd like the description to appear above the field.", 'yikes-inc-easy-mailchimp-extender' );?></small></span>
 											</td>
 										</tr>
 										<!-- Additional Classes -->
 										<tr valign="top">
 											<td scope="row">
-												<label for="placeholder">
+												<label for="classes_<?php echo esc_attr( $field['merge'] ); ?>">
 													<?php _e( 'Additional Classes' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
-												<input type="text" class="widefat" name="field[<?php echo $field['merge']; ?>][additional-classes]" value="<?php echo isset( $field['additional-classes'] ) ? stripslashes( wp_strip_all_tags( $field['additional-classes'] ) ) : '' ; ?>" />
+												<input type="text" id="classes_<?php echo esc_attr( $field['merge'] ); ?>" class="widefat" name="field[<?php echo $field['merge']; ?>][additional-classes]" value="<?php echo isset( $field['additional-classes'] ) ? stripslashes( wp_strip_all_tags( $field['additional-classes'] ) ) : '' ; ?>" />
 												<p class="description"><small><?php printf( __( "Assign additional classes to this field. %s.", 'yikes-inc-easy-mailchimp-extender' ), '<a target="_blank" href="' . esc_url( 'https://yikesplugins.com/support/knowledge-base/bundled-css-classes/' ) . '">' . __( 'View bundled classes', 'yikes-inc-easy-mailchimp-extender' ) . '</a>' );?></small></p>
 											</td>
 										</tr>
 										<!-- Required Toggle -->
 										<tr valign="top" class="yikes-checkbox-container yikes-checkbox-container-first">
 											<td scope="row">
-												<label for="field-required">
+												<label for="field-required-<?php echo esc_attr( $field['merge'] ); ?>">
 													<?php _e( 'Field Required?' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
 												<?php $checked = isset( $field['require'] ) ? $field['require'] : '0'; ?>
-												<input type="checkbox" class="widefat" value="1" name="field[<?php echo $field['merge']; ?>][require]" <?php checked( $checked , 1 ); ?> <?php if( $field['merge'] == 'EMAIL' ) {  ?> disabled="disabled" checked="checked" title="<?php echo __( 'Email is a required field.' , 'yikes-inc-easy-mailchimp-extender' ); } ?>">
+												<input id="field-required-<?php echo esc_attr( $field['merge'] ); ?>" type="checkbox" class="widefat" value="1" name="field[<?php echo $field['merge']; ?>][require]" <?php checked( $checked , 1 ); ?> <?php if( $field['merge'] == 'EMAIL' ) {  ?> disabled="disabled" checked="checked" title="<?php echo __( 'Email is a required field.' , 'yikes-inc-easy-mailchimp-extender' ); } ?>">
 												<p class="description"><small><?php _e( "Require this field to be filled in before the form can be submitted.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
 											</td>
 										</tr>
 										<!-- Visible Toggle -->
 										<tr valign="top" class="yikes-checkbox-container">
 											<td scope="row">
-												<label for="hide-field">
+												<label for="hide-field-<?php echo esc_attr( $field['merge'] ); ?>">
 													<?php _e( 'Hide Field' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
 												<?php $hide = isset( $field['hide'] ) ? $field['hide'] : '0'; ?>
-												<input type="checkbox" class="widefat" value="1" name="field[<?php echo $field['merge']; ?>][hide]" <?php checked( $hide , 1 ); ?> <?php if( $field['merge'] == 'EMAIL' ) {  ?> disabled="disabled" title="<?php echo __( 'Cannot toggle email field visibility.' , 'yikes-inc-easy-mailchimp-extender' ); } ?>">
+												<input id="hide-field-<?php echo esc_attr( $field['merge'] ); ?>" type="checkbox" class="widefat" value="1" name="field[<?php echo $field['merge']; ?>][hide]" <?php checked( $hide , 1 ); ?> <?php if( $field['merge'] == 'EMAIL' ) {  ?> disabled="disabled" title="<?php echo __( 'Cannot toggle email field visibility.' , 'yikes-inc-easy-mailchimp-extender' ); } ?>">
 												<p class="description"><small><?php _e( "Hide this field from being displayed on the front end.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
 											</td>
 										</tr>
 										<!-- Toggle Field Label Visibility -->
 										<tr valign="top" class="yikes-checkbox-container">
 											<td scope="row">
-												<label for="placeholder">
+												<label for="hide-label-<?php echo esc_attr( $field['merge'] ); ?>">
 													<?php _e( 'Hide Label' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
 												<?php $hide_label = isset( $field['hide-label'] ) ? $field['hide-label'] : '0'; ?>
-												<input type="checkbox" name="field[<?php echo $field['merge']; ?>][hide-label]" value="1" <?php checked( $hide_label , 1 ); ?>/>
+												<input id="hide-label-<?php echo esc_attr( $field['merge'] ); ?>" type="checkbox" name="field[<?php echo $field['merge']; ?>][hide-label]" value="1" <?php checked( $hide_label , 1 ); ?>/>
 												<p class="description"><small><?php _e( "Toggle field label visibility.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
 											</td>
 										</tr>
@@ -2261,64 +2281,77 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 										<!-- Field Description -->
 										<tr valign="top">
 											<td scope="row">
-												<label for="placeholder">
+												<label for="description_<?php echo esc_attr( $field['group_id'] ); ?>">
 													<?php _e( 'Description' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
-												<textarea class="widefat field-description-input" name="field[<?php echo $field['group_id']; ?>][description]"><?php echo isset( $field['description'] ) ? stripslashes( esc_html( $field['description'] ) ) : '' ; ?></textarea>
+												<textarea id="description_<?php echo esc_attr( $field['group_id'] ); ?>" class="widefat field-description-input" name="field[<?php echo $field['group_id']; ?>][description]"><?php echo isset( $field['description'] ) ? stripslashes( esc_html( $field['description'] ) ) : '' ; ?></textarea>
 												<p class="description"><small><?php _e( "Enter the description for the form field. This will be displayed to the user and provide some direction on how the field should be filled out or selected.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
+											</td>
+										</tr>
+
+										<!-- Description Above Field -->
+										<tr valign="top">
+											<td scope="row">
+												<label for="description_above_<?php echo $field['group_id']; ?>">
+													<?php _e( 'Description Above Field' , 'yikes-inc-easy-mailchimp-extender' ); ?>
+												</label>
+											</td>
+											<td>
+												<input type="checkbox" id="description_above_<?php echo $field['group_id']; ?>" class="widefat field-description-input" name="field[<?php echo $field['group_id']; ?>][description_above]" value="1" <?php echo isset( $field['description_above'] ) && $field['description_above'] === '1' ? 'checked="checked"' : ''; ?> />
+												<span class="description"><small><?php _e( "By default the description will appear undearneath the field. Check this box if you'd like the description to appear above the field.", 'yikes-inc-easy-mailchimp-extender' );?></small></span>
 											</td>
 										</tr>
 
 										<!-- Additional Classes -->
 										<tr valign="top">
 											<td scope="row">
-												<label for="placeholder">
+												<label for="classes_<?php echo esc_attr( $field['group_id'] ); ?>">
 													<?php _e( 'Additional Classes' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
-												<input type="text" class="widefat" name="field[<?php echo $field['group_id']; ?>][additional-classes]" value="<?php echo isset( $field['additional-classes'] ) ? stripslashes( wp_strip_all_tags( $field['additional-classes'] ) ) : '' ; ?>" />
+												<input type="text" id="classes_<?php echo esc_attr( $field['group_id'] ); ?>" class="widefat" name="field[<?php echo $field['group_id']; ?>][additional-classes]" value="<?php echo isset( $field['additional-classes'] ) ? stripslashes( wp_strip_all_tags( $field['additional-classes'] ) ) : '' ; ?>" />
 												<p class="description"><small><?php printf( __( "Assign additional classes to this field. %s.", 'yikes-inc-easy-mailchimp-extender' ), '<a target="_blank" href="' . esc_url( 'https://yikesplugins.com/support/knowledge-base/bundled-css-classes/' ) . '">' . __( 'View bundled classes', 'yikes-inc-easy-mailchimp-extender' ) . '</a>' );?></small></p>
 											</td>
 										</tr>
 										<!-- Required Toggle -->
 										<tr valign="top">
 											<td scope="row">
-												<label for="field-required">
+												<label for="field-required-<?php echo esc_attr( $field['group_id'] ); ?>">
 													<?php _e( 'Field Required?' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
 												<?php $checked = isset( $field['require'] ) ? $field['require'] : '0'; ?>
-												<input type="checkbox" class="widefat" value="1" name="field[<?php echo $field['group_id']; ?>][require]" <?php checked( $checked , 1 ); ?>>
+												<input type="checkbox" id="field-required-<?php echo esc_attr( $field['group_id'] ); ?>" class="widefat" value="1" name="field[<?php echo $field['group_id']; ?>][require]" <?php checked( $checked , 1 ); ?>>
 												<p class="description"><small><?php _e( "Require this field to be filled in before the form can be submitted.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
 											</td>
 										</tr>
 										<!-- Visible Toggle -->
 										<tr valign="top">
 											<td scope="row">
-												<label for="hide-field">
+												<label for="hide-field-<?php echo esc_attr( $field['group_id'] ); ?>">
 													<?php _e( 'Hide Field' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
 												<?php $hide = isset( $field['hide'] ) ? $field['hide'] : '0'; ?>
-												<input type="checkbox" class="widefat" value="1" name="field[<?php echo $field['group_id']; ?>][hide]" <?php checked( $hide , 1 ); ?>>
+												<input type="checkbox" id="hide-field-<?php echo esc_attr( $field['group_id'] ); ?>" class="widefat" value="1" name="field[<?php echo $field['group_id']; ?>][hide]" <?php checked( $hide , 1 ); ?>>
 												<p class="description"><small><?php _e( "Hide this field from being displayed on the front end.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
 											</td>
 										</tr>
 										<!-- Toggle Field Label Visibility -->
 										<tr valign="top">
 											<td scope="row">
-												<label for="placeholder">
+												<label for="hide-label-<?php echo esc_attr( $field['group_id'] ); ?>">
 													<?php _e( 'Hide Label' , 'yikes-inc-easy-mailchimp-extender' ); ?>
 												</label>
 											</td>
 											<td>
 												<?php $hide = isset( $field['hide-label'] ) ? $field['hide-label'] : '0'; ?>
-												<input type="checkbox" name="field[<?php echo $field['group_id']; ?>][hide-label]" value="1" <?php checked( $hide , 1 ); ?>/>
+												<input type="checkbox" id="hide-label-<?php echo esc_attr( $field['group_id'] ); ?>" name="field[<?php echo $field['group_id']; ?>][hide-label]" value="1" <?php checked( $hide , 1 ); ?>/>
 												<p class="description"><small><?php _e( "Toggle field label visibility.", 'yikes-inc-easy-mailchimp-extender' );?></small></p>
 											</td>
 										</tr>
@@ -2769,6 +2802,8 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 				$this->form_interface->get_form_defaults()
 			);
 
+			$form_updates = apply_filters( 'yikes-mailchimp-save-form-filter', $form_updates, $form_id );
+
 			$this->form_interface->update_form( $form_id, $form_updates );
 
 			/* Custom action hook which allows users to update specific options when a form is updated - used in add ons */
@@ -2878,11 +2913,16 @@ class Yikes_Inc_Easy_Mailchimp_Forms_Admin {
 			$referer = wp_get_referer();
 			if ( $referer && ( strpos( $referer, 'yikes-inc-easy-mailchimp-settings' ) > 0 ) ) {
 				wp_redirect( esc_url_raw( admin_url( 'admin.php?page=yikes-inc-easy-mailchimp-settings&section=api-cache-settings&transient-cleared=true' ) ) );
+			} elseif ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'yikes-mailchimp-edit-form' && isset( $_REQUEST['id'] ) && ! empty( $_REQUEST['id'] ) ) {
+
+				// else check if we were editing a form
+				$id = filter_var( $_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT );
+				wp_redirect( esc_url_raw( admin_url( 'admin.php?page=yikes-mailchimp-edit-form&id=' . $id ) ) );
 			} else {
 				// else redirect to the manage forms page
 				wp_redirect( esc_url_raw( admin_url( 'admin.php?page=yikes-inc-easy-mailchimp&transient-cleared=true' ) ) );
 			}
-			// redirect the user to the manage forms page, display confirmation
+
 			exit;
 		}
 

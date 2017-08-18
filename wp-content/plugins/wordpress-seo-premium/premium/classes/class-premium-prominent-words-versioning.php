@@ -10,7 +10,7 @@ class WPSEO_Premium_Prominent_Words_Versioning implements WPSEO_WordPress_Integr
 
 	const VERSION_NUMBER = 1;
 
-	const POST_META_NAME = 'yst_prominent_words_version';
+	const POST_META_NAME = '_yst_prominent_words_version';
 
 	const COLLECTION_PARAM = 'yst_prominent_words_is_unindexed';
 
@@ -18,8 +18,6 @@ class WPSEO_Premium_Prominent_Words_Versioning implements WPSEO_WordPress_Integr
 	 * {@inheritdoc}
 	 */
 	public function register_hooks() {
-		add_action( 'save_post', array( $this, 'save_version_number' ) );
-
 		if ( ! $this->can_retrieve_data() ) {
 			return;
 		}
@@ -37,9 +35,6 @@ class WPSEO_Premium_Prominent_Words_Versioning implements WPSEO_WordPress_Integr
 	 */
 	public function save_version_number( $post_id ) {
 		add_post_meta( $post_id, self::POST_META_NAME, self::VERSION_NUMBER, true );
-
-		// Prevent infinite loops.
-		remove_action( 'save_post', array( $this, 'save_version_number' ), 10 );
 	}
 
 	/**
@@ -69,18 +64,21 @@ class WPSEO_Premium_Prominent_Words_Versioning implements WPSEO_WordPress_Integr
 	 */
 	public function rest_add_query_args( $args, WP_REST_Request $request ) {
 		if ( $request->get_param( self::COLLECTION_PARAM ) === true ) {
-			$args['meta_query'] = array(
-				'relation' => 'OR',
-				array(
-					'key'     => WPSEO_Premium_Prominent_Words_Versioning::POST_META_NAME,
-					'value'   => WPSEO_Premium_Prominent_Words_Versioning::VERSION_NUMBER,
-					'compare' => '!=',
-				),
-				array(
-					'key'     => WPSEO_Premium_Prominent_Words_Versioning::POST_META_NAME,
-					'compare' => 'NOT EXISTS',
-				),
-			);
+
+			$limit = 10;
+			if ( ! empty( $args['posts_per_page'] ) ) {
+				$limit = $args['posts_per_page'];
+			}
+
+			$prominent_words = new WPSEO_Premium_Prominent_Words_Unindexed_Post_Query();
+			$post_ids = $prominent_words->get_unindexed_post_ids( $args['post_type'], $limit );
+
+			// Make sure WP_Query uses our list, especially when it's empty!
+			if ( empty( $post_ids ) ) {
+				$post_ids = array( 0 );
+			}
+
+			$args['post__in'] = $post_ids;
 		}
 
 		return $args;
@@ -93,5 +91,42 @@ class WPSEO_Premium_Prominent_Words_Versioning implements WPSEO_WordPress_Integr
 	 */
 	public function can_retrieve_data() {
 		return current_user_can( WPSEO_Premium_Prominent_Words_Endpoint::CAPABILITY_RETRIEVE );
+	}
+
+	/**
+	 * Renames the meta key for the prominent words version. It was a public meta field and it has to be private.
+	 */
+	public static function upgrade_4_7() {
+		global $wpdb;
+
+		// The meta key has to be private, so prefix it.
+		$wpdb->query(
+			$wpdb->prepare(
+				'UPDATE ' . $wpdb->postmeta . ' SET meta_key = "%s" WHERE meta_key = "yst_prominent_words_version"',
+				self::POST_META_NAME
+			)
+		);
+	}
+
+	/**
+	 * Removes the meta key for the prominent words version for the unsupported languages that might have this value
+	 * set.
+	 */
+	public static function upgrade_4_8() {
+		$language_support = new WPSEO_Premium_Prominent_Words_Language_Support();
+
+		if ( $language_support->is_language_supported( WPSEO_Utils::get_language( get_locale() ) ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		// The remove all post metas.
+		$wpdb->query(
+			$wpdb->prepare(
+				'DELETE FROM ' . $wpdb->postmeta . ' WHERE meta_key = "%s"',
+				self::POST_META_NAME
+			)
+		);
 	}
 }

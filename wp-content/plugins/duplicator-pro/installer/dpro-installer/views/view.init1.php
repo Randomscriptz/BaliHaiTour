@@ -1,29 +1,30 @@
 <?php
-	require_once(dirname(__FILE__) . '/../classes/util/class.crypt.php');
+/** IDE HELPERS */
+/* @var $GLOBALS['DUPX_AC'] DUPX_ArchiveConfig */
 
-//-- START OF VIEW INIT 1
+require_once($GLOBALS['DUPX_INIT'] . '/classes/class.crypt.php');
 
-	$_POST['secure-pass'] = isset($_POST['secure-pass']) ? $_POST['secure-pass'] : '' ;
-	$_POST['secure-try']  = isset($_POST['secure-try'])  ? 1 : 0 ;
-	$page_url = DUPX_HTTP::get_request_uri();
-	$page_err = 0;
+$_POST['secure-pass'] = isset($_POST['secure-pass']) ? $_POST['secure-pass'] : '' ;
+$_POST['secure-try']  = isset($_POST['secure-try'])  ? 1 : 0 ;
+$page_url = DUPX_HTTP::get_request_uri();
+$page_err = 0;
 
-	//FORWARD: password not enabled
-	if (! $GLOBALS['FW_SECUREON'] && ! $_GET['debug']) {
-		DUPX_HTTP::post_with_html($page_url, array('view' => 'scan'));
-		exit;
-	}
+//FORWARD: password not enabled
+if (! $GLOBALS['DUPX_AC']->secure_on && ! $_GET['debug']) {
+	DUPX_HTTP::post_with_html($page_url, array('view' => 'step1'));
+	exit;
+}
 
-	//POSTBACK: valid password
-	if ($_POST['secure-pass'] == DUPX_Crypt::unscramble($GLOBALS['FW_SECUREPASS'])) {
-		DUPX_HTTP::post_with_html($page_url, array('view' => 'scan'));
-		exit;
-	}
+//POSTBACK: valid password
+if ($_POST['secure-pass'] == DUPX_Crypt::unscramble($GLOBALS['DUPX_AC']->secure_pass)) {
+	DUPX_HTTP::post_with_html($page_url, array('view' => 'step1'));
+	exit;
+}
 
-	//ERROR: invalid password
-	if ($_POST['secure-try'] && $_POST['secure-pass'] != DUPX_Crypt::unscramble($GLOBALS['FW_SECUREPASS'])) {
-		$page_err = 1;
-	}
+//ERROR: invalid password
+if ($_POST['secure-try'] && $_POST['secure-pass'] != DUPX_Crypt::unscramble($GLOBALS['DUPX_AC']->secure_pass)) {
+	$page_err = 1;
+}
 ?>
 
 

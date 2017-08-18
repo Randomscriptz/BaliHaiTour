@@ -29,7 +29,7 @@ class DUP_PRO_STR
     }
 
     /**
-     * Returns true if the string contains utf8 characters
+     * Returns true if the string contains UTF8 characters
      * @see http://php.net/manual/en/function.mb-detect-encoding.php
      *
      * @param string  $string     The class name where the $destArray exists

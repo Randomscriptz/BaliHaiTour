@@ -30,6 +30,7 @@ if (!class_exists('DUP_PRO_Web_Services')) {
 
             $this->add_class_action('wp_ajax_duplicator_pro_package_scan', 'duplicator_pro_package_scan');
             $this->add_class_action('wp_ajax_duplicator_pro_package_delete', 'duplicator_pro_package_delete');
+            $this->add_class_action('wp_ajax_duplicator_pro_reset_user_settings', 'duplicator_pro_reset_user_settings');
 
             $this->add_class_action('wp_ajax_duplicator_pro_dropbox_send_file_test', 'duplicator_pro_dropbox_send_file_test');
             $this->add_class_action('wp_ajax_duplicator_pro_gdrive_send_file_test', 'duplicator_pro_gdrive_send_file_test');
@@ -226,9 +227,20 @@ if (!class_exists('DUP_PRO_Web_Services')) {
 
             //$json = json_encode($report);
             try {
+                $json = null;
+
                 if ($global->json_mode == DUP_PRO_JSON_Mode::PHP) {
-                    $json = DUP_PRO_JSON_U::encode($report);
-                } else {
+                    try {
+                        $json = DUP_PRO_JSON_U::encode($report);
+                    } catch(Exception $jex) {
+                        DUP_PRO_LOG::trace("Problem encoding using PHP JSON so switching to custom");
+                        
+                        $global->json_mode = DUP_PRO_JSON_Mode::Custom;
+                        $global->save();
+                    }
+                }
+
+                if($json === null) {
                     $json = DUP_PRO_JSON_U::customEncode($report);
                 }
             } catch (Exception $ex) {
@@ -237,7 +249,7 @@ if (!class_exists('DUP_PRO_Web_Services')) {
 
             //$json = ($json) ? $json : '{"Status" : 3, "Message" : "Unable to encode to JSON data.  Please validate that no invalid characters exist in your file tree."}';
             error_reporting($errLevel);
-
+			
             die($json);
         }
 
@@ -275,6 +287,35 @@ if (!class_exists('DUP_PRO_Web_Services')) {
 
             $json['ids']     = "{$postIDs}";
             $json['removed'] = $delCount;
+            die(json_encode($json));
+        }
+
+        /**
+         *  DUPLICATOR_PRO_PACKAGE_DELETE
+         *  Deletes the files and database record entries
+         *
+         *  @return json   A json message about the action.
+         * 				   Use console.log to debug from client
+         */
+        function duplicator_pro_reset_user_settings()
+        {
+            DUP_PRO_U::hasCapability('export');
+
+            $json = array();
+            
+            try {
+                /* @var $global DUP_PRO_Global_Entity */
+                $global = DUP_PRO_Global_Entity::get_instance();
+
+                $global->ResetUserSettings();
+
+                $global->save();
+
+            } catch (Exception $e) {
+                $json['error'] = "{$e}";
+                die(json_encode($json));
+            }
+
             die(json_encode($json));
         }
 
@@ -831,7 +872,7 @@ if (!class_exists('DUP_PRO_Web_Services')) {
             DUP_PRO_LOG::deleteTraceLog();
 
             exit;
-        }
+        }       
 
         function export_settings()
         {

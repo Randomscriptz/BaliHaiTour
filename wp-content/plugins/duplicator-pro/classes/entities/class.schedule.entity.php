@@ -189,7 +189,8 @@ class DUP_PRO_Schedule_Entity extends DUP_PRO_JSON_Entity_Base
             //ARCHIVE
             $package->Archive->PackDir = rtrim(DUPLICATOR_PRO_WPROOTPATH, '/');
             $package->Archive->Format = 'ZIP';
-            $package->Archive->FilterOn = $template->archive_filter_on;
+            $package->Archive->ExportOnlyDB = $template->archive_export_onlydb;
+			$package->Archive->FilterOn = $template->archive_filter_on;
             $package->Archive->FilterDirs = $template->archive_filter_dirs;
             $package->Archive->FilterExts = $template->archive_filter_exts;
             $package->Archive->FilterFiles = $template->archive_filter_files;
@@ -198,11 +199,8 @@ class DUP_PRO_Schedule_Entity extends DUP_PRO_JSON_Entity_Base
             $package->Installer->OptsDBHost = $template->installer_opts_db_host;
             $package->Installer->OptsDBName = $template->installer_opts_db_name;
             $package->Installer->OptsDBUser = $template->installer_opts_db_user;
-            $package->Installer->OptsSSLAdmin = $template->installer_opts_ssl_admin;
-            $package->Installer->OptsSSLLogin = $template->installer_opts_ssl_login;
             $package->Installer->OptsCacheWP = $template->installer_opts_cache_wp;
             $package->Installer->OptsCachePath = $template->installer_opts_cache_path;
-            $package->Installer->OptsURLNew = $template->installer_opts_url_new;
             $package->Installer->OptsSecureOn = $template->installer_opts_secure_on;
             $package->Installer->OptsSecurePass = $template->installer_opts_secure_pass;
             $package->Installer->OptsSkipScan = $template->installer_opts_skip_scan;
@@ -238,7 +236,7 @@ class DUP_PRO_Schedule_Entity extends DUP_PRO_JSON_Entity_Base
             $system_global->clear_recommended_fixes();
             $system_global->save();
 
-            $results = $wpdb->insert($wpdb->prefix . "duplicator_pro_packages", array(
+            $results = $wpdb->insert($wpdb->base_prefix . "duplicator_pro_packages", array(
                 'name' => $package->Name,
                 'hash' => $package->Hash,
                 'status' => DUP_PRO_PackageStatus::PRE_PROCESS,
@@ -270,8 +268,23 @@ class DUP_PRO_Schedule_Entity extends DUP_PRO_JSON_Entity_Base
         //Remove specail_chars from final result
         $special_chars = array(".", "-");
         $name = date('Y-m-d_H-i-s', $ticks) . '_' . $this->name . '_' . sanitize_title(get_bloginfo('name', 'display'));
-        $name = substr(sanitize_file_name($name), 0, 40);
+      
+        // Get away from using sanitize_file_name since it has dependencies on user which is problematic for schedules
+        // $name = substr(sanitize_file_name($name), 0, 40);
+
         $name = str_replace($special_chars, '', $name);
+        
+          // Yanked from core logic of sanitize_file_name
+        $sanitize_special_chars = array("?", "[", "]", "/", "\\", "=", "<", ">", ":", ";", ",", "'", "\"", "&", "$", "#", "*", "(", ")", "|", "~", "`", "!", "{", "}", "%", "+", chr(0));
+        
+        $name = preg_replace( "#\x{00a0}#siu", ' ', $name );
+        $name = str_replace( $sanitize_special_chars, '', $name );
+        $name = str_replace( array( '%20', '+' ), '-', $name );
+        $name = preg_replace( '/[\r\n\t -]+/', '-', $name );
+        $name = trim( $name, '.-_' );
+        
+        $name = substr($name, 0, 40);
+        
         return $name;
     }
 

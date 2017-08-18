@@ -205,7 +205,14 @@ if (!empty($_POST['StartOver']))
   mysql_close($MySql);
 }
 ?>
-
+    <?php
+    ini_set('display_errors', 1);
+   // ini_set('include_path', '../php/routines.php');
+    require('config.php');
+    $EndTime = time() + (86400 * 120);
+    ListTours($EndTime);
+    StartTour();
+    ?>
 
 <!-- whole site table-->
        <A NAME="top"></A>
@@ -276,8 +283,9 @@ if (!empty($_POST['StartOver']))
                     <span size="2">I need an infant safety seat.</span>
                 </td>
                 </tr>
-                <tr height="30">
-                    <td>
+                <tr >
+
+                    <td style="display:none !important;">
 
                     </td>
                 <tr>

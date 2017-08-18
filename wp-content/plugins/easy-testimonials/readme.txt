@@ -3,9 +3,9 @@ Plugin Name: Easy Testimonials
 Plugin URI: https://goldplugins.com/downloads/easy-testimonials-pro/
 Contributors: richardgabriel, ghuger
 Tags: testimonials, testimonial widget, testimonial feed, random testimonials
-Requires at least: 4.0.0
-Tested up to: 4.7.3
-Stable tag: 2.2.2
+Requires at least: 4.5.0
+Tested up to: 4.8.1
+Stable tag: 3.0.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,7 +35,7 @@ Easy Testimonials is an easy-to-use plugin that allows users to add Testimonials
 * Multiple Testimonial Forms: use multiple forms to send to specific Testimonial Categories!
 * Testimonial Form Spam Prevention: support for Really Simple Captcha and ReCaptcha included!
 * New Testimonial Notifications: Send an e-mail to one, or more, addresses when a new testimonial is submitted.
-* Designer Themes: 75+ professionally designed themes for front end display!
+* Designer Themes: 100+ professionally designed themes for front end display!
 * Advanced Transitions: including scrolling, flipping, and tiling testimonials!
 * Testimonial Carousel: The testimonial carousel widget shows 2 or more testimonials on each slide. Your visitors can click Previous and Next buttons to scroll through the list of testimonials.
 * Font Options: choose from a huge selection of fonts (including Google web fonts), colors, and sizes!
@@ -93,24 +93,37 @@ Visit [here](https://goldplugins.com/documentation/easy-testimonials-documentati
 3. This is the Basic Settings Page.
 4. This is the Display Options Settings Page.
 5. This is the Themes Selection Page.
-6. This is the Submission Form Settings Page.
-7. This is the Shortcode Generator.
-8. This is the Import & Export Testimonials Page.
-9. This is the Help & Instructions Page.
-10. This is the Random Testimonial Widget.
-11. This is the Testimonial Cycle Widget.
-12. This is the Testimonial List Widget.
-13. This is the Single Testimonial Widget.
-14. This is the Testimonial Grid Widget.
+6. This is the Shortcode Generator.
+7. This is the Help & Instructions Page.
+8. This is the Random Testimonial Widget.
+9. This is the Testimonial Cycle Widget.
+10. This is the Testimonial List Widget.
+11. This is the Single Testimonial Widget.
+12. This is the Testimonial Grid Widget.
 
 == Changelog ==
 
-= 2.2.2 =
-* Reverse default sort order to show most recent Testimonials first.
-* Update shortcode and widget defaults to show all meta data and otherwise match the examples shown.
+= 3.0.5 =
+* Compatible with WordPress 4.8.1
+* Update content filter for better compatibility with WooCommerce and Themes that integrate WooCommerce.
+* Minor fixes.
+
+= 3.0.4 =
+* Address remaining issues with upgrade notice for legacy users.
+* Compatibility update for Widgets and certain WordPress themes.
+
+= 3.0.3 =
+* Bug fix to improve performance after v3 update.
+
+= 3.0 =
+* MAJOR UPDATE: Please Backup Before Updating!
+* Changes Upgrade messaging and process.
+* Updates Single Testimonial template for more powerful customization control.
+* Fixes issue with JSON-LD encoding breaking with various characters in testimonial content.
+* Various under the hood improvements.
 
 * [View Changelog](https://goldplugins.com/documentation/easy-testimonials-documentation/easy-testimonials-changelog/ "View Changelog")
 
 == Upgrade Notice ==
 
-**2.2.2** Update Available!
+**3.0.5** Compatibility update for WooCommerce.

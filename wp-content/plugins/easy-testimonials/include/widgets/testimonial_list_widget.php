@@ -21,24 +21,16 @@ Shout out to http://www.makeuseof.com/tag/how-to-create-wordpress-widgets/ for t
 class listTestimonialsWidget extends WP_Widget
 {
 	var $config;
+	var $defaults; 
 	
 	function __construct(){
 		//load config
 		$this->config = new easyTestimonialsConfig();
-	
-		$widget_ops = array('classname' => 'listTestimonialsWidget', 'description' => 'Displays a List of Testimonials.' );
-		parent::__construct('listTestimonialsWidget', 'Easy Testimonials List', $widget_ops);
-	}
 		
-	function listTestimonialsWidget()
-	{
-		$this->__construct();
-	}
-
-	function form($instance){
-		$defaults = array(
+		//load defaults
+		$this->defaults = array(
 			'title' => '',
-			'count' => '',
+			'count' => 5,
 			'show_title' => 0,
 			'category' => '',
 			'use_excerpt' => 0,
@@ -54,7 +46,18 @@ class listTestimonialsWidget extends WP_Widget
 			'testimonials_per_page' => '',
 			'hide_view_more' => 1
 		);
-		$instance = wp_parse_args( (array) $instance, $defaults );
+	
+		$widget_ops = array('classname' => 'listTestimonialsWidget', 'description' => 'Displays a List of Testimonials.' );
+		parent::__construct('listTestimonialsWidget', 'Easy Testimonials List', $widget_ops);
+	}
+		
+	function listTestimonialsWidget()
+	{
+		$this->__construct();
+	}
+
+	function form($instance){
+		$instance = wp_parse_args( (array) $instance, $this->defaults );
 		$title = $instance['title'];
 		$count = $instance['count'];
 		$show_title = $instance['show_title'];
@@ -73,9 +76,9 @@ class listTestimonialsWidget extends WP_Widget
 		$testimonials_per_page = $instance['testimonials_per_page'];
 		$testimonial_categories = get_terms( 'easy-testimonial-category', 'orderby=title&hide_empty=0' );				
 		$ip = $this->config->is_pro;
-	
-		$free_theme_array = $this->config->free_theme_array;
-		$pro_theme_array = $this->config->pro_theme_array;
+		
+		//load themes
+		$themes = $this->config->load_theme_array();
 		?>
 		<div class="gp_widget_form_wrapper">
 			<p class="hide_in_popup">
@@ -86,24 +89,11 @@ class listTestimonialsWidget extends WP_Widget
 			<p>
 				<label for="<?php echo $this->get_field_id('theme'); ?>">Theme:</label><br/>
 				<select name="<?php echo $this->get_field_name('theme'); ?>" id="<?php echo $this->get_field_id('theme'); ?>">	
-					<optgroup label="Free Themes">
-					<?php foreach($free_theme_array as $key => $theme_name): ?>
-						<option value="<?php echo $key ?>" <?php if($theme == $key): echo 'selected="SELECTED"'; endif; ?>><?php echo htmlentities($theme_name); ?></option>					
-					<?php endforeach; ?>
-					</optgroup>
-					<?php foreach($pro_theme_array as $group_key => $theme_group): ?>
-						<?php $group_label = $this->get_theme_group_label($theme_group); ?>
-							<?php if (!$ip): ?>
-							<optgroup  disabled="disabled" label="<?php echo htmlentities($group_label);?> (Pro)">
-							<?php else: ?>
-							<optgroup  label="<?php echo htmlentities($group_label);?>">
-							<?php endif; ?>
+					<?php foreach($themes as $group_key => $theme_group): ?>
+					<?php $group_label = $this->get_theme_group_label($theme_group); ?>									
+						<optgroup  label="<?php echo htmlentities($group_label);?>">
 							<?php foreach($theme_group as $key => $theme_name): ?>
-								<?php if (!$ip): ?>
-								<option disabled="disabled" value="<?php echo $key ?>" <?php if($theme == $key): echo 'selected="SELECTED"'; endif; ?>><?php echo htmlentities($theme_name); ?></option>
-								<?php else: ?>
 								<option value="<?php echo $key ?>" <?php if($theme == $key): echo 'selected="SELECTED"'; endif; ?>><?php echo htmlentities($theme_name); ?></option>
-								<?php endif; ?>
 							<?php endforeach; ?>
 						</optgroup>
 					<?php endforeach; ?>
@@ -190,31 +180,37 @@ class listTestimonialsWidget extends WP_Widget
 				<legend>Fields To Display:</legend> &nbsp;
 				<div class="bikeshed_radio">
 					<p>
-						<input class="widefat" id="<?php echo $this->get_field_id('show_title'); ?>" name="<?php echo $this->get_field_name('show_title'); ?>" type="checkbox" value="1" <?php if($show_title){ ?>checked="CHECKED"<?php } ?>/>
+						<input name="<?php echo $this->get_field_name('show_title'); ?>" type="hidden" value="0" />
+						<input class="widefat" id="<?php echo $this->get_field_id('show_title'); ?>" name="<?php echo $this->get_field_name('show_title'); ?>" type="checkbox" value="1" <?php if($show_title){ ?>checked="CHECKED"<?php } ?> data-shortcode-value-if-unchecked="0" />
 						<label for="<?php echo $this->get_field_id('show_title'); ?>">Show Testimonial Title</label>
 					</p>
 					
 					<p>
-						<input class="widefat" id="<?php echo $this->get_field_id('use_excerpt'); ?>" name="<?php echo $this->get_field_name('use_excerpt'); ?>" type="checkbox" value="1" <?php if($use_excerpt){ ?>checked="CHECKED"<?php } ?>/>
+						<input name="<?php echo $this->get_field_name('use_excerpt'); ?>" type="hidden" value="0" />
+						<input class="widefat" id="<?php echo $this->get_field_id('use_excerpt'); ?>" name="<?php echo $this->get_field_name('use_excerpt'); ?>" type="checkbox" value="1" <?php if($use_excerpt){ ?>checked="CHECKED"<?php } ?> data-shortcode-value-if-unchecked="0" />
 						<label for="<?php echo $this->get_field_id('use_excerpt'); ?>">Use Testimonial Excerpt</label>
 					</p>	
 					
 					<p>
-						<input class="widefat" id="<?php echo $this->get_field_id('show_testimonial_image'); ?>" name="<?php echo $this->get_field_name('show_testimonial_image'); ?>" type="checkbox" value="1" <?php if($show_testimonial_image){ ?>checked="CHECKED"<?php } ?> data-shortcode-key="show_thumbs" />
+						<input name="<?php echo $this->get_field_name('show_testimonial_image'); ?>" type="hidden" value="0" />
+						<input class="widefat" id="<?php echo $this->get_field_id('show_testimonial_image'); ?>" name="<?php echo $this->get_field_name('show_testimonial_image'); ?>" type="checkbox" value="1" <?php if($show_testimonial_image){ ?>checked="CHECKED"<?php } ?> data-shortcode-key="show_thumbs" data-shortcode-value-if-unchecked="0"/>
 						<label for="<?php echo $this->get_field_id('show_testimonial_image'); ?>">Show Featured Image</label>
 					</p>
 					
 					<p>
-						<input class="widefat" id="<?php echo $this->get_field_id('show_date'); ?>" name="<?php echo $this->get_field_name('show_date'); ?>" type="checkbox" value="1" <?php if($show_date){ ?>checked="CHECKED"<?php } ?>/>
+						<input name="<?php echo $this->get_field_name('show_date'); ?>" type="hidden" value="0" />
+						<input class="widefat" id="<?php echo $this->get_field_id('show_date'); ?>" name="<?php echo $this->get_field_name('show_date'); ?>" type="checkbox" value="1" <?php if($show_date){ ?>checked="CHECKED"<?php } ?> data-shortcode-value-if-unchecked="0"/>
 						<label for="<?php echo $this->get_field_id('show_date'); ?>">Show Testimonial Date</label>
 					</p>
 					
 					<p>
-						<input class="widefat" id="<?php echo $this->get_field_id('show_other'); ?>" name="<?php echo $this->get_field_name('show_other'); ?>" type="checkbox" value="1" <?php if($show_other){ ?>checked="CHECKED"<?php } ?>/>
+						<input name="<?php echo $this->get_field_name('show_other'); ?>" type="hidden" value="0" />
+						<input class="widefat" id="<?php echo $this->get_field_id('show_other'); ?>" name="<?php echo $this->get_field_name('show_other'); ?>" type="checkbox" value="1" <?php if($show_other){ ?>checked="CHECKED"<?php } ?> data-shortcode-value-if-unchecked="0" />
 						<label for="<?php echo $this->get_field_id('show_other'); ?>">Show "Location Reviewed / Product Reviewed / Item Reviewed" Field</label>
 					</p>
 					
 					<p>
+						<input name="<?php echo $this->get_field_name('hide_view_more'); ?>" type="hidden" value="0" />
 						<input class="widefat" id="<?php echo $this->get_field_id('hide_view_more'); ?>" name="<?php echo $this->get_field_name('hide_view_more'); ?>" type="checkbox" value="1" <?php if($hide_view_more){ ?>checked=""<?php } ?> data-shortcode-value-if-unchecked="0" />
 						<label for="<?php echo $this->get_field_id('hide_view_more'); ?>">Hide View More Testimonials Link</label>
 					</p>
@@ -240,6 +236,8 @@ class listTestimonialsWidget extends WP_Widget
 	}
 
 	function update($new_instance, $old_instance){
+		$new_instance = wp_parse_args( (array) $new_instance, $this->defaults );
+		
 		$instance = $old_instance;
 		$instance['title'] = $new_instance['title'];
 		$instance['count'] = $new_instance['count'];

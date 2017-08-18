@@ -19,23 +19,25 @@
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-require_once(DUPLICATOR_PRO_PLUGIN_PATH.'/classes/entities/class.system.global.entity.php');
-require_once(DUPLICATOR_PRO_PLUGIN_PATH.'/classes/entities/class.schedule.entity.php');
-require_once(DUPLICATOR_PRO_PLUGIN_PATH.'/classes/package/class.pack.php');
-require_once(DUPLICATOR_PRO_PLUGIN_PATH.'/classes/class.server.php');
-require_once(DUPLICATOR_PRO_PLUGIN_PATH.'/classes/class.system.checker.php');
+require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/classes/entities/class.secure.global.entity.php');
+require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/classes/entities/class.system.global.entity.php');
+require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/classes/entities/class.schedule.entity.php');
+require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/classes/package/class.pack.php');
+require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/classes/class.server.php');
+require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/classes/class.system.checker.php');
 
 if (!class_exists('DUP_PRO_Package_Runner')) {
 
     class DUP_PRO_Package_Runner
     {
+
         public static $delayed_exit_and_kickoff = false;
 
         public static function init()
         {
             $kick_off_worker = false;
             /* @var $global DUP_PRO_Global_Entity */
-            $global          = DUP_PRO_Global_Entity::get_instance();
+            $global = DUP_PRO_Global_Entity::get_instance();
 
             if ($global == null) {
                 DUP_PRO_LOG::trace("Global appears to not be initialized yet so returning from init without processing.");
@@ -58,7 +60,9 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
                         DUP_PRO_LOG::trace("File lock denied");
                     }
                 } else {
+                    DUP_PRO_LOG::profile('init->getsqllock', true);
                     $acquired_lock = DUP_PRO_U::getSqlLock();
+                    DUP_PRO_LOG::profile('init->getsqllock', false);
                 }
 
                 if ($acquired_lock) {
@@ -67,7 +71,7 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
                     $pending_cancellations = DUP_PRO_Package::get_pending_cancellations();
 
                     // Try to minimize the impact of checking for long running
-                    if (time() % 3 == 0) {
+                    if (time() % 5 == 0) {
                         self::cancel_long_running($pending_cancellations);
                     }
 
@@ -77,15 +81,27 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
                             $package_to_cancel = DUP_PRO_Package::get_by_id((int) $package_id_to_cancel);
 
                             if ($package_to_cancel != null) {
+
                                 if ($package_to_cancel->Status == DUP_PRO_PackageStatus::STORAGE_PROCESSING) {
                                     $package_to_cancel->Status = DUP_PRO_PackageStatus::STORAGE_CANCELLED;
 
                                     $package_to_cancel->cancel_all_uploads();
-                                } else {
-                                    $package_to_cancel->Status = DUP_PRO_PackageStatus::BUILD_CANCELLED;
-                                }
 
-                                $package_to_cancel->update();
+                                    $package_to_cancel->update();
+
+                                    if ($package_to_cancel->schedule_id != -1) {
+                                        add_action('plugins_loaded', array($package_to_cancel, 'post_scheduled_storage_failure'));
+                                    }
+                                } else {
+
+                                    $package_to_cancel->Status = DUP_PRO_PackageStatus::BUILD_CANCELLED;
+
+                                    $package_to_cancel->update();
+
+                                    if ($package_to_cancel->schedule_id != -1) {
+                                        add_action('plugins_loaded', array($package_to_cancel, 'post_scheduled_build_failure'));
+                                    }
+                                }
                             }
                         }
 
@@ -101,8 +117,10 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
                     if ($global->lock_mode == DUP_PRO_Thread_Lock_Mode::Flock) {
                         DUP_PRO_LOG::trace("File lock released");
                         flock($locking_file, LOCK_UN);
+
                         fclose($locking_file);
                     } else {
+
                         DUP_PRO_U::releaseSqlLock();
                     }
                 }
@@ -151,7 +169,7 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
 
             $gateway = array('ajaxurl' => $ajax_url, 'client_call_frequency' => $CLIENT_CALL_PERIOD_IN_MS);
 
-            wp_register_script('dup-pro-kick', DUPLICATOR_PRO_PLUGIN_URL.'assets/js/dp-kick.js', array('jquery'), DUPLICATOR_PRO_VERSION);
+            wp_register_script('dup-pro-kick', DUPLICATOR_PRO_PLUGIN_URL . 'assets/js/dp-kick.js', array('jquery'), DUPLICATOR_PRO_VERSION);
 
             wp_localize_script('dup-pro-kick', 'dp_gateway', $gateway);
 
@@ -171,13 +189,13 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
                 $active_package = DUP_PRO_Package::get_next_active_package();
 
                 if (($global->max_package_runtime_in_min > 0) && ($active_package != null) && ($active_package->timer_start > 0)) {
-                    $current_time    = DUP_PRO_U::getMicrotime();
-                    $elapsed_sec     = $current_time - $active_package->timer_start;
+                    $current_time = DUP_PRO_U::getMicrotime();
+                    $elapsed_sec = $current_time - $active_package->timer_start;
                     $elapsed_minutes = $elapsed_sec / 60;
 
                     if ($elapsed_minutes > $global->max_package_runtime_in_min) {
                         $error_text = DUP_PRO_U::__('Package was cancelled because it exceeded Max Build Time.');
-                        $fix_text   = DUP_PRO_U::__('To avoid package cancellations go to Settings > Packages and increase Max Build Time.');
+                        $fix_text = DUP_PRO_U::__('To avoid package cancellations go to Settings > Packages and increase Max Build Time.');
 
                         $system_global = DUP_PRO_System_Global_Entity::get_instance();
                         $system_global->add_recommended_text_fix($error_text, $fix_text);
@@ -197,15 +215,14 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
                         }
 
                         $current_time = DUP_PRO_U::getMicrotime();
-                        $elapsed_sec  = $current_time - $active_package->timer_start;
+                        $elapsed_sec = $current_time - $active_package->timer_start;
 
                         if ($elapsed_sec > 75) {
                             DUP_PRO_LOG::trace("*** STUCK");
                             DUP_PRO_Log::open($active_package->NameHash);
 
                             $error_text = DUP_PRO_U::__('Communication to AJAX is blocked.');
-                            $fix_text   = sprintf("%s <a href='http://snapcreek.com/duplicator/docs/faqs-tech/#faq-package-100-q' target='_blank'>%s</a>", DUP_PRO_U::__('See FAQ:'),
-                                DUP_PRO_U::__('Why is the package build stuck at 5%?'));
+                            $fix_text = sprintf("%s <a href='http://snapcreek.com/duplicator/docs/faqs-tech/#faq-package-100-q' target='_blank'>%s</a>", DUP_PRO_U::__('See FAQ:'), DUP_PRO_U::__('Why is the package build stuck at 5%?'));
 
                             $system_global = DUP_PRO_System_Global_Entity::get_instance();
                             $system_global->add_recommended_text_fix($error_text, $fix_text);
@@ -218,7 +235,7 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
                             $active_package->save();
 
                             if ($active_package->schedule_id != -1) {
-                                add_action('plugins_loaded', array($active_package, 'send_build_failure_email'));
+                                add_action('plugins_loaded', array($active_package, 'post_scheduled_build_failure'));
                             }
 
                             DUP_PRO_Log::error($message, $message, false);
@@ -230,6 +247,7 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
 
         public static function kick_off_worker($run_only_if_client = false)
         {
+            DUP_PRO_LOG::profile('kick off worker', true);
             /* @var $global DUP_PRO_Global_Entity */
             $global = DUP_PRO_Global_Entity::get_instance();
 
@@ -268,8 +286,9 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
                     DUP_PRO_LOG::trace('KICKOFF: Server Side');
 
                     if ($global->basic_auth_enabled) {
-                        wp_remote_get($ajax_url,
-                            array('blocking' => false, 'headers' => array('Authorization' => 'Basic '.base64_encode($global->basic_auth_user.':'.$global->basic_auth_password))));
+                        $sglobal = DUP_PRO_Secure_Global_Entity::getInstance();
+
+                        wp_remote_get($ajax_url, array('blocking' => false, 'headers' => array('Authorization' => 'Basic ' . base64_encode($global->basic_auth_user . ':' . $sglobal->basic_auth_password))));
                     } else {
                         wp_remote_get($ajax_url, array('blocking' => false));
                     }
@@ -277,6 +296,8 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
 
                 DUP_PRO_LOG::trace("after sent kickoff request");
             }
+
+            DUP_PRO_LOG::profile('kick off worker', false);
         }
 
         // Executed by cron
@@ -345,9 +366,8 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
 
                             ignore_user_abort(true);
 
-                            // Split build time and scan time into two steps to make more reliable
-
                             if ($package->Status < DUP_PRO_PackageStatus::AFTER_SCAN) {
+                                // Scan step built into package build - used by schedules - NOT manual build where scan is done in web service.
                                 DUP_PRO_LOG::trace("PACKAGE $package->ID:SCANNING");
 
                                 //After scanner runs.  Save FilterInfo (unreadable, warnings, globals etc)
@@ -469,6 +489,8 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
 
         public static function process_schedules()
         {
+            // Hack fix - observed issue on a machine where schedule process bombs
+
             $next_run_time = self::calculate_earliest_schedule_run_time();
 
             if ($next_run_time != -1 && ($next_run_time <= time())) {
@@ -481,4 +503,5 @@ if (!class_exists('DUP_PRO_Package_Runner')) {
             }
         }
     }
+
 }

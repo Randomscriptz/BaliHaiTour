@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 /* ============================================================================
  * DESCRIPTION: Methods and Objects in this file are global and common in 
  * nature use this file to place all shared methods and varibles */
@@ -17,6 +17,7 @@ DupPro.Storage.S3 = new Object();
 DupPro.Schedule = new Object();
 DupPro.Template = new Object();
 DupPro.Support = new Object();
+DupPro.Debug = new Object();
 
 //GLOBAL CONSTANTS
 DupPro.DEBUG_AJAX_RESPONSE = false;
@@ -46,13 +47,25 @@ DupPro.EndAjaxTimer = function ()
 
 /*	Reloads the current window
  *	@param data		An xhr object  */
-DupPro.ReloadWindow = function (data) 
+DupPro.ReloadWindow = function (data, queryString)
 {
 	if (DupPro.DEBUG_AJAX_RESPONSE) {
 		DupPro.Pack.ShowError('debug on', data);
 	} else {
-		//window.location.reload(true);
-		window.location = window.location.href;
+        var url = window.location.href;
+
+        if(queryString !== 'undefined') {
+
+            var character = '?';
+
+            if(url.indexOf('?') > -1) {
+                character = '&';
+            }
+
+            url += character + queryString;
+        }
+
+        window.location = url;
 	}
 };
 
@@ -236,22 +249,71 @@ jQuery(document).ready(function ($)
 				: $arrow.html('<i class="fa fa-caret-down"></i>');
 	});
 
-	//INIT: Look for tooltip data
-	$('i[data-tooltip!=""]').qtip({ 
-		content: {
-			attr: 'data-tooltip',
-			title: {
-				text: function() { return  $(this).attr('data-tooltip-title'); }
+	DupPro.UI.loadQtip = function()
+	{
+		//Look for tooltip data
+		$('i[data-tooltip!=""]').qtip({
+			content: {
+				attr: 'data-tooltip',
+				title: {
+					text: function() { return  $(this).attr('data-tooltip-title'); }
+				}
+			},
+			style: {
+				classes: 'qtip-light qtip-rounded qtip-shadow',
+				width: 500
+			},
+			 position: {
+				my: 'top left',
+				at: 'bottom center'
 			}
-		},
-		style: {
-			classes: 'qtip-light qtip-rounded qtip-shadow',
-			width: 500
-		},
-		 position: {
-			my: 'top left', 
-			at: 'bottom center'
+		});
+	}
+
+	DupPro.UI.loadQtip();
+	
+
+	//HANDLEBARS HELPERS
+	if  (typeof(Handlebars) != "undefined"){
+
+		function _handleBarscheckCondition(v1, operator, v2) {
+			switch(operator) {
+				case '==':
+					return (v1 == v2);
+				case '===':
+					return (v1 === v2);
+				case '!==':
+					return (v1 !== v2);
+				case '<':
+					return (v1 < v2);
+				case '<=':
+					return (v1 <= v2);
+				case '>':
+					return (v1 > v2);
+				case '>=':
+					return (v1 >= v2);
+				case '&&':
+					return (v1 && v2);
+				case '||':
+					return (v1 || v2);
+				case 'obj||':
+					v1 = typeof(v1) == 'object' ? v1.length : v1;
+					v2 = typeof(v2) == 'object' ? v2.length : v2;
+					return (v1 !=0 || v2 != 0);
+				default:
+					return false;
+			}
 		}
-	});
+
+		Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+			return _handleBarscheckCondition(v1, operator, v2)
+						? options.fn(this)
+						: options.inverse(this);
+		});
+
+		Handlebars.registerHelper('if_eq',		function(a, b, opts) { return (a == b) ? opts.fn(this) : opts.inverse(this);});
+		Handlebars.registerHelper('if_neq',		function(a, b, opts) { return (a != b) ? opts.fn(this) : opts.inverse(this);});
+	}
+
 });
 </script>

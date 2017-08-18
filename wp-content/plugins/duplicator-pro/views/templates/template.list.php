@@ -78,7 +78,7 @@ $package_template_count = count($package_templates);
 				<a href="admin.php?page=duplicator-pro-tools&tab=data" class="button" title="<?php DUP_PRO_U::_e("Import/Export Data"); ?>"><i class="fa fa-download"></i></a>
             </td>
             <td>
-                <span><i class="fa fa-files-o"></i> <?php DUP_PRO_U::_e("All Templates"); ?></span>
+                <span><i class="fa fa-files-o"></i> <?php DUP_PRO_U::_e("Templates"); ?></span>
                 <a href="<?php echo $edit_template_url; ?>" class="add-new-h2"><?php DUP_PRO_U::_e('Add New'); ?></a>
             </td>
         </tr>

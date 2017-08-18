@@ -20,12 +20,38 @@ require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/classes/utilities/class.u.multisite.
 
 class DUP_PRO_U
 {
-    // Pseudo-constants
+
+	/**
+     * Is PHP 5.2.9 or better running
+     */
+    public static $on_php_529_plus;
+
+    /**
+     * Is PHP 5.3 or better running
+     */
+    public static $on_php_53_plus;
+
+    /**
+     * Is PHP 5.4 or better running
+     */
+    public static $on_php_54_plus;
+
+	/**
+     * Is PHP 7 or better running
+     */
+    public static $PHP7_plus;
+
+	// Pseudo-constants
     private static $type_format_array;
+
 
     public static function init()
     {
         self::$type_format_array = array('boolean' => '%s', 'integer' => '%d', 'double' => '%g', 'string' => '%s');
+	    self::$on_php_529_plus = version_compare(PHP_VERSION, '5.2.9') >= 0;
+        self::$on_php_53_plus  = version_compare(PHP_VERSION, '5.3.0') >= 0;
+        self::$on_php_54_plus  = version_compare(PHP_VERSION, '5.4.0') >= 0;
+		self::$PHP7_plus = version_compare(PHP_VERSION, '7.0.0', '>=');
     }
 
      /**
@@ -119,11 +145,11 @@ class DUP_PRO_U
     /**
      * Append a new query value to the end of a URL
      *
-     * @param string $url   The url to append the new value to
+     * @param string $url   The URL to append the new value to
      * @param string $key   The new key name
      * @param string $value The new key name value
      *
-     * @return string Returns the new url with with the query string name and value
+     * @return string Returns the new URL with with the query string name and value
      */
     public static function appendQueryValue($url, $key, $value)
     {
@@ -165,7 +191,7 @@ class DUP_PRO_U
      */
     public static function elapsedTime($end, $start)
     {
-        return sprintf('%.2f sec.', abs($end - $start));
+        return sprintf('%.3f sec.', abs($end - $start));
     }
 
     /**
@@ -238,11 +264,11 @@ class DUP_PRO_U
 
     
     /**
-     * Return the WP admin page url from the slug
+     * Return the WP admin page URL from the slug
      *
      * @param string $menuSlug  The slug to search on
      *
-     * @return  string   Returns the url of the menu by the slug
+     * @return  string   Returns the URL of the menu by the slug
      */
     public static function getMenuPageURL($menuSlug, $echo = true)
     {
@@ -272,23 +298,50 @@ class DUP_PRO_U
      *
      * @return  bool    Returns true if an SQL lock request was successful
      */
-    public static function getSqlLock()
+    public static function getSqlLock($lock_name = 'duplicator_pro_lock')
     {
         global $wpdb;
 
-        $query_string = "select GET_LOCK('duplicator_pro_lock', 0)";
+        $query_string = "select GET_LOCK('{$lock_name}', 0)";
 
         $ret_val = $wpdb->get_var($query_string);
 
         if ($ret_val == 0) {
-            DUP_PRO_LOG::trace("Couldnt get mysql lock");
+            DUP_PRO_LOG::trace("Couldnt get mysql lock {$lock_name}");
             return false;
         } else if ($ret_val == null) {
-            DUP_PRO_LOG::trace("Error retrieving mysql lock");
+            DUP_PRO_LOG::trace("Error retrieving mysql lock {$lock_name}");
             return false;
         } else {
-            DUP_PRO_LOG::trace("Mysql lock obtained");
+            DUP_PRO_LOG::trace("Mysql lock {$lock_name} obtained");
             return true;
+        }
+    }
+
+    /**
+     * Gets an SQL lock request
+     *
+     * @see releaseSqlLock()
+     *
+     * @return  bool    Returns true if an SQL lock request was successful
+     */
+    public static function isSqlLockLocked($lock_name = 'duplicator_pro_lock')
+    {
+        global $wpdb;
+
+        $query_string = "select IS_FREE_LOCK('{$lock_name}')";
+
+        $ret_val = $wpdb->get_var($query_string);
+
+        if ($ret_val == 0) {
+            DUP_PRO_LOG::trace("MySQL lock {$lock_name} is in use");
+            return true;
+        } else if ($ret_val == null) {
+            DUP_PRO_LOG::trace("Error retrieving mysql lock {$lock_name}");
+            return false;
+        } else {
+            DUP_PRO_LOG::trace("MySQL lock {$lock_name} is free");
+            return false;
         }
     }
 
@@ -426,14 +479,15 @@ class DUP_PRO_U
      * Copies simple values from one object to another
      *
      * @param array &$srcObject  The source object
-     * @param array &$destObject     The destination object to copy to
+     * @param array &$destObject          The destination object to copy to
+     * @param array &$skipMemberArray     List of members to skip when copying
      *
      * @return null
      */
-    public static function objectCopy($srcObject, $destObject)
+    public static function objectCopy($srcObject, $destObject, $skipMemberArray = null)
     {
         foreach ($srcObject as $member_name => $member_value) {
-            if (!is_object($member_value)) {
+            if (!is_object($member_value) && (($skipMemberArray == null) || !in_array($member_name, $skipMemberArray))) {
                 // Skipping all object members
                 $destObject->$member_name = $member_value;
             }
@@ -477,21 +531,21 @@ class DUP_PRO_U
      *
      * @return  bool    Returns true if an SQL lock request was released
      */
-    public static function releaseSqlLock()
+    public static function releaseSqlLock($lock_name = 'duplicator_pro_lock')
     {
         global $wpdb;
 
-        $query_string = "select RELEASE_LOCK('duplicator_pro_lock')";
+        $query_string = "select RELEASE_LOCK('{$lock_name}')";
 
         $ret_val = $wpdb->get_var($query_string);
 
         if ($ret_val == 0) {
-            DUP_PRO_LOG::trace("Failed releasing sql lock duplicator_pro_lock because it wasn't established by this thread");
+            DUP_PRO_LOG::trace("Failed releasing sql lock {$lock_name} because it wasn't established by this thread");
         } else if ($ret_val == null) {
-            DUP_PRO_LOG::trace("Tried to release sql lock duplicator_pro_lock but it didn't exist");
+            DUP_PRO_LOG::trace("Tried to release sql lock {$lock_name} but it didn't exist");
         } else {
             // Lock was released
-            DUP_PRO_LOG::trace("SQL lock released");
+            DUP_PRO_LOG::trace("SQL lock {$lock_name} released");
         }
     }
 
@@ -507,7 +561,7 @@ class DUP_PRO_U
      */
     public static function safePath($path)
     {
-        return str_replace("\\", "/", $path);
+        return str_replace("\\", '/', $path);
     }
 
     /**

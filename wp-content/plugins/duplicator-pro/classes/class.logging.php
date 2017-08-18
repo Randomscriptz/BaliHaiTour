@@ -4,9 +4,9 @@ if (!defined('DUPLICATOR_PRO_VERSION')) exit; // Exit if accessed directly
 /**
  * Used to create package and application trace logs
  *
- * Pakcage logs: Consist of a seperate log file for each package created
+ * Package logs: Consist of a separate log file for each package created
  * Trace logs:   Created only when tracing is enabled see Settings > General
- *               One trace log is created and when it hits a threashold a
+ *               One trace log is created and when it hits a threshold a
  *               second one is made
  *
  * Standard: PSR-2
@@ -19,6 +19,25 @@ if (!defined('DUPLICATOR_PRO_VERSION')) exit; // Exit if accessed directly
  * @since 3.0.0
  *
  */
+
+require_once(dirname(__FILE__) . '/../lib/snaplib/class.snaplib.u.string.php');
+
+class DUP_PRO_Profile_Call_Info
+{
+    public $latestStartTS = -1;
+    public $latestStopTS = -1;
+
+    public $numCalls = 0;
+    public $culmulativeTime = 0;
+    
+    public $eventName = '';
+
+    public function __construct($eventName)
+    {
+        $this->eventName = $eventName;
+    }
+}
+
 class DUP_PRO_Log
 {
     /**
@@ -31,6 +50,7 @@ class DUP_PRO_Log
      */
     private static $traceEnabled;
 
+    public static $profileLogs = null;
 
     /**
      * Init this static object
@@ -38,6 +58,19 @@ class DUP_PRO_Log
     public static function init()
     {
         self::$traceEnabled = (bool) get_option('duplicator_pro_trace_log_enabled', false);
+    }
+
+    public static function setProfileLogs($profileLogs)
+    {
+        if($profileLogs == null)
+        {
+            self::$profileLogs = new stdClass();
+        }
+        else
+        {
+            self::$profileLogs = $profileLogs;
+        }
+
     }
 
     /**
@@ -75,6 +108,19 @@ class DUP_PRO_Log
         @fwrite(self::$logFileHandle, "{$msg} \n");
     }
 
+	   /**
+     *  General information send to the package log and trace log
+     *
+     *  @param string $msg	The message to log
+     *
+     *  @return null
+     */
+    public static function infoTrace($msg)
+    {
+        self::info($msg);
+		self::trace($msg);
+    }
+
     /**
      *  Called for the package log when an error is detected and no further processing should occur
      *
@@ -90,7 +136,7 @@ class DUP_PRO_Log
             $detail = '(no detail)';
         }
 
-        DUP_PRO_LOG::trace("Forced Error Generated: ".$msg."-$detail");
+        DUP_PRO_LOG::traceError("Forced Error Generated: ".$msg."-$detail");
         $source = self::getStack(debug_backtrace());
 
         $err_msg = "\n====================================================================\n";
@@ -118,11 +164,11 @@ class DUP_PRO_Log
     }
 
     /**
-     * The current strack trace of a PHP call
+     * The current stack trace of a PHP call
      *
      * @param $stacktrace   The current debug stack
      *
-     * @return string       A log friend stacktrace view of info
+     * @return string       A log friend stack-trace view of info
      */
     public static function getStack($stacktrace)
     {
@@ -247,28 +293,36 @@ class DUP_PRO_Log
      *
      * @param string $message The message to add to the active trace
      * @param bool $audit Add the trace message to the PHP error log
-     *                    additional contraints are required
+     *                    additional constraints are required
      *
      * @return null
      */
-    public static function trace($message, $audit = true)
+    public static function trace($message, $audit = true, $calling_function_override = null, $force_trace = false)
     {
-        if (self::$traceEnabled) {
+        if (self::$traceEnabled || $force_trace) {
             $send_trace_to_error_log = (bool) get_option('duplicator_pro_send_trace_to_error_log', false);
             $unique_id               = sprintf("%08x", abs(crc32($_SERVER['REMOTE_ADDR'].$_SERVER['REQUEST_TIME'].$_SERVER['REMOTE_PORT'])));
-            $calling_function        = DUP_PRO_U::getCallingFunctionName().'()';
 
-            if (is_array($message) || is_object($message)) {
-                $message = print_r($message, true);
-            }
+            if ($calling_function_override == null) {
+				$calling_function = DUP_PRO_U::getCallingFunctionName();
+			} else {
+				$calling_function = $calling_function_override;
+			}
 
-            $logging_message           = 'DUP_PRO | '.$unique_id." | $calling_function | ".$message;
+			if (is_object($message)) {
+				$ov = get_object_vars($message);
+				$message = print_r($ov, true);
+			} else if (is_array($message)) {
+				$message = print_r($message, true);
+			}
+
+			$logging_message           = "{$unique_id}|{$calling_function} | {$message}";
             $ticks                     = time() + ((int) get_option('gmt_offset') * 3600);
-            $formatted_time            = date('d M H:i:s', $ticks);
-            $formatted_logging_message = "[$formatted_time] $logging_message \r\n";
+            $formatted_time            = date('d-m-H:i:s', $ticks);
+			$formatted_logging_message = "{$formatted_time}|DPRO|{$logging_message} \r\n";
 
             // Write to error log if warranted - if either it's a non audit(error) or tracing has been piped to the error log
-            if (($audit == false) || ($send_trace_to_error_log) && WP_DEBUG && WP_DEBUG_LOG) {
+            if (($audit == false) || ($send_trace_to_error_log) || ($force_trace) && WP_DEBUG && WP_DEBUG_LOG) {
                 DUP_PRO_Low_U::errLog($logging_message);
             }
 
@@ -286,7 +340,7 @@ class DUP_PRO_Log
      */
     public static function traceError($message)
     {
-        self::trace("***ERROR***: $message", false);
+        self::trace("***ERROR*** $message", false);
     }
 
     /**
@@ -299,11 +353,105 @@ class DUP_PRO_Log
      */
     public static function traceObject($message, $object)
     {
-        self::trace($message.'<br\>');
-        self::trace($object);
+		
+			self::trace($message.'<br\>', true, DUP_PRO_U::getCallingFunctionName());
+			self::trace($object, true, DUP_PRO_U::getCallingFunctionName());
+		
     }
 
-    /**
+	 /**
+	  * Profiles an event for performance analysis
+	  * 
+	  * @param string $eventName A descriptive name of an event to profile
+	  * @param bool $start Start or stop the profiler event
+	  *
+	  * @return null
+	  */
+	public static function profile($eventName, $start)
+	{
+		if (self::$profileLogs !== null) {
+			
+			if (isset(self::$profileLogs->$eventName)) {
+
+				$profileCallInfo = &self::$profileLogs->$eventName;
+
+				if ($start) {
+					if (($profileCallInfo->latestStartTS != -1) && ($profileCallInfo->latestStopTS == -1)) {
+						throw new Exception("Overwriting a start for {$eventName} when stop hasn’t occurred yet");
+					}
+
+					$profileCallInfo->latestStartTS	 = microtime(true);
+					$profileCallInfo->latestStopTS	 = -1;
+				} else {
+					$profileCallInfo->latestStopTS = microtime(true);
+
+					if ($profileCallInfo->latestStartTS == -1) {
+						throw new Exception("Attempting to stop event $eventName when start didn't occur yet");
+					}
+
+					$deltaTime = ($profileCallInfo->latestStopTS - $profileCallInfo->latestStartTS);
+					$profileCallInfo->numCalls++;
+					$profileCallInfo->culmulativeTime += $deltaTime;
+				}
+			} else {
+				if (!$start) {
+                    throw new Exception("Trying to stop an event that never started ({$eventName})");
+				}
+
+				$profileCallInfo				 = new DUP_PRO_Profile_Call_Info($eventName);
+				$profileCallInfo->latestStartTS	 = microtime(true);
+				$profileCallInfo->latestStopTS	 = -1;
+				self::$profileLogs->$eventName	 = $profileCallInfo;
+			}
+		}
+	}
+
+	/**
+	  * Logs the cumulative agrigation of all profiled events
+	  *
+	  * @return null
+	  */
+	public static function profileReport()
+	{
+        $profileLogArray = get_object_vars(self::$profileLogs);
+        usort($profileLogArray, create_function('$a,$b', 'return ($a->culmulativeTime < $b->culmulativeTime ? 1 : -1);'));
+
+        $eventWidth = 30;
+        foreach ($profileLogArray as $profileLog) {
+            if(strlen($profileLog->eventName) > $eventWidth) {
+
+                $eventWidth = strlen($profileLog->eventName);
+            }
+        }
+
+        $eventWidth += 4;
+
+        if($eventWidth > 70) {
+            $eventWidth = 70;
+        }
+
+        $txt = ("\n\n====START PROFILE REPORT====\n");
+        $txt .= sprintf("%-{$eventWidth}s | %-7s | %-6s | %9s", 'EVENT NAME', '# CALLS', 'AVG(T)', "TOTAL T\n");
+       
+        foreach ($profileLogArray as $profileLog) {
+
+            if ($profileLog->numCalls != 0) {
+                $avgTime = $profileLog->culmulativeTime / $profileLog->numCalls;
+            } else {
+                $avgTime = -1;
+            }
+            $name = SnapLibStringU::truncateString($profileLog->eventName, $eventWidth);
+
+           // $name = substr($profileLog->eventName, 0, ($eventWidth - 5)).'...';
+
+            $entry = sprintf("%-{$eventWidth}s | %-7d | %-6.3f | %9.3f \n", $name, $profileLog->numCalls, $avgTime, $profileLog->culmulativeTime);
+            $txt .= $entry;
+        }
+        $txt .= ("====END PROFILE REPORT====\n");
+        self::trace($txt, true, null, true);
+	}
+
+	/**
      * Does the trace file exisit
      *
      * @return bool Returns true if an active trace file exists

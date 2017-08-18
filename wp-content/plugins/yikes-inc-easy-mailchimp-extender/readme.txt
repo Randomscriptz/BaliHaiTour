@@ -3,8 +3,8 @@ Contributors: yikesinc, eherman24, liljimmi, hiwhatsup, JPry, yikesitskevin
 Donate link: https://yikesplugins.com/?utm_source=wp_plugin_repo&utm_medium=donate_link&utm_campaign=easy_forms_for_mailchimp
 Tags: MailChimp, MailChimp forms, MailChimp lists, opt-in forms, sign up form, MailChimp, email, forms, mailing lists, marketing, newsletter, sign up
 Requires at least: 4.0
-Tested up to: 4.7.3
-Stable tag: 6.3.11
+Tested up to: 4.8.1
+Stable tag: 6.3.23
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -229,6 +229,22 @@ Below you'll find a complete list of the hooks and filters available in Easy For
 * Version 6.3.10:
 * `yikes-mailchimp-countries-with-zip` - Control which countries the zip field displays for. If the chosen country is not in this array, the zip field will fade out. @params: $countries_with_zip, $form_id
 * `yikes-mailchimp-state-province-list` - Add or remove options from the states dropdown list. Default: All U.S. States and Canadian Provinces - @params: $state_and_province_list, $form_id
+* Version 6.3.13:
+* `yikes-mailchimp-use-nonce-verification` - Control whether we verify the nonce on form submissions. Default: `true` (by default, we check the nonce). @params: $use_nonce, $form_id
+* `yikes-mailchimp-wp-comment-integration-placement` - Control the placement of the subscription checkbox for the WP Comment Form integration. Default: `comment_form_field_comment` (after the comment textarea box) - @params: $comment_form_field. This filter allows you to choose which WP Comment Form filter to use, and for the full list of WP Comment Form filters, check the documentation: https://codex.wordpress.org/Function_Reference/comment_form.
+* 6.3.14:
+* `yikes-mailchimp-wooco-integration-checkbox-classes` - Control the classes that are added to the checkbox for the WooCommerce Checkout Integration. Default: 'form-row-wide' - @params: $classes
+* 6.3.15:
+* `yikes-mailchimp-{$merge_tag}-description-html` - Filter the full block of HTML that will be used for the form field's description. @params: $description_full, $description_text, $form_id
+* `yikes-mailchimp-{$interest_group_id}-description-html` - Filter the full block of HTML that will be used for the interest group field's description. @params: $description_full, $description_text, $form_id
+* 6.3.18:
+* `yikes-mailchimp-checkbox-integration-body` - Filter the full request body of a checkbox integration subscribe API call. @params: $data, $type
+* `yikes-mailchimp-ignore-required-array-field` - For server side validation, filter the required/unrequired fields. Due to the way MailChimp requires addresses, this is only useful for address 2 at the moment. @params: $non_required_fields, $form_id
+* 6.3.19:
+* `yikes-mailchimp-save-form-filter - Filter all of a form's data before it gets saved. @params: $form_updates, $form_id
+* `yikes-mailchimp-datepicker-options` - Filter all of the options for the jQuery datepicker. @params: $datepicker_options, $form_id
+* 6.3.20:
+* `yikes-mailchimp-integration-is-user-subscribed` - Override the integration checkbox for already subscribed users. @params: $subscribed, $integration_type.
 
 **Actions**
 
@@ -247,8 +263,60 @@ Below you'll find a complete list of the hooks and filters available in Easy For
 * `yikes-mailchimp-custom-form-actions` - Add custom action links on the manage forms page (alongside Edit, Duplicate, Shortcode, Delete). @params: $form_id
 * `yikes-mailchimp-list-form-fields-metabox` - Add additional content to the 'Form Fields' metabox on the view list page.
 * `yikes-mailchimp-list-interest-groups-metabox` - Add additional content inside of the interest groups metabox on the view list page.
+* 6.3.15:
+* `yikes-mailchimp-google-analytics` - Add Google Analytics JS functions. Check our Knowledge Base for instructions.
 
 == Changelog ==
+
+= Easy Forms for MailChimp 6.3.23 - August 14th, 2017 =
+* Removed an additional `esc_url` call on the redirect URL. Redirect URLs should now be able to accept characters like ampersands without encoding them.
+
+= Easy Forms for MailChimp 6.3.22 - June 23rd, 2017 =
+* Fixed an issue with comment integration subscriptions - comments will now be spam checked correctly
+
+= Easy Forms for MailChimp 6.3.21 - June 22nd, 2017 =
+* Cleaned up some HTML on the form
+* Fixed an issue with comment integration subscriptions - the commenter's name will now populate the First Name field in your MailChimp list.
+
+= Easy Forms for MailChimp 6.3.20 - May 31st, 2017 =
+* Added a filter - `yikes-mailchimp-integration-is-user-subscribed` - for the integration checkbox. You can override whether the checkbox will display for already subscribed users (by default, the checkbox will not display).
+* Updated the way we're logging errors for the homepage dashboard widgets - an error should no longer break your dashboard!
+* Added some default excluded post types for our post query on the form builder (CPTS are forum, topic, and reply). This should help people who use bbPress and are experiencing timeout issues. (These can be filtered with the `yikes-mailchimp-excluded-redirect-post-types`).
+
+= Easy Forms for MailChimp 6.3.19 - May 16th, 2017 =
+* Fixed a bug where hidden form fields were being counted as visible.
+* Added a new filter - yikes-mailchimp-save-form-filter - that allows you to filter all of a form's data before it gets saved.
+* Replaced the current datepicker with the standard jQuery core datepicker. Added styles and custom code to support this.
+* Added a new filter - yikes-mailchimp-datepicker-options - that allows you to filter the datepicker options.
+
+= Easy Forms for MailChimp 6.3.18 - May 3rd, 2017 =
+* Added a filter, `yikes-mailchimp-checkbox-integration-body`, for the checkbox integrations. You can now filter the entire request body before it's sent to MailChimp.
+* Fixed up the code that was requiring address 2. By default, the address 2 field will never be required (can be changed with filters `yikes-mailchimp-address-2-required` and `yikes-mailchimp-ignore-required-array-field`).
+
+= Easy Forms for MailChimp 6.3.17 - May 1st, 2017 =
+* Added a quick fix for the Addon Settings list 
+
+= Easy Forms for MailChimp 6.3.16 - April 26th, 2017 =
+* Quick fix to 6.3.15 - forgot to add a couple of files that handle the "Description Above Field" when a form field/interest group is initially added to the form.
+
+= Easy Forms for MailChimp 6.3.15 - April 26th, 2017 =
+* Google Analytics Event Tracking is here! We've added an action - `yikes-mailchimp-google-analytics` - where you can add Google Analytics JavaScript. Check out our knowledge base article (https://yikesplugins.com/support/knowledge-base/add-google-analytics-event-tracking/) for more instructions.
+* The form builder field instructions are now hidden when there are no fields added to the form.
+* Added the Clear API Cache button to the form builder - you can find the button in the Associated List Settings box.
+* Added a new option to the fields in the form builder: the ability to place the description above the field. This also comes with some minor style changes and a couple new filters: `'yikes-mailchimp-{$interest_group_id}-description-html'` to filter the interest group's description HTML, and `'yikes-mailchimp-{$merge_tag}-description-html'` to filter a form/merge field's description HTML.
+* Added HTML so that labels will work properly in the form builder. You can now select input fields by clicking on the field's label.
+
+= Easy Forms for MailChimp 6.3.14 - April 21st, 2017 =
+* Updating the WooCommerce Checkout integration checkbox with a new class and a filter for the classes (yikes-mailchimp-wooco-integration-checkbox-classes). The checkbox should now align correctly. 
+* Added a new setting to the General Setting page that controls using the nonce validation. The nonce has caused numerous people issues, and the filter is difficult for some people. This new setting will turn off the nonce validation for all forms on the website. The previously added filter, yikes-mailchimp-use-nonce-verification, can still turn off nonce validation on a per-form basis.
+
+= Easy Forms for MailChimp 6.3.13 - April 17th, 2017 = 
+* Two new filters: `yikes-mailchimp-wp-comment-integration-placement` and `yikes-mailchimp-use-nonce-verification`.
+* `yikes-mailchimp-use-nonce-verification` - Control whether we verify the nonce on form submissions. Default: `true` (by default, we check the nonce). @params: $use_nonce, $form_id
+* `yikes-mailchimp-wp-comment-integration-placement` - Control the placement of the subscription checkbox for the WP Comment Form integration. Default: `comment_form_field_comment` (after the comment textarea box) - @params: $comment_form_field. This filter allows you to choose which WP Comment Form filter to use, and for the full list of WP Comment Form filters, check the documentation: https://codex.wordpress.org/Function_Reference/comment_form.
+
+= Easy Forms for MailChimp 6.3.12 - April 6th, 2017 = 
+* Security vulnerability patched - Discovered with DefenseCode ThunderScan Source Code Security Analyzer by Neven Biruski
 
 = Easy Forms for MailChimp 6.3.11 - March 23rd, 2017 =
 * Optimized our query that fetches all posts/pages/CPTs - we now fetch only the IDs - this should prevent issues such as memory overflow or timeout

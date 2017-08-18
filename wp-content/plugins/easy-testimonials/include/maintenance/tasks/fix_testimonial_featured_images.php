@@ -4,7 +4,7 @@ class Easy_Testimonials_Maintenance_Fix_Featured_Images extends Easy_Testimonial
 {
 	var $key = 'fix_testimonial_featured_images_02022017';
 	
-	function run()
+	function run($version = '')
 	{
 		// remove WP_Errors that might have been saved as featured images
 		if ( !$this->task_has_been_run() ) {
@@ -27,7 +27,7 @@ class Easy_Testimonials_Maintenance_Fix_Featured_Images extends Easy_Testimonial
 			if ( is_wp_error(get_post_thumbnail_id($post->ID) ) ) {
 				delete_post_meta($post->ID, '_thumbnail_id');
 			}
-		}		
+		}
 	}
 } // end class
 

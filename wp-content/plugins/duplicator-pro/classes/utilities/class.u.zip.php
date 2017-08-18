@@ -1,6 +1,6 @@
 <?php
 /**
- * Utility class for ziping up content
+ * Utility class for zipping up content
  *
  * Standard: PSR-2
  * @link http://www.php-fig.org/psr/psr-2
@@ -42,7 +42,7 @@ class DUP_PRO_Zip_U
      *
      * @return bool Returns true if the directory was added to the object
      */
-    public static function addDirWithZipArchive(&$zipArchive, $directoryPath, $retainDirectory = true)
+    public static function addDirWithZipArchive(&$zipArchive, $directoryPath, $retainDirectory = true, $localPrefix = '')
     {
         $success = true;
 
@@ -56,6 +56,8 @@ class DUP_PRO_Zip_U
                 $local_name = basename($directoryPath)."/$local_name";
             }
 
+            $local_name = $localPrefix . $local_name;
+            
             if (!is_dir($path)) {
                 if (is_readable($path)) {
                  //   $added = $zipArchive->addFile($path, $local_name);
@@ -105,7 +107,7 @@ class DUP_PRO_Zip_U
             if ($filepath == null) {
                 $problem_fix          = new DUP_PRO_Problem_Fix();
                 $problem_fix->problem = DUP_PRO_U::__('Zip executable not present');
-                $problem_fix->fix     = DUP_PRO_U::__('To install the zip executable and make it accessible to PHP.');
+                $problem_fix->fix     = DUP_PRO_U::__('Install the zip executable and make it accessible to PHP.');
 
                 $problem_fixes[] = $problem_fix;
             }
@@ -117,7 +119,7 @@ class DUP_PRO_Zip_U
                 $problem_fix = new DUP_PRO_Problem_Fix();
 
                 $problem_fix->problem = DUP_PRO_U::__('Required functions disabled in the php.ini.');
-                $problem_fix->fix     = DUP_PRO_U::__('To remove any of the following from disable_functions in the php.ini file: shell_exec, escapeshellarg, escapeshellcmd, and extension_loaded.');
+                $problem_fix->fix     = DUP_PRO_U::__('Remove any of the following from the disable_functions setting in the php.ini files: shell_exec, escapeshellarg, escapeshellcmd, and extension_loaded.');
 
                 $problem_fixes[] = $problem_fix;
             }
@@ -128,7 +130,7 @@ class DUP_PRO_Zip_U
                     $problem_fix = new DUP_PRO_Problem_Fix();
 
                     $problem_fix->problem = DUP_PRO_U::__('Suhosin is blocking PHP shell_exec.');
-                    $problem_fix->fix     = DUP_PRO_U::__('To remove any of the following from the suhosin.executor.func.blacklist setting in the php.ini file: shell_exec, escapeshellarg, escapeshellcmd, and extension_loaded.');
+                    $problem_fix->fix     = DUP_PRO_U::__('In the php.ini file - Remove the following from the suhosin.executor.func.blacklist setting: shell_exec, escapeshellarg, escapeshellcmd, and extension_loaded.');
 
                     $problem_fixes[] = $problem_fix;
                 }
@@ -139,7 +141,7 @@ class DUP_PRO_Zip_U
     }
 
     /**
-     * Get the path to the zip progame exeacutable on the server
+     * Get the path to the zip program executable on the server
      *
      * @return string   Returns the path to the zip program
      */

@@ -73,7 +73,7 @@ TOOL-BAR -->
 			<a href="admin.php?page=duplicator-pro-tools&tab=data" class="button" title="<?php DUP_PRO_U::_e("Import/Export Data"); ?>"><i class="fa fa-download"></i></a>
         </td>
         <td>
-            <span> <i class="fa fa-clock-o"></i> <?php DUP_PRO_U::_e("All Schedules"); ?></span>
+            <span> <i class="fa fa-clock-o"></i> <?php DUP_PRO_U::_e("Schedules"); ?></span>
             <a href="<?php echo $edit_schedule_url; ?>" class="add-new-h2"><?php DUP_PRO_U::_e("Add New"); ?></a>
         </td>
     </tr>

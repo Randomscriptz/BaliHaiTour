@@ -254,7 +254,9 @@ class DUP_PRO_FTP_Chunker
                 				
                 while (($ret == FTP_MOREDATA) && ($time_passed < $max_upload_time_in_sec))
                 {
-                    usleep($server_load_delay);
+                    if($server_load_delay !== 0) {
+                        usleep($server_load_delay);
+                    }
                     if ($ret != FTP_FAILED)
                     {
                         $next_offset = ftell($local_file_handle);

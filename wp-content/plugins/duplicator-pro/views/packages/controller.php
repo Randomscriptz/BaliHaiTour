@@ -13,7 +13,7 @@ $current_view =  (isset($_REQUEST['action']) && $_REQUEST['action'] == 'detail')
 $nonce = wp_create_nonce('duplicator_pro_download_package_file');
 ?>
 
-<script type="text/javascript">
+<script>
     jQuery(document).ready(function($) {
 
         /*	----------------------------------------

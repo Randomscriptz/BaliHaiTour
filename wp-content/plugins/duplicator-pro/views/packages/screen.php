@@ -30,7 +30,8 @@ class DUP_PRO_Package_Screen extends DUP_PRO_UI_Screen
 		$faq   = '#faq-package';
 		$content .= "<b>References:</b><br/>"
 					. "<a href='https://snapcreek.com/duplicator/docs/guide/{$guide}' target='_sc-guide'>Guide</a> | "
-					. "<a href='https://snapcreek.com/duplicator/docs/faqs-tech/{$faq}' target='_sc-guide'>FAQs</a>";
+					. "<a href='https://snapcreek.com/duplicator/docs/faqs-tech/{$faq}' target='_sc-guide'>FAQs</a> | "
+					. "<a href='https://snapcreek.com/support/?idea=1' target='_sc-guide'>Feature Request</a>";
 		
 		$this->screen->add_help_tab( array(
 				'id'        => 'dpro_help_package_overview',

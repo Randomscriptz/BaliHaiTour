@@ -7,18 +7,21 @@ global $wpdb;
 //COMMON HEADER DISPLAY
 require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/assets/js/javascript.php');
 require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/views/inc.header.php');
+require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/classes/ui/class.ui.dialog.php');
+
 $current_tab = isset($_REQUEST['tab']) ? esc_html($_REQUEST['tab']) : 'general';
 ?>
 
 <style>
 	.narrow-input { width: 80px; }
 	.wide-input {width: 400px; } 
-	table.form-table tr td { padding-top: 25px; }
+	table.form-table tr td { padding-top:15px; }
 	td.dpro-license-type div {padding:5px 0 0 30px}
 	td.dpro-license-type i.fa-check-square-o {display: inline-block; padding-right: 5px}
 	td.dpro-license-type i.fa-square-o {display: inline-block; padding-right: 7px}
 	td.dpro-license-type i.fa-question-circle {font-size:12px}
-	div.sub-opts {padding:15px 0px 5px 30px }
+	div.sub-opts {padding:10px 0 10px 30px; }
+	h3.title {font-size:1.45em; padding:0; margin:10px 0 0 0}
 </style>
 
 <div class="wrap">

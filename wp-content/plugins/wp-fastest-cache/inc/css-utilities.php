@@ -165,7 +165,7 @@
 		public function create_name($arr){
 			$name = "";
 			foreach ($arr as $tag_key => $tag_value) {
-				$name = $name.$tag_value["href"];
+				$name = $name.$this->remove_query_string($tag_value["href"]);
 			}
 			return md5($name);
 		}
@@ -264,7 +264,11 @@
 			$script_tags = $this->find_tags("<script", "</script>");
 
 			foreach ($script_tags as $key => $value) {
-				$this->except = $value["text"].$this->except;
+				$link_tags = $this->find_tags("<link", ">", $value["text"]);
+
+				if(count($link_tags) > 0){
+					$this->except = $value["text"].$this->except;
+				}
 			}
 		}
 
@@ -299,8 +303,12 @@
 			}
 		}
 
-		public function find_tags($start_string, $end_string){
-			$data = $this->html;
+		public function find_tags($start_string, $end_string, $source = false){
+			if($source){
+				$data = $source;
+			}else{
+				$data = $this->html;
+			}
 
 			$list = array();
 			$start_index = false;
@@ -329,11 +337,19 @@
 			return $list;
 		}
 
+		public function remove_query_string($url){
+			$url = preg_replace("/^(\/\/|http\:\/\/|https\:\/\/)(www\.)?/", "", $url);
+			$url = preg_replace("/\?.*/", "", $url);
+			
+			return $url;
+		}
+
 		public function minify($url){
 			$this->url = $url;
+			$md5 = md5($this->remove_query_string($url));
 
-			$cachFilePath = WPFC_WP_CONTENT_DIR."/cache/wpfc-minified/".md5($url);
-			$cssLink = WPFC_WP_CONTENT_URL."/cache/wpfc-minified/".md5($url);
+			$cachFilePath = WPFC_WP_CONTENT_DIR."/cache/wpfc-minified/".$md5;
+			$cssLink = WPFC_WP_CONTENT_URL."/cache/wpfc-minified/".$md5;
 
 			if(is_dir($cachFilePath)){
 				if($cssFiles = @scandir($cachFilePath, 1)){

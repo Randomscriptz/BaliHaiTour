@@ -33,7 +33,7 @@ class DUP_PRO_JSON_Entity_Base
         $this->type       = get_class($this);
         $this->dirty      = false;
         $this->verifiers  = array();
-        $this->table_name = $wpdb->prefix.$table_name;
+        $this->table_name = $wpdb->base_prefix.$table_name;
     }
 
     public static function init_table($table_name = self::DEFAULT_TABLE_NAME)
@@ -41,18 +41,15 @@ class DUP_PRO_JSON_Entity_Base
 
         global $wpdb;
 
-        $table_name = $wpdb->prefix.$table_name;
+        $table_name = $wpdb->base_prefix.$table_name;
 
         $index_query = "select count(*) from information_schema.statistics where table_name = '$table_name' and index_name = 'type_idx' and TABLE_SCHEMA = DATABASE()";
 
-        //DUP_PRO_U::debug("index query=$index_query");
         if ($wpdb->get_var($index_query) != 0) {
             $sql = "ALTER TABLE ".$table_name." DROP INDEX type_idx";
 
             //     DUP_PRO_U::debug("removing index type_idx for $table_name using sql $sql");
             $wpdb->query($sql);
-        } else {
-            DUP_PRO_Low_U::errLog("index type_idx for $table_name doesn't exist");
         }
 
         $query_string = "CREATE TABLE IF NOT EXISTS ".$table_name."(";
@@ -101,7 +98,7 @@ class DUP_PRO_JSON_Entity_Base
                 return false;
             }
         } else {
-            DUP_PRO_Low_U::errLog("Entity trying to be inserted exceeds max size of 65K!");
+            DUP_PRO_Low_U::errLog("Entity ({$this->type}) trying to be inserted exceeds max size of 65K!");
             return false;
         }
 
@@ -127,7 +124,7 @@ class DUP_PRO_JSON_Entity_Base
             return true;
         } else {
 
-            DUP_PRO_Low_U::errLog("Entity trying to be updated exceeds max size of 65K!");
+            DUP_PRO_Low_U::errLog("Entity ({$this->type}) trying to be updated exceeds max size of 65K!");
             return false;
         }
     }
@@ -139,7 +136,7 @@ class DUP_PRO_JSON_Entity_Base
 
         global $wpdb;
 
-        // $table_name = $wpdb->prefix . $table_name;
+        // $table_name = $wpdb->base_prefix . $table_name;
 
         $query_string = "DELETE FROM ".$this->table_name;
         $query_string .= " WHERE id = %d";
@@ -156,7 +153,7 @@ class DUP_PRO_JSON_Entity_Base
     {
         global $wpdb;
 
-        $table_name = $wpdb->prefix.$table_name;
+        $table_name = $wpdb->base_prefix.$table_name;
 
         $query_string = "SELECT * FROM ".$table_name;
         $query_string .= " WHERE id = %d";
@@ -193,7 +190,7 @@ class DUP_PRO_JSON_Entity_Base
     {
         global $wpdb;
 
-        $table_name = $wpdb->prefix.$table_name;
+        $table_name = $wpdb->base_prefix.$table_name;
 
         $query_string = "DELETE FROM ".$table_name;
         $query_string .= " WHERE id = %d";
@@ -232,7 +229,7 @@ class DUP_PRO_JSON_Entity_Base
 
         global $wpdb;
 
-        $table_name = $wpdb->prefix.$table_name;
+        $table_name = $wpdb->base_prefix.$table_name;
 
         $query_string = "SELECT * FROM ".$table_name;
         $query_string .= " WHERE type = %s";

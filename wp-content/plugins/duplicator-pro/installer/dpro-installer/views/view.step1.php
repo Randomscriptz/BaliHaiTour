@@ -1,6 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../classes/config/class.archive.config.php');
-
+require_once($GLOBALS['DUPX_INIT'] . '/classes/config/class.archive.config.php');
 
 //ARCHIVE FILE
 $arcCheck	= (file_exists($GLOBALS['FW_PACKAGE_PATH']))	? 'Pass' : 'Fail';
@@ -9,7 +8,7 @@ $arcSize    = is_numeric($arcSize) ? $arcSize : 0;
 
 //REQUIRMENTS
 $req      	= array();
-$req['01']	= DUPX_Server::is_dir_writable($GLOBALS["CURRENT_ROOT_PATH"]) ? 'Pass' : 'Fail';
+$req['01']	= DUPX_Server::is_dir_writable($GLOBALS['DUPX_ROOT']) ? 'Pass' : 'Fail';
 $req['02']	= 'Pass'; //Place-holder for future check
 $req['03']	= (! DUPX_Server::$php_safe_mode_on) ? 'Pass' : 'Fail';
 $req['04']	= function_exists('mysqli_connect')	 ? 'Pass' : 'Fail';
@@ -18,25 +17,24 @@ $all_req  	= in_array('Fail', $req) 			 ? 'Fail' : 'Pass';
 
 //NOTICES
 $openbase		= ini_get("open_basedir");
-$scanfiles		= @scandir($GLOBALS["CURRENT_ROOT_PATH"]);
+$scanfiles		= @scandir($GLOBALS['DUPX_ROOT']);
 $scancount		= is_array($scanfiles) ? (count($scanfiles)) : -1;
 $datetime1		= $GLOBALS['FW_CREATED'];
 $datetime2		= date("Y-m-d H:i:s");
 $fulldays		= round(abs(strtotime($datetime1) - strtotime($datetime2))/86400);
-$root_path		= DUPX_U::set_safe_path($GLOBALS['CURRENT_ROOT_PATH']);
+$root_path		= $GLOBALS['DUPX_ROOT'];
 $wpconf_path	= "{$root_path}/wp-config.php";
 $max_time_zero  = set_time_limit(0);
 $max_time_size  = 314572800;  //300MB
 $max_time_ini   = ini_get('max_execution_time');
 $max_time_warn  = (is_numeric($max_time_ini) && $max_time_ini < 31  && $max_time_ini > 0) && $arcSize > $max_time_size;
 
-
 $notice		    = array();
 $notice['01']   = ! file_exists($wpconf_path)	? 'Good' : 'Warn';
 $notice['02']   = $scancount <= 40 ? 'Good' : 'Warn';
 $notice['03']	= $fulldays <= 180 ? 'Good' : 'Warn';
 $notice['04']	= 'Good'; //Place-holder for future check
-$notice['05']	= $GLOBALS['FW_VERSION_OS'] == PHP_OS ? 'Good' : 'Warn';
+$notice['05']	= 'Good'; //Place-holder for future check $GLOBALS['FW_VERSION_OS'] == PHP_OS ? 'Good' : 'Warn';
 $notice['06']	= empty($openbase)	 ? 'Good' : 'Warn';
 $notice['07']	= ! $max_time_warn	 ? 'Good' : 'Warn';
 $all_notice  	= in_array('Warn', $notice) ? 'Warn' : 'Good';
@@ -47,8 +45,11 @@ $req_notice   = ($all_notice == 'Good');
 $all_success  = ($req_success && $req_notice);
 $agree_msg    = "To enable this button the checkbox above under the 'Terms & Notices' must be checked.";
 
+$shell_exec_unzip_path 	= DUPX_Server::get_unzip_filepath();
+$shell_exec_zip_enabled	= ($shell_exec_unzip_path != null);
+$zip_archive_enabled    = class_exists('ZipArchive') ? 'Enabled' : 'Not Enabled';
 
-/* FORWARD: To one-click installer
+/** FORWARD: To one-click installer
 $oneclick = ($GLOBALS['FW_ONECLICK'] && $req_success) && (! isset($_GET['view']));
 if ($oneclick && ! $_GET['debug']) {
 	DUPX_HTTP::post_with_html(DUPX_HTTP::get_request_uri(), array('view' => 'deploy'));
@@ -57,20 +58,23 @@ if ($oneclick && ! $_GET['debug']) {
 
 ?>
 
-<form method="post" class="content-form">
-<input type="hidden" name="view" value="deploy" />
+
+<form id="s1-input-form" method="post" class="content-form">
+<input type="hidden" name="view" value="step1" />
+<input type="hidden" name="ctrl_action" value="ctrl-step1" />
 
 <div class="hdr-main">
-	Step <span class="step">1</span> of 4: System Setup
+	  Step <span class="step">1</span> of 4: Extract Archive
 	<!--div style="float:right; font-size:14px"><a href="javascript:void(0)">One-Click Install</a></div-->
 </div>
+<br/>
 
 <!-- ====================================
 ARCHIVE FILE
 ==================================== -->
 <div class="hdr-sub1">
 	<a id="s1-area-archive-file-link" data-type="toggle" data-target="#s1-area-archive-file"><i class="fa fa-plus-square"></i>Archive File</a>
-	<div class="status-badge <?php echo ( $arcCheck == 'Pass') ? 'status-pass' : 'status-fail'; ?>	">
+	<div class="<?php echo ( $arcCheck == 'Pass') ? 'status-badge-pass' : 'status-badge-fail'; ?>	">
 		<?php echo ($arcCheck == 'Pass') ? 'Pass' : 'Fail'; ?>
 	</div>
 </div>
@@ -84,11 +88,15 @@ ARCHIVE FILE
 			<table class="s1-archive-local">
 				<tr>
 					<td>Size:</td>
-					<td><?php echo DUPX_U::readable_bytesize($arcSize); ;?> </td>
+					<td><?php echo DUPX_U::readableByteSize($arcSize); ;?> </td>
 				</tr>
 				<tr>
 					<td>Name:</td>
 					<td><?php echo "{$GLOBALS['FW_PACKAGE_NAME']}";?> </td>
+				</tr>
+				<tr>
+					<td>Path:</td>
+					<td><?php echo $root_path;?> </td>
 				</tr>
 				<tr>
 					<td>Notes:</td>
@@ -114,7 +122,7 @@ SYSTEM CHECKS
 ==================================== -->
 <div class="hdr-sub1">
 	<a id="s1-area-sys-setup-link" data-type="toggle" data-target="#s1-area-sys-setup"><i class="fa fa-plus-square"></i>System Checks</a>
-	<div class="status-badge <?php echo ( $req_success) ? 'status-pass' : 'status-fail'; ?>	">
+	<div class="<?php echo ( $req_success) ? 'status-badge-pass' : 'status-badge-fail'; ?>	">
 		<?php echo ( $req_success) ? 'Pass' : 'Fail'; ?>
 	</div>
 </div>
@@ -131,7 +139,7 @@ SYSTEM CHECKS
 	</div>
 
 	<div class="s1-reqs" id="s1-reqs-all">
-		<div class="notice">All requirements must pass to start deployment</div>
+		<div class="notice">All requirements must pass to start archive extraction</div>
 
 		<!-- REQ 1 -->
 		<div class="status <?php echo strtolower($req['01']); ?>"><?php echo $req['01']; ?></div>
@@ -140,11 +148,11 @@ SYSTEM CHECKS
 			<table>
 				<tr>
 					<td><b>Deployment Path:</b> </td>
-					<td><i><?php echo "{$GLOBALS['CURRENT_ROOT_PATH']}"; ?></i> </td>
+					<td><i><?php echo "{$GLOBALS['DUPX_ROOT']}"; ?></i> </td>
 				</tr>
 				<tr>
 					<td><b>Suhosin Extension:</b> </td>
-					<td><?php echo extension_loaded('suhosin') ? "<i class='dup-fail'>Enabled</i>'" : "<i class='dup-pass'>Disabled</i>"; ?> </td>
+					<td><?php echo extension_loaded('suhosin') ? "<i class='dupx-fail'>Enabled</i>'" : "<i class='dupx-pass'>Disabled</i>"; ?> </td>
 				</tr>
 			</table><br/>
 
@@ -197,7 +205,7 @@ SYSTEM CHECKS
 		</table>
 	</div>
 	<div class="s1-reqs" id="s1-notice-all">
-		<div class="notice">Notices are not required to start deployment</div>
+		<div class="notice">Notices are <u>not</u> required to start archive extraction</div>
 
 		<!-- NOTICE 1 -->
 		<div class="status <?php echo ($notice['01'] == 'Good') ? 'pass' : 'fail' ?>"><?php echo $notice['01']; ?></div>
@@ -212,7 +220,7 @@ SYSTEM CHECKS
 		<div class="status <?php echo ($notice['02'] == 'Good') ? 'pass' : 'fail' ?>"><?php echo $notice['02']; ?></div>
 		<div class="title" data-type="toggle" data-target="#s1-notice02"><i class="fa fa-plus-square"></i> Directory Setup</div>
 		<div class="info" id="s1-notice02">
-			<b>Deployment Path:</b> <i><?php echo "{$GLOBALS['CURRENT_ROOT_PATH']}"; ?></i>
+			<b>Deployment Path:</b> <i><?php echo "{$GLOBALS['DUPX_ROOT']}"; ?></i>
 			<br/><br/>
 			There are currently <?php echo "<b>[{$scancount}]</b>";?>  items in the deployment path. These items will be overwritten if they also exist
 			inside the archive file.  The notice is to prevent overwriting an existing site or trying to install on-top of one which
@@ -232,8 +240,7 @@ SYSTEM CHECKS
 		<div class="info" id="s1-notice04">
 		</div>-->
 
-
-		<!-- NOTICE 5 -->
+		<!-- NOTICE 5
 		<div class="status <?php echo ($notice['05'] == 'Good') ? 'pass' : 'fail' ?>"><?php echo $notice['05']; ?></div>
 		<div class="title" data-type="toggle" data-target="#s1-notice05"><i class="fa fa-plus-square"></i> OS Compatibility</div>
 		<div class="info" id="s1-notice05">
@@ -242,13 +249,13 @@ SYSTEM CHECKS
 				echo "The current OS (operating system) is '{$currentOS}'.  The package was built on '{$GLOBALS['FW_VERSION_OS']}'.  Moving from one OS to another
 				is typically very safe and normal, however if any issues do arise be sure that you don't have any items on your site that were OS specific";
 			?>
-		</div>
+		</div>-->
 
 		<!-- NOTICE 6 -->
 		<div class="status <?php echo ($notice['06'] == 'Good') ? 'pass' : 'fail' ?>"><?php echo $notice['06']; ?></div>
 		<div class="title" data-type="toggle" data-target="#s1-notice06"><i class="fa fa-plus-square"></i> PHP Open Base</div>
 		<div class="info" id="s1-notice06">
-			<b>Open BaseDir:</b> <i><?php echo $notice['06'] == 'Good' ? "<i class='dup-pass'>Disabled</i>" : "<i class='dup-fail'>Enabled</i>"; ?></i>
+			<b>Open BaseDir:</b> <i><?php echo $notice['06'] == 'Good' ? "<i class='dupx-pass'>Disabled</i>" : "<i class='dupx-fail'>Enabled</i>"; ?></i>
 			<br/><br/>
 
 			If <a href="http://www.php.net/manual/en/ini.core.php#ini.open-basedir" target="_blank">open_basedir</a> is enabled and your
@@ -268,7 +275,7 @@ SYSTEM CHECKS
 		<div class="status <?php echo ($notice['07'] == 'Good') ? 'pass' : 'fail' ?>"><?php echo $notice['07']; ?></div>
 		<div class="title" data-type="toggle" data-target="#s1-notice07"><i class="fa fa-plus-square"></i> PHP Timeout</div>
 		<div class="info" id="s1-notice07">
-			<b>Archive Size:</b> <?php echo DUPX_U::readable_bytesize($arcSize) ?>  <small>(detection limit is set at <?php echo DUPX_U::readable_bytesize($max_time_size) ?>) </small><br/>
+			<b>Archive Size:</b> <?php echo DUPX_U::readableByteSize($arcSize) ?>  <small>(detection limit is set at <?php echo DUPX_U::readableByteSize($max_time_size) ?>) </small><br/>
 			<b>PHP max_execution_time:</b> <?php echo "{$max_time_ini}"; ?> <small>(zero means not limit)</small> <br/>
 			<b>PHP set_time_limit:</b> <?php echo ($max_time_zero) ? '<i style="color:green">Success</i>' : '<i style="color:maroon">Failed</i>' ?>
 			<br/><br/>
@@ -281,20 +288,12 @@ SYSTEM CHECKS
 			Duplicator Pro attempts to turn off the timeout by using the
 			<a href="http://php.net/manual/en/function.set-time-limit.php" target="_blank">set_time_limit</a> setting.   If this notice shows as a warning then it is
 			still safe to continue with the install.  However, if a timeout occurs then you will need to consider working with the max_execution_time setting or extracting the
-			archive file using the 'Manual package extraction' method.
+			archive file using the 'Manual Archive Extraction' method.
 			Please see the	<a href="https://snapcreek.com/duplicator/docs/faqs-tech/#faq-trouble-100-q" target="_blank">FAQ timeout</a> help link for more details.
-
 		</div>
-
-
 	</div>
-	<small style="display:block; text-align:center">
-
-	</small>
-
 </div>
 <br/><br/>
-
 
 <!-- ====================================
 ADVANCED OPTIONS
@@ -303,18 +302,68 @@ ADVANCED OPTIONS
 	<a data-type="toggle" data-target="#s1-area-adv-opts"><i class="fa fa-plus-square"></i>Advanced Options</a>
 </div>
 <div id="s1-area-adv-opts" style="display:none">
+	<div class="help-target"><a href="<?php echo $GLOBALS['_HELP_URL_PATH'];?>#help-s1" target="_blank"><i class="fa fa-question-circle"></i></a></div>
 
 	<table class="dupx-opts dupx-advopts">
 		<tr>
+			<td>Extraction:</td>
+			<td>
+				<select id="archive_engine" name="archive_engine" size="3">
+					<option value="manual">Manual Archive Extraction</option>
+					<?php
+						//ZIP-ARCHIVE
+						if (! $zip_archive_enabled){
+							echo '<option value="ziparchive" disabled="true">PHP ZipArchive (not detected on server)</option>';
+						} elseif ($zip_archive_enabled && ! $shell_exec_zip_enabled) {
+							echo '<option value="ziparchive" selected="true">PHP ZipArchive</option>';
+						} else {
+							echo '<option value="ziparchive">PHP ZipArchive</option>';
+						}
+
+						//SHELL-EXEC UNZIP
+						if (! $shell_exec_zip_enabled){
+							echo '<option value="shellexec_unzip" disabled="true">Shell Exec Unzip (not detected on server)</option>';
+						} else {
+							echo '<option value="shellexec_unzip" selected="true">Shell Exec Unzip</option>';
+						}
+					?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Config Files:</td>
+			<td>
+				<input type="checkbox" name="retain_config" id="retain_config" value="1" />
+				<label for="retain_config" style="font-weight: normal">Retain original .htaccess, .user.ini and web.config</label>
+			</td>
+		</tr>
+		<tr>
+			<td>Permissions:</td>
+			<td>
+				<input type="checkbox" name="set_file_perms" id="set_file_perms" value="1" onclick="jQuery('#file_perms_value').prop('disabled', !jQuery(this).is(':checked'));"/>
+				<label for="set_file_perms">All Files</label><input name="file_perms_value" id="file_perms_value" style="width:30px; margin-left:7px;" value="644" disabled> &nbsp;
+				<input type="checkbox" name="set_dir_perms" id="set_dir_perms" value="1" onclick="jQuery('#dir_perms_value').prop('disabled', !jQuery(this).is(':checked'));"/>
+				<label for="set_dir_perms">All Directories</label><input name="dir_perms_value" id="dir_perms_value" style="width:30px; margin-left:7px;" value="755" disabled>
+			</td>
+		</tr>
+		<tr>
+			<td>File Times:</td>
+			<td>
+				<input type="radio" name="zip_filetime" id="zip_filetime_now" value="current" checked="checked" />
+				<label class="radio" for="zip_filetime_now" title='Set the files current date time to now'>Current</label> &nbsp;
+				<input type="radio" name="zip_filetime" id="zip_filetime_orginal" value="original" />
+				<label class="radio" for="zip_filetime_orginal" title="Keep the files date time the same">Original</label>
+			</td>
+		</tr>
+		<tr>
 			<td>Logging:</td>
-			<td colspan="2">
-				<input type="radio" name="logging" id="logging-light" value="1" checked="true"> <label for="logging-light">Light</label> &nbsp;
-				<input type="radio" name="logging" id="logging-detailed" value="2"> <label for="logging-detailed">Detailed</label> &nbsp;
-				<input type="radio" name="logging" id="logging-debug" value="3"> <label for="logging-debug">Debug</label>
+			<td>
+				<input type="radio" name="logging" id="logging-light" value="1" checked="true"> <label for="logging-light" class="radio">Light</label> &nbsp;
+				<input type="radio" name="logging" id="logging-detailed" value="2"> <label for="logging-detailed" class="radio">Detailed</label> &nbsp;
+				<input type="radio" name="logging" id="logging-debug" value="3"> <label for="logging-debug" class="radio">Debug</label>
 			</td>
 		</tr>
 	</table>
-
 </div>
 <br/><br/>
 
@@ -344,8 +393,8 @@ TERMS & NOTICES
 			<br/><br/>
 
 			<b>Setup:</b>
-			Only the archive and installer file should be in the install directory, unless you have manually extracted the package and checked the
-			'Manual Package Extraction' checkbox. All other files will be OVERWRITTEN during install.  Make sure you have full backups of all your databases and files
+			Only the archive and installer file should be in the install directory, unless you have manually extracted the package and selected the
+			'Manual Archive Extraction' option under advanced options. All other files will be OVERWRITTEN during install.  Make sure you have full backups of all your databases and files
 			before continuing with an installation. Manual extraction requires that all contents in the package are extracted to the same directory as the installer file.
 			Manual extraction is only needed when your server does not support the ZipArchive extension.  Please see the online help for more details.
 			<br/><br/>
@@ -386,8 +435,10 @@ TERMS & NOTICES
 </div>
 <div id="s1-warning-check">
 	<input id="accept-warnings" name="accpet-warnings" type="checkbox" onclick="DUPX.acceptWarning()" />
-	<label for="accept-warnings">I have read and accept all terms &amp; notices <small style="font-style:italic">(required for install)</small></label><br/>
-</div><br/><br/><br/>
+	<label for="accept-warnings">I have read and accept all terms &amp; notices <small style="font-style:italic">(required to continue)</small></label><br/>
+</div>
+<br/><br/><br/>
+<br/><br/>
 
 
 <?php if (! $req_success  ||  $arcCheck == 'Fail') :?>
@@ -403,35 +454,150 @@ TERMS & NOTICES
 	</div>
 <?php else : ?>
 	<div class="footer-buttons" >
-		<button id="step0-deploy-btn" type="submit" title="<?php echo $agree_msg; ?>" class="default-btn"> Next <i class="fa fa-caret-right"></i> </button>
+		<button id="s1-deploy-btn" type="button" title="<?php echo $agree_msg; ?>" onclick="DUPX.runExtraction()"  class="default-btn"> Next <i class="fa fa-caret-right"></i> </button>
 	</div>
 <?php endif; ?>
 
 </form>
 
+
+<!-- =========================================
+VIEW: STEP 1 - AJAX RESULT
+Auto Posts to view.step2.php
+========================================= -->
+<form id='s1-result-form' method="post" class="content-form" style="display:none">
+
+	<div class="dupx-logfile-link"><a href="../installer-log.txt" target="dpro-installer">installer-log.txt</a></div>
+	<div class="hdr-main">
+        Step <span class="step">1</span> of 4: Extract Archive
+	</div>
+
+	<!--  POST PARAMS -->
+	<div class="dupx-debug">
+		<input type="hidden" name="view" value="step2" />
+		<input type="hidden" name="archive_name" value="<?php echo $GLOBALS['FW_PACKAGE_NAME'] ?>" />
+		<input type="hidden" name="logging" id="ajax-logging"  />
+		<input type="hidden" name="retain_config" id="ajax-retain-config"  />
+		<input type="hidden" name="json"    id="ajax-json" />
+		<textarea id='ajax-json-debug' name='json_debug_view'></textarea>
+		<input type='submit' value='manual submit'>
+	</div>
+
+	<!--  PROGRESS BAR -->
+	<div id="progress-area">
+	    <div style="width:500px; margin:auto">
+			<div style="font-size:1.7em; margin-bottom:20px"><i class="fa fa-circle-o-notch fa-spin"></i> Extracting Archive Files</div>
+			<div id="progress-bar"></div>
+			<h3> Please Wait...</h3><br/><br/>
+			<i>Keep this window open during the extraction process.</i><br/>
+			<i>This can take several minutes.</i>
+	    </div>
+	</div>
+
+	<!--  AJAX SYSTEM ERROR -->
+	<div id="ajaxerr-area" style="display:none">
+	    <p>Please try again an issue has occurred.</p>
+	    <div style="padding: 0px 10px 10px 0px;">
+			<div id="ajaxerr-data">An unknown issue has occurred with the file and database setup process.  Please see the installer-log.txt file for more details.</div>
+			<div style="text-align:center; margin:10px auto 0px auto">
+				<input type="button" class="default-btn" onclick="DUPX.hideErrorResult()" value="&laquo; Try Again" /><br/><br/>
+				<i style='font-size:11px'>See online help for more details at <a href='https://snapcreek.com/ticket' target='_blank'>snapcreek.com</a></i>
+			</div>
+	    </div>
+	</div>
+</form>
+
 <script>
-	/**
-     * Accetps Usage Warning */
-    DUPX.acceptWarning = function ()
-    {
-        if ($("#accept-warnings").is(':checked')) {
-            $("#step0-deploy-btn").removeAttr("disabled");
-			$("#step0-deploy-btn").removeAttr("title");
-        } else {
-            $("#step0-deploy-btn").attr("disabled", "true");
-			$("#step0-deploy-btn").attr("title", "<?php echo $agree_msg; ?>");
-        }
-    };
+/** Performs Ajax post to extract files and create db
+ * Timeout (10000000 = 166 minutes) */
+DUPX.runExtraction = function()
+{
+	var $form = $('#s1-input-form');
 
-	//DOCUMENT LOAD
-	$(document).ready(function()
-	{
-		//INIT Routines
-		$("*[data-type='toggle']").click(DUPX.toggleClick);
-		$("#tabs").tabs();
-		DUPX.acceptWarning();
+	//1800000 = 30 minutes
+	//If the extraction takes longer than 30 minutes then user
+	//will probably want to do a manual extraction or even FTP
+	$.ajax({
+		type: "POST",
+		timeout:1800000,
+		dataType: "json",
+		url: window.location.href,
+		data: $form.serialize(),
+		beforeSend: function() {
+			DUPX.showProgressBar();
+			$form.hide();
+			$('#s1-result-form').show();
+		},
+		success: function(data) {
+			var dataJSON = JSON.stringify(data);
+			$("#ajax-json-debug").val(dataJSON);
+			if (typeof(data) != 'undefined' && data.pass == 1) {
+				$("#ajax-logging").val($("input:radio[name=logging]:checked").val());
+				$("#ajax-retain-config").val($("#retain_config").is(":checked") ? 1 : 0);
+				$("#ajax-json").val(escape(dataJSON));
+				<?php if (! $GLOBALS['DUPX_DEBUG']) : ?>
+					setTimeout(function() {$('#s1-result-form').submit();}, 500);
+				<?php endif; ?>
+				$('#progress-area').fadeOut(1000);
+			} else {
+				$('#ajaxerr-data').html('Error Processing Step 1');
+				DUPX.hideProgressBar();
+			}
+		},
+		error: function(xhr) {
 
-		<?php echo ($arcCheck == 'Fail') 	? "$('#s1-area-archive-file-link').trigger('click');" 	: ""; ?>
-		<?php echo (! $all_success)         ? "$('#s1-area-sys-setup-link').trigger('click');" 		: ""; ?>
+			var status  = "<b>Server Code:</b> "	+ xhr.status		+ "<br/>";
+				status += "<b>Status:</b> "			+ xhr.statusText	+ "<br/>";
+				status += "<b>Response:</b> "		+ xhr.responseText  + "<hr/>";
+
+			if((xhr.status == 403) || (xhr.status == 500)) {
+				status += "<b>Recommendation:</b><br/>";
+				status += "See <a target='_blank' href='https://snapcreek.com/duplicator/docs/faqs-tech/#faq-installer-120-q'>this FAQ item</a> for possible resolutions.<br/><br/>"
+			} else if(xhr.status == 0) {
+				status += "<b>Recommendation:</b><br/>";
+				status += "Possible server timeout! Performing a 'Manual Extraction' can avoid timeouts.";
+				status += "See <a target='_blank' href='https://snapcreek.com/duplicator/docs/faqs-tech/#faq-installer-015-q'>this FAQ item</a> for a complete overview.<br/><br/>"
+			} else {
+				status += "<b>Additional Resources:</b><br/> ";
+				status += "&raquo; <a target='_blank' href='https://snapcreek.com/duplicator/docs/'>Help Resources</a><br/>";
+				status += "&raquo; <a target='_blank' href='https://snapcreek.com/duplicator/docs/faqs-tech/'>Technical FAQ</a>";
+			}
+
+			$('#ajaxerr-data').html(status);
+			DUPX.hideProgressBar();
+		}
 	});
+};
+
+/** Go back on AJAX result view */
+DUPX.hideErrorResult = function()
+{
+	$('#s1-result-form').hide();
+	$('#s1-input-form').show(200);
+}
+
+/**
+ * Accetps Usage Warning */
+DUPX.acceptWarning = function ()
+{
+	if ($("#accept-warnings").is(':checked')) {
+		$("#s1-deploy-btn").removeAttr("disabled");
+		$("#s1-deploy-btn").removeAttr("title");
+	} else {
+		$("#s1-deploy-btn").attr("disabled", "true");
+		$("#s1-deploy-btn").attr("title", "<?php echo $agree_msg; ?>");
+	}
+};
+
+//DOCUMENT LOAD
+$(document).ready(function()
+{
+	//INIT Routines
+	$("*[data-type='toggle']").click(DUPX.toggleClick);
+	$("#tabs").tabs();
+	DUPX.acceptWarning();
+
+	<?php echo ($arcCheck == 'Fail') 	? "$('#s1-area-archive-file-link').trigger('click');" 	: ""; ?>
+	<?php echo (! $all_success)         ? "$('#s1-area-sys-setup-link').trigger('click');" 		: ""; ?>
+});
 </script>

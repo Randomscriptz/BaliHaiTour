@@ -38,6 +38,7 @@ class DUP_PRO_System_Global_Entity extends DUP_PRO_JSON_Entity_Base
 {	
     const NAME_IN_GLOBALS = 'dup_pro_system_global';
     public $recommended_fixes;
+    public $schedule_failed = false;
 
     public static function initialize_plugin_data()
     {

@@ -86,21 +86,58 @@ class DUP_PRO_IO
 
 
     /**
-     * Get all of the files of a path
+     * Get all of the files and directories of a path including dots
      * 
-     * @path string $path A system directory path
+     * @param string $dir The full path to the directory
+	 *
+	 * Notes:
+     * 	- Avoid using glob() as GLOB_BRACE is not an option on some operating systems
+     * 	- Pre PHP 5.3 DirectoryIterator will crash on unreadable files
+	 *  - Scandir will not crash on unreadable items and just skip file
      * 
      * @return array of all files in that path
      */
-    public static function getFiles($dir = '.')
+    public static function getFilesAll($dir = '.')
     {
-        $files = array();
-        foreach (new DirectoryIterator($dir) as $file)
-        {
-            $files[] = str_replace("\\", '/', $file->getPathname());
-        }
-        return $files;
+		try {
+			$files = array();
+			foreach (new DirectoryIterator($dir) as $file) {
+				$files[] = str_replace("\\", '/', $file->getPathname());
+			}
+			return $files;
+
+		}  catch (Exception $exc) {
+
+			$result = array();
+			$files = @scandir($path);
+			if (is_array($files)) {
+				foreach ($files as $file) {
+					$result[] = str_replace("\\", '/', $path) . $file;
+				}
+			}
+
+			return $result;
+		}
     }
+
+    /**
+     * Get only the files and excludes directories and dots
+     *
+     * @param string $dir The full path to the directory
+     *
+     * @return array of only files in that path
+     */
+	public static function  getFilesOnly($dir = '.')
+	{
+		$files = array();
+		foreach (new DirectoryIterator($dir) as $file) {
+			if (!$file->isDir())
+				$files[] = str_replace("\\", '/', $file->getPathname());
+		}
+		return $files;
+	}
+
+
 
 
     /**
@@ -163,7 +200,7 @@ class DUP_PRO_IO
 
 
     /**
-     * Size of the directory recuresivly in bytes
+     * Size of the directory recursively in bytes
      * 
      * @param string $dir	A system directory
      *
@@ -185,8 +222,6 @@ class DUP_PRO_IO
         }
         return $size;
     }
-
-
 
      /**
      * @todo ASKBOB
@@ -248,34 +283,37 @@ class DUP_PRO_IO
 
 
     public static function deleteTree($directory)
-    {
-        $success = true;
+	{
+		$success = true;
 
-        $filenames = array_diff(scandir($directory), array('.','..'));
-
-        foreach ($filenames as $filename)
+        if(!file_exists("{$directory}/wp-config.php"))
         {
-            if(is_dir("$directory/$filename"))
-            {
-                $success = self::deleteTree("$directory/$filename");
-            }
-            else
-            {
-                $success = @unlink("$directory/$filename");
-            }
+            $filenames = array_diff(scandir($directory), array('.', '..'));
 
-            if($success === false)
-            {
-                DUP_PRO_LOG::trace("Problem deleting $directory/$filename");
-                break;
+            foreach ($filenames as $filename) {
+                if (is_dir("$directory/$filename")) {
+                    $success = self::deleteTree("$directory/$filename");
+                } else {
+                    $success = @unlink("$directory/$filename");
+                }
+
+                if ($success === false) {
+                    DUP_PRO_LOG::trace("Problem deleting $directory/$filename");
+                    break;
+                }
             }
         }
+        else
+        {
+            DUP_PRO_LOG::trace("Attempted to delete a directory with wp-config.php in it! ({$directory})");
+            
+            return false;
+        }
 
-        return $success && rmdir($directory);
-    }
+		return $success && @rmdir($directory);
+	}
 
-
-    public static function copyDir($src, $dst)
+	public static function copyDir($src, $dst)
     {
         $success = true;
 
@@ -295,6 +333,7 @@ class DUP_PRO_IO
                     $src_filepath = $src . '/' . $file;
                     $dst_filepath = $dst . '/' . $file;
 
+                    DUP_PRO_LOG::trace("attempting to copy $src_filepath to $dst_filepath");
                     if (copy($src_filepath, $dst_filepath) === false)
                     {
                         $success = false;

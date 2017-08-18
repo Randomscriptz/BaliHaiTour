@@ -30,12 +30,8 @@ class DUP_PRO_Installer
     public $OptsCPNLDBName   = '';
     public $OptsCPNLDBUser   = '';
     //ADVANCED OPTS
-    public $OptsSSLAdmin;
-    public $OptsSSLLogin;
     public $OptsCacheWP;
     public $OptsCachePath;
-    //OTHER
-    public $OptsURLNew;
     //PROTECTED
     protected $Package;
 
@@ -91,18 +87,27 @@ class DUP_PRO_Installer
 
         $success = true;
 
-        $installer_filepath = DUP_PRO_U::safePath(DUPLICATOR_PRO_SSDIR_PATH_TMP)."/{$this->Package->NameHash}_{$global->installer_base_name}";
-
-        $template_filepath = DUPLICATOR_PRO_PLUGIN_PATH.'/installer/installer.tpl';
+        $installer_filepath     = DUP_PRO_U::safePath(DUPLICATOR_PRO_SSDIR_PATH_TMP)."/{$this->Package->NameHash}_{$global->installer_base_name}";
+        $template_filepath      = DUPLICATOR_PRO_PLUGIN_PATH.'/installer/installer.tpl';
+        $mini_expander_filepath = DUPLICATOR_PRO_PLUGIN_PATH.'/lib/dup_archive/classes/class.duparchive.mini.expander.php';
 
         // Replace the @@ARCHIVE@@ token
         $installer_contents = file_get_contents($template_filepath);
 
+        if ($this->Package->build_progress->current_build_mode == DUP_PRO_Archive_Build_Mode::DupArchive) {
+            $mini_expander_string = file_get_contents($mini_expander_filepath);
 
-        $search_array  = array('@@ARCHIVE@@', '@@VERSION@@');
-        $replace_array = array($this->Package->Archive->File, DUPLICATOR_PRO_VERSION);
+            if ($mini_expander_string === false) {
+                DUP_PRO_Log::error(DUP_PRO_U::__('Error reading DupArchive mini expander'), DUP_PRO_U::__('Error reading DupArchive mini expander'), false);
+                return false;
+            }
+        } else {
+            $mini_expander_string = '';
+        }
 
-        //$installer_contents = str_replace("@@ARCHIVE@@", $this->Package->Archive->File, $installer_contents);
+        $search_array  = array('@@ARCHIVE@@', '@@VERSION@@', '@@ARCHIVE_SIZE@@', '@@DUPARCHIVE_MINI_EXPANDER@@');
+        $replace_array = array($this->Package->Archive->File, DUPLICATOR_PRO_VERSION, $this->Package->Archive->Size, $mini_expander_string);
+
         $installer_contents = str_replace($search_array, $replace_array, $installer_contents);
 
         if (@file_put_contents($installer_filepath, $installer_contents) === false) {
@@ -125,66 +130,67 @@ class DUP_PRO_Installer
         $global                  = DUP_PRO_Global_Entity::get_instance();
         $success                 = true;
         $archive_config_filepath = DUP_PRO_U::safePath(DUPLICATOR_PRO_SSDIR_PATH_TMP)."/{$this->Package->NameHash}_archive.cfg";
-        //$archive_config_filepath = DUP_PRO_U::safePath(DUPLICATOR_PRO_SSDIR_PATH_TMP) . "/dpa.cfg";
         $ac                      = new DUP_PRO_Archive_Config();
+        $extension               = strtolower($this->Package->Archive->Format);
 
-        //COMPARE VALUES
+        //READ-ONLY: COMPARE VALUES
         $ac->created     = $this->Package->Created;
         $ac->version_dup = DUPLICATOR_PRO_VERSION;
         $ac->version_wp  = $this->Package->VersionWP;
         $ac->version_db  = $this->Package->VersionDB;
         $ac->version_php = $this->Package->VersionPHP;
         $ac->version_os  = $this->Package->VersionOS;
+        $ac->dbInfo      = $this->Package->Database->info;
 
-        //GENERAL
-        $ac->secure_on           = $this->Package->Installer->OptsSecureOn;
-        $ac->secure_pass         = DUP_PRO_Crypt::scramble(base64_decode($this->Package->Installer->OptsSecurePass));
-        $ac->skipscan            = $this->Package->Installer->OptsSkipScan;
-        $ac->installer_base_name = $global->installer_base_name;
-        $ac->package_name        = "{$this->Package->NameHash}_archive.zip";
-        $ac->package_notes       = $this->Package->Notes;
-        $ac->url_old             = get_option('siteurl');
-        $ac->url_new             = $this->Package->Installer->OptsURLNew;
-        $ac->dbhost              = $this->Package->Installer->OptsDBHost;
-        $ac->dbname              = $this->Package->Installer->OptsDBName;
-        $ac->dbuser              = $this->Package->Installer->OptsDBUser;
-        $ac->dbpass              = '';
-        $ac->ssl_admin           = $this->Package->Installer->OptsSSLAdmin;
-        $ac->ssl_login           = $this->Package->Installer->OptsSSLLogin;
-        $ac->cache_wp            = $this->Package->Installer->OptsCacheWP;
-        $ac->cache_path          = $this->Package->Installer->OptsCachePath;
-
+        //READ-ONLY: GENERAL
+        $ac->installer_base_name  = $global->installer_base_name;
+        $ac->package_name         = "{$this->Package->NameHash}_archive.{$extension}";
+        $ac->package_notes        = $this->Package->Notes;
+        $ac->url_old              = get_option('siteurl');
         $ac->opts_delete          = json_encode($GLOBALS['DUPLICATOR_PRO_OPTS_DELETE']);
         $ac->blogname             = esc_html(get_option('blogname'));
         $ac->wproot               = DUPLICATOR_PRO_WPROOTPATH;
         $ac->relative_content_dir = str_replace(ABSPATH, '', WP_CONTENT_DIR);
+		$ac->exportOnlyDB		  = $this->Package->Archive->ExportOnlyDB;
+		$ac->wplogin_url		  = wp_login_url();
 
-        //MULTISITE
-        $ac->mu_mode = DUP_PRO_MU::getMode();
-        if ($ac->mu_mode == 0) {
-            $ac->wp_tableprefix = $wpdb->prefix;
-        } else {
-            $ac->wp_tableprefix = $wpdb->base_prefix;
-        }
+        //PRE-FILLED: GENERAL
+        $ac->secure_on   = $this->Package->Installer->OptsSecureOn;
+        $ac->secure_pass = DUP_PRO_Crypt::scramble(base64_decode($this->Package->Installer->OptsSecurePass));
+        $ac->skipscan    = $this->Package->Installer->OptsSkipScan;
+        $ac->dbhost      = $this->Package->Installer->OptsDBHost;
+        $ac->dbname      = $this->Package->Installer->OptsDBName;
+        $ac->dbuser      = $this->Package->Installer->OptsDBUser;
+        $ac->dbpass      = '';
+        $ac->cache_wp    = $this->Package->Installer->OptsCacheWP;
+        $ac->cache_path  = $this->Package->Installer->OptsCachePath;
 
-        $ac->subsites = DUP_PRO_MU::getSubsites();
-
-        if ($ac->subsites === false) {
-            $success = false;
-        }
-
-        //CPANEL
-        $ac->cpnl_host    = $this->Package->Installer->OptsCPNLHost;
-        $ac->cpnl_user    = $this->Package->Installer->OptsCPNLUser;
-        $ac->cpnl_pass    = $this->Package->Installer->OptsCPNLPass;
-        $ac->cpnl_enable  = $this->Package->Installer->OptsCPNLEnable;
-        $ac->cpnl_connect = $this->Package->Installer->OptsCPNLConnect;
-
-        //CPANEL:DB
+        //PRE-FILLED: CPANEL
+        $ac->cpnl_host     = $this->Package->Installer->OptsCPNLHost;
+        $ac->cpnl_user     = $this->Package->Installer->OptsCPNLUser;
+        $ac->cpnl_pass     = $this->Package->Installer->OptsCPNLPass;
+        $ac->cpnl_enable   = $this->Package->Installer->OptsCPNLEnable;
+        $ac->cpnl_connect  = $this->Package->Installer->OptsCPNLConnect;
         $ac->cpnl_dbaction = $this->Package->Installer->OptsCPNLDBAction;
         $ac->cpnl_dbhost   = $this->Package->Installer->OptsCPNLDBHost;
         $ac->cpnl_dbname   = $this->Package->Installer->OptsCPNLDBName;
         $ac->cpnl_dbuser   = $this->Package->Installer->OptsCPNLDBUser;
+
+        //MULTISITE
+        $ac->mu_mode = DUP_PRO_MU::getMode();
+        if ($ac->mu_mode == 0) {
+            $ac->wp_tableprefix = $wpdb->base_prefix;
+        } else {
+            $ac->wp_tableprefix = $wpdb->base_prefix;
+        }
+
+        $ac->mu_generation = DUP_PRO_MU::getGeneration();
+
+        $ac->subsites = DUP_PRO_MU::getSubsites();
+        if ($ac->subsites === false) {
+            $success = false;
+        }
+
 
         //LICENSING
         $ac->license_limit = $global->license_limit;
@@ -212,7 +218,7 @@ class DUP_PRO_Installer
         $installer_filepath      = DUP_PRO_U::safePath(DUPLICATOR_PRO_SSDIR_PATH_TMP)."/{$this->Package->NameHash}_{$global->installer_base_name}";
         $scan_filepath           = DUP_PRO_U::safePath(DUPLICATOR_PRO_SSDIR_PATH_TMP)."/{$this->Package->NameHash}_scan.json";
         $sql_filepath            = DUP_PRO_U::safePath("{$this->Package->StorePath}/{$this->Package->Database->File}");
-        $zip_filepath            = DUP_PRO_U::safePath("{$this->Package->StorePath}/{$this->Package->Archive->File}");
+        $archive_filepath            = DUP_PRO_U::safePath("{$this->Package->StorePath}/{$this->Package->Archive->File}");
         $archive_config_filepath = DUP_PRO_U::safePath(DUPLICATOR_PRO_SSDIR_PATH_TMP)."/{$this->Package->NameHash}_archive.cfg";
 
         if (file_exists($installer_filepath) == false) {
@@ -233,8 +239,8 @@ class DUP_PRO_Installer
         if ($package->Archive->file_count != 2) {
             DUP_PRO_LOG::trace("Doing archive file check");
             // Only way it's 2 is if the root was part of the filter in which case the archive won't be there
-            if (file_exists($zip_filepath) == false) {
-                $error_text = DUP_PRO_U::__("Zip archive {$zip_filepath} not present.");
+            if (file_exists($archive_filepath) == false) {
+                $error_text = DUP_PRO_U::__("Zip archive {$archive_filepath} not present.");
                 $fix_text   = DUP_PRO_U::__("Go to: Settings > Packages Tab > Set Archive Engine to ZipArchive.");
 
                 DUP_PRO_Log::error("$error_text. **RECOMMENDATION: $fix_text", '', false);
@@ -250,22 +256,81 @@ class DUP_PRO_Installer
         DUP_PRO_LOG::trace("Add extra files: Current build mode = ".$package->build_progress->current_build_mode);
 
         if ($package->build_progress->current_build_mode == DUP_PRO_Archive_Build_Mode::ZipArchive) {
-            $success = $this->add_extra_files_using_zip_archive($installer_filepath, $scan_filepath, $sql_filepath, $zip_filepath,
-                $archive_config_filepath);
+            $success = $this->add_extra_files_using_ziparchive($installer_filepath, $scan_filepath, $sql_filepath, $archive_filepath, $archive_config_filepath);
         } else if ($package->build_progress->current_build_mode == DUP_PRO_Archive_Build_Mode::Shell_Exec) {
-            $success = $this->add_extra_files_using_shellexec($zip_filepath, $installer_filepath, $scan_filepath, $sql_filepath,
-                $archive_config_filepath);
+            $success = $this->add_extra_files_using_shellexec($archive_filepath, $installer_filepath, $scan_filepath, $sql_filepath, $archive_config_filepath);
+            // Adding the shellexec fail text fix
+            if(!$success) {
+                $error_text = DUP_PRO_U::__("Problem adding installer to archive");
+                $fix_text   = DUP_PRO_U::__("Go to: Settings > Packages Tab > Archive Engine to ZipArchive'");
+                // Getting the globar error and setting the fix
+                $system_global = DUP_PRO_System_Global_Entity::get_instance();
+                $system_global->add_recommended_text_fix($error_text, $fix_text);
+                $system_global->save();
+            }
+        } else if ($package->build_progress->current_build_mode == DUP_PRO_Archive_Build_Mode::DupArchive) {
+            $success = $this->add_extra_files_using_duparchive($installer_filepath, $scan_filepath, $sql_filepath, $archive_filepath, $archive_config_filepath);
         }
 
         // No sense keeping the archive config around
         @unlink($archive_config_filepath);
 
-        $package->Archive->Size = @filesize($zip_filepath);
+        $package->Archive->Size = @filesize($archive_filepath);
 
         return $success;
     }
 
-    private function add_extra_files_using_zip_archive($installer_filepath, $scan_filepath, $sql_filepath, $zip_filepath, $archive_config_filepath)
+    private function add_extra_files_using_duparchive($installer_filepath, $scan_filepath, $sql_filepath, $archive_filepath, $archive_config_filepath)
+    {
+        $success = false;
+
+        try {
+            $logger = new DUP_PRO_Dup_Archive_Logger();
+
+            DupArchiveEngine::init($logger, 'DUP_PRO_LOG::profile');
+
+            DupArchiveEngine::addRelativeFileToArchiveST($archive_filepath, $scan_filepath, DUPLICATOR_PRO_EMBEDDED_SCAN_FILENAME);
+
+            $this->add_installer_files_using_duparchive($archive_filepath, $installer_filepath, $archive_config_filepath);
+
+            $success = true;
+        } catch (Exception $ex) {
+            DUP_PRO_Log::error("Error adding installer files to archive. ".$ex->getMessage());
+        }
+
+        return $success;
+    }
+
+    private function add_installer_files_using_duparchive($archive_filepath, $installer_filepath, $archive_config_filepath)
+    {
+        $success                   = false;
+        /* @var $global DUP_PRO_Global_Entity */
+        $global                    = DUP_PRO_Global_Entity::get_instance();
+        $installer_backup_filename = $global->get_installer_backup_filename();
+
+        DUP_PRO_LOG::trace('Adding enhanced installer files to archive using DupArchive');
+
+        DupArchiveEngine::addFileToArchiveUsingBaseDirST($archive_filepath, dirname($installer_filepath), $installer_filepath);
+
+        $base_installer_directory = DUPLICATOR_PRO_PLUGIN_PATH.'installer';
+        $installer_directory      = "$base_installer_directory/dpro-installer";
+
+        DupArchiveEngine::addDirectoryToArchiveST($archive_filepath, $installer_directory, $base_installer_directory, true);
+
+        $archive_config_relative_path = 'dpro-installer/archive.cfg';
+
+        DupArchiveEngine::addRelativeFileToArchiveST($archive_filepath, $archive_config_filepath, $archive_config_relative_path);
+
+        $duparchive_lib_directory = DUPLICATOR_PRO_PLUGIN_PATH.'lib/dup_archive';
+        DupArchiveEngine::addDirectoryToArchiveST($archive_filepath, $duparchive_lib_directory, DUPLICATOR_PRO_PLUGIN_PATH, true, 'dpro-installer/');
+
+        $snaplib_directory = DUPLICATOR_PRO_PLUGIN_PATH.'lib/snaplib';
+        DupArchiveEngine::addDirectoryToArchiveST($archive_filepath, $snaplib_directory, DUPLICATOR_PRO_PLUGIN_PATH, true, 'dpro-installer/');
+
+        return $success;
+    }
+
+    private function add_extra_files_using_ziparchive($installer_filepath, $scan_filepath, $sql_filepath, $zip_filepath, $archive_config_filepath)
     {
         $success = false;
 
@@ -274,8 +339,8 @@ class DUP_PRO_Installer
         if ($zipArchive->open($zip_filepath, ZIPARCHIVE::CREATE) === TRUE) {
             DUP_PRO_LOG::trace("Successfully opened zip $zip_filepath");
 
-          //  if ($zipArchive->addFile($scan_filepath, DUPLICATOR_PRO_EMBEDDED_SCAN_FILENAME)) {
-              if (DUP_PRO_Zip_U::addFileToZipArchive($zipArchive, $scan_filepath, DUPLICATOR_PRO_EMBEDDED_SCAN_FILENAME)) {
+            //  if ($zipArchive->addFile($scan_filepath, DUPLICATOR_PRO_EMBEDDED_SCAN_FILENAME)) {
+            if (DUP_PRO_Zip_U::addFileToZipArchive($zipArchive, $scan_filepath, DUPLICATOR_PRO_EMBEDDED_SCAN_FILENAME)) {
                 if ($this->add_installer_files_using_zip_archive($zipArchive, $installer_filepath, $archive_config_filepath)) {
                     DUP_PRO_Log::info("Installer files added to archive");
                     DUP_PRO_LOG::trace("Added to archive");
@@ -308,6 +373,10 @@ class DUP_PRO_Installer
         $installer_dpro_source_directory = "$installer_source_directory/dpro-installer";
         $extras_directory                = DUP_PRO_U::safePath(DUPLICATOR_PRO_SSDIR_PATH_TMP).'/extras';
         $extras_installer_directory      = $extras_directory.'/dpro-installer';
+        $extras_lib_directory            = $extras_installer_directory.'/lib';
+
+        $snaplib_source_directory        = DUPLICATOR_PRO_LIB_PATH.'/snaplib';
+        $extras_snaplib_directory        = $extras_installer_directory.'/lib/snaplib';
 
         $installer_backup_filepath = "$extras_directory/".$global->get_installer_backup_filename();
 
@@ -315,12 +384,14 @@ class DUP_PRO_Installer
         $dest_archive_config_filepath = "$extras_installer_directory/archive.cfg";
         $dest_scan_filepath           = "$extras_directory/scan.json";
 
+
         if (file_exists($extras_directory)) {
             if (DUP_PRO_IO::deleteTree($extras_directory) === false) {
                 DUP_PRO_Log::error("Error deleting $extras_directory", '', false);
                 return false;
             }
         }
+
 
         if (!@mkdir($extras_directory)) {
             DUP_PRO_Log::error("Error creating extras directory", "Couldn't create $extras_directory", false);
@@ -355,13 +426,28 @@ class DUP_PRO_Installer
         $one_stage_add = strtoupper($global->get_installer_extension()) == 'PHP';
 
         if ($one_stage_add) {
+
+            if (!@mkdir($extras_snaplib_directory, 0755, true)) {
+                DUP_PRO_Log::error("Error creating extras directory", "Couldn't create $extras_directory", false);
+                return false;
+            }
+
             // If the installer has the PHP extension copy the installer files to add all extras in one shot since the server supports creation of PHP files
             if (DUP_PRO_IO::copyDir($installer_dpro_source_directory, $extras_installer_directory) === false) {
-                DUP_PRO_Log::error("Error copying installer file directory to extras directory",
-                    "Couldn't copy $installer_source_directory to $extras_installer_directory", false);
+                DUP_PRO_Log::error("Error copying installer file directory to extras directory", "Couldn't copy $installer_dpro_source_directory to $extras_installer_directory", false);
+                return false;
+            }
+            
+            if (DUP_PRO_IO::copyDir($snaplib_source_directory, $extras_snaplib_directory) === false) {
+                DUP_PRO_Log::error("Error copying installer file directory to extras directory", "Couldn't copy $snaplib_source_directory to $extras_snaplib_directory", false);
                 return false;
             }
         }
+//        else {
+//            // Can't copy snaplib directory using shell exec so as of right now non php extension with shell exec isn't supported
+//            DUP_PRO_Log::error("Unsupported options", "Shell Exec ZIP doesn't support non-standard installer filename. Either rename to installer.php or change Archive engine to ZipArchive or DupArchive.", false);
+//            return false;
+//        }
 
         //-- STAGE 1 ADD
         $compression_parameter = DUP_PRO_Shell_U::getCompressionParam();
@@ -374,13 +460,21 @@ class DUP_PRO_Installer
 
         $stderr = shell_exec($command);
 
-        //-- STAGE 2 ADD
+        //-- STAGE 2 ADD - old code until we can figure out how to add the snaplib library within dpro-installer/lib/snaplib
         if ($stderr == '') {
             if (!$one_stage_add) {
                 // Since we didn't bundle the installer files in the earlier stage we have to zip things up right from the plugin source area
                 $command = 'cd '.escapeshellarg($installer_source_directory);
                 $command .= ' && '.escapeshellcmd(DUP_PRO_Zip_U::getShellExecZipPath())." $compression_parameter".' -g -rq ';
                 $command .= escapeshellarg($zip_filepath).' dpro-installer/*';
+
+                DUP_PRO_LOG::trace("Executing Shell Exec Zip Stage 2 to add installer files: $command");
+                $stderr = shell_exec($command);
+
+                $command = 'cd '.escapeshellarg(DUPLICATOR_PRO_LIB_PATH);
+                //$command .= ' && '.escapeshellcmd(DUP_PRO_Zip_U::getShellExecZipPath())." $compression_parameter".' -g -rq -pp /dpro-installer/ ';
+                $command .= ' && '.escapeshellcmd(DUP_PRO_Zip_U::getShellExecZipPath())." $compression_parameter".' -g -rq ';
+                $command .= escapeshellarg($zip_filepath).' snaplib/*';
 
                 DUP_PRO_LOG::trace("Executing Shell Exec Zip Stage 2 to add installer files: $command");
                 $stderr = shell_exec($command);
@@ -443,19 +537,27 @@ class DUP_PRO_Installer
 
         DUP_PRO_LOG::trace('Adding enhanced installer files to archive using ZipArchive');
 
-     //   if ($zip_archive->addFile($installer_filepath, $installer_backup_filename)) {
-    if (DUP_PRO_Zip_U::addFileToZipArchive($zip_archive, $installer_filepath, $installer_backup_filename)) {
-            DUPLICATOR_PRO_PLUGIN_PATH . 'installer/';
+        //   if ($zip_archive->addFile($installer_filepath, $installer_backup_filename)) {
+        if (DUP_PRO_Zip_U::addFileToZipArchive($zip_archive, $installer_filepath, $installer_backup_filename)) {
+            DUPLICATOR_PRO_PLUGIN_PATH.'installer/';
 
             $installer_directory = DUPLICATOR_PRO_PLUGIN_PATH.'installer/dpro-installer';
-            ;
+
 
             if (DUP_PRO_Zip_U::addDirWithZipArchive($zip_archive, $installer_directory)) {
                 $archive_config_local_name = 'dpro-installer/archive.cfg';
 
-               // if ($zip_archive->addFile($archive_config_filepath, $archive_config_local_name)) {
-                 if (DUP_PRO_Zip_U::addFileToZipArchive($zip_archive, $archive_config_filepath, $archive_config_local_name)) {
-                    $success = true;
+                // if ($zip_archive->addFile($archive_config_filepath, $archive_config_local_name)) {
+                if (DUP_PRO_Zip_U::addFileToZipArchive($zip_archive, $archive_config_filepath, $archive_config_local_name)) {
+
+                    $snaplib_directory = DUPLICATOR_PRO_PLUGIN_PATH . 'lib/snaplib';
+                    //DupArchiveEngine::addDirectoryToArchiveST($archive_filepath, $snaplib_directory, DUPLICATOR_PRO_PLUGIN_PATH, true, 'dpro-installer/');
+                    if (DUP_PRO_Zip_U::addDirWithZipArchive($zip_archive, $snaplib_directory, true, 'dpro-installer/lib/')) {
+
+                        $success = true;
+                    } else {
+                        DUP_PRO_Log::error("Error adding directory $snaplib_directory to zipArchive", '', false);
+                    }
                 } else {
                     DUP_PRO_Log::error("Error adding $archive_config_filepath to zipArchive", '', false);
                 }
@@ -504,30 +606,5 @@ class DUP_PRO_Installer
         $dest_scan_path = $home_path.DUPLICATOR_PRO_EMBEDDED_SCAN_FILENAME;
 
         return DUP_PRO_IO::copyWithVerify($source_scan_path, $dest_scan_path);
-    }
-
-    /**
-     *  parseTemplate
-     *  Tokenize a file based on an array key 
-     *
-     *  @param string $filename		The filename to tokenize
-     *  @param array  $data			The array of key value items to tokenize
-     */
-    private function parseTemplate($filename, $data)
-    {
-        $q = file_get_contents($filename);
-        foreach ($data as $key => $value) {
-            //NOTE: Use var_export as it's probably best and most "thorough" way to
-            //make sure the values are set correctly in the template.  But in the template,
-            //need to make things properly formatted so that when real syntax errors
-            //exist they are easy to spot.  So the values will be surrounded by quotes
-
-            $find = array("'%{$key}%'", "\"%{$key}%\"");
-            $q    = str_replace($find, var_export($value, true), $q);
-            //now, account for places that do not surround with quotes...  these
-            //places do NOT need to use var_export as they are not inside strings
-            $q    = str_replace('%'.$key.'%', $value, $q);
-        }
-        return $q;
     }
 }

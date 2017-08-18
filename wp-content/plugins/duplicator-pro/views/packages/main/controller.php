@@ -31,11 +31,11 @@ switch ($inner_page)
         break;
     case 'new1': 
 		duplicator_pro_header(DUP_PRO_U::__("Packages") . " &raquo; " . DUP_PRO_U::__('New'));
-		include('step1.base.php');
+		include('s1.setup0.base.php');
         break;
     case 'new2': 
 		duplicator_pro_header(DUP_PRO_U::__("Packages") . " &raquo; " . DUP_PRO_U::__('New'));
-		include('step2.base.php');
+		include('s2.scan1.base.php');
         break;
 }
 

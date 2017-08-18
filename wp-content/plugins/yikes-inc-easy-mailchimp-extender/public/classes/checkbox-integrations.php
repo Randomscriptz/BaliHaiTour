@@ -52,7 +52,7 @@
 				return false;
 			}
 
-			return $this->is_user_subscribed( $email, $checkbox_options[ $type ]['associated-list'] );
+			return $this->is_user_subscribed( $email, $checkbox_options[ $type ]['associated-list'], $type );
 		}
 
 		/**
@@ -62,10 +62,11 @@
 		 *
 		 * @param string $email   The email address to check.
 		 * @param string $list_id The list ID to check.
+		 * @param string $type    The integration type
 		 *
 		 * @return bool Whether the email is subscribed to the list.
 		 */
-		public function is_user_subscribed( $email, $list_id ) {
+		public function is_user_subscribed( $email, $list_id, $type ) {
 			$email_hash = md5( $email );
 
 			// Check the API to see the status
@@ -90,7 +91,9 @@
 			}
 
 			// Look at the status from the API
-			return 'subscribed' == $response['status'];
+			$subscribed = 'subscribed' == $response['status'] ? true : false;
+
+			return apply_filters( 'yikes-mailchimp-integration-is-user-subscribed', $subscribed, $type );
 		}
 
 		/**
@@ -175,6 +178,16 @@
 
 				$data['interests'] = $groups;
 			}
+
+			/**
+			*	'yikes-mailchimp-checkbox-integration-body'
+			*
+			*	Filter the request body for a MailChimp subscription via the checkbox integrations
+			*
+			*	@param array  | $data | The request body
+			*	@param string | $type | The integration type, e.g. 'contact_form_7'
+			*/
+			$data = apply_filters( 'yikes-mailchimp-checkbox-integration-body', $data, $type );
 
 			// Subscribe the user to the list via the API.
 			$response = yikes_get_mc_api_manager()->get_list_handler()->member_subscribe( $list_id, $id, $data );

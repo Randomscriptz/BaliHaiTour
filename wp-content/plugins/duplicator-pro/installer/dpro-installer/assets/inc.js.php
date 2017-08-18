@@ -1,7 +1,8 @@
-<script type="text/javascript">
+<script>
 	//Unique namespace
 	DUPX = new Object();
 	DUPX.Util = new Object();
+    DUPX.Const = new Object();
 	DUPX.GLB_DEBUG =  <?php echo ($_GET['debug'] || $GLOBALS['DEBUG_JS']) ? 'true' : 'false'; ?>;
 
 	DUPX.showProgressBar = function ()
@@ -62,6 +63,7 @@
 		//Requests to API are capped at 2 minutes
 		$.ajax({
 			type: "POST",
+			cache: false,
 			timeout: timeout,
 			dataType: "json",
 			url: requestURI,
@@ -77,23 +79,46 @@
 		});
 	}
 
-	DUPX.toggleClick = function() {
-
+	DUPX.toggleClick = function()
+	{
+		var src	   = 0;
 		var id     = $(this).attr('data-target');
 		var text   = $(this).text().replace(/\+|\-/, "");
 		var icon   = $(this).find('i.fa');
 		var target = $(id);
-		$(icon).removeClass('fa-plus-square fa-minus-square');
+		var list   = new Array();
 
+		var style = [
+		{ open:   "fa-minus-square",
+		  close:  "fa-plus-square"
+		},
+		{ open:   "fa-caret-down",
+		  close:  "fa-caret-right"
+		}];
 
+		//Create src
+		for (i = 0; i < style.length; i++) {
+			if ($(icon).hasClass(style[i].open) || $(icon).hasClass(style[i].close)) {
+				src = i;
+				break;
+			}
+		}
+
+		//Build remove list
+		for (i = 0; i < style.length; i++) {
+			list.push(style[i].open);
+			list.push(style[i].close);
+		}
+
+		$(icon).removeClass(list.join(" "));
 		if (target.is(':hidden') ) {
 			(icon.length)
-				? $(icon).addClass('fa-minus-square')
+				? $(icon).addClass(style[src].open )
 				: $(this).html("- " + text );
 			target.show();
 		} else {
 			(icon.length)
-				? $(icon).addClass('fa-plus-square')
+				? $(icon).addClass(style[src].close)
 				: $(this).html("+ " + text );
 			target.hide();
 		}
@@ -109,5 +134,21 @@
 		var i = Math.floor(Math.log(bytes) / Math.log(k));
 		return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
 	}
+
+	$(document).ready(function()
+    {
+		<?php if ($GLOBALS['DUPX_DEBUG']) : ?>
+			$("div.dupx-debug input[type=hidden], div.dupx-debug textarea").each(function() {
+				var label = '<label>' + $(this).attr('name') + ':</label>';
+				$(this).before(label);
+				$(this).after('<br/>');
+			 });
+			 $("div.dupx-debug input[type=hidden]").each(function() {
+				$(this).attr('type', 'text');
+			 });
+
+			 $("div.dupx-debug").prepend('<h2>Debug View</h2>');
+		<?php endif; ?>
+	});
 
 </script>

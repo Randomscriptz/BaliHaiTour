@@ -185,6 +185,16 @@ class ikTestimonialsCustomPostType
 								echo '<textarea name="' . $this->prefix . $customField[ 'name' ] . '" id="' . $this->prefix . $customField[ 'name' ] . '" columns="30" rows="3">' . htmlspecialchars( get_post_meta( $post->ID, $this->prefix . $customField[ 'name' ], true ) ) . '</textarea>';
 								break;
 							}
+							case "number": {
+								$min = !empty($customField[ 'min' ]) ? sprintf( 'min="%s"',$customField['min'] ) : 'min="1"';
+								$max = !empty($customField[ 'max' ]) ? sprintf( 'max="%s"',$customField['max'] ) : 'max="5"';
+								
+								
+								// HTML5 Number
+								echo '<label for="' . $this->prefix . $customField[ 'name' ] .'"><b>' . $customField[ 'title' ] . '</b></label>';
+								echo '<input type="number" '.$min.' '.$max.' name="' . $this->prefix . $customField[ 'name' ] . '" id="' . $this->prefix . $customField[ 'name' ] . '" value="' . htmlspecialchars( get_post_meta( $post->ID, $this->prefix . $customField[ 'name' ], true ) ) . '" />';
+								break;
+							}
 							default: {
 								// Plain text field
 								echo '<label for="' . $this->prefix . $customField[ 'name' ] .'"><b>' . $customField[ 'title' ] . '</b></label>';

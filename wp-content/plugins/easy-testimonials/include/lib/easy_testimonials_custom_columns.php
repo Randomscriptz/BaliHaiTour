@@ -128,7 +128,8 @@ class Easy_Testimonials_Custom_Columns
 		$orderby = $query->get( 'orderby');	
 		
 		// make sure the column name begins with our prefix, 'testimonials_'
-		if ( strpos($orderby, 'testimonials_') !== 0 ) {
+		// Note: make sure its a string first, to prevent conflicts with other plugins
+		if ( !is_string($orderby) || strpos($orderby, 'testimonials_') !== 0 ) {
 			return;
 		}
 		

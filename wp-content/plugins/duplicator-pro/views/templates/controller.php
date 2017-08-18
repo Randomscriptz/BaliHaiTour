@@ -11,7 +11,7 @@ require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/views/inc.header.php');
 $nonce = wp_create_nonce('duplicator_pro_download_package_file');
 ?>
 
-<script type="text/javascript">
+<script>
     jQuery(document).ready(function($) {
 
         /*	METHOD: Triggers the download of an installer/package file
@@ -30,7 +30,7 @@ $nonce = wp_create_nonce('duplicator_pro_download_package_file');
         // which: 0=installer, 1=archive, 2=sql file, 3=log
         DupPro.Pack.DownloadPackageFile = function (which, packageID) {
     
-            var actionLocation = ajaxurl + '?action=duplicator_pro_get_package_file&which=' + which + '&package_id=' + packageID + '&nonce=' + <?php echo $nonce; ?>;
+            var actionLocation = ajaxurl + '?action=duplicator_pro_get_package_file&which=' + which + '&package_id=' + packageID + '&nonce=' + '<?php echo $nonce; ?>';
     
             if(which == 3)
             {

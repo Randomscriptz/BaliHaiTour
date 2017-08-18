@@ -207,7 +207,7 @@ $ui_css_transfer_log = (isset($view_state['dup-transfer-transfer-log']) && $view
 </div>
 
 
-<script type="text/javascript">
+<script>
 	DupPro.Pack.Transfer = { };
     jQuery(document).ready(function ($) {
 

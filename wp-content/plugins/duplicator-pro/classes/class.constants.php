@@ -14,7 +14,7 @@ class DUP_PRO_Constants
     const MAX_LOG_SIZE = 200000;    // The higher this is the more overhead
     const LICENSE_KEY_OPTION_NAME = 'duplicator_pro_license_key';
     const MAX_BUILD_RETRIES = 10; // Max number of tries doing the same part of the package before auto cancelling
-    const EDD_API_CACHE_TIME = 43200;	// 12 hours
+    const EDD_API_CACHE_TIME = 86400;	// 24 hours
     const UNLICENSED_SUPER_NAG_DELAY_IN_DAYS = 30;
 
     /* Pseudo constants */
@@ -24,8 +24,8 @@ class DUP_PRO_Constants
     public static $TEMPLATES_SUBMENU_SLUG;
     public static $TOOLS_SUBMENU_SLUG;
     public static $SETTINGS_SUBMENU_SLUG;
+	public static $DEBUG_SUBMENU_SLUG;
     public static $LOCKING_FILE_FILENAME;
-
 
     public static function init()
     {
@@ -35,6 +35,7 @@ class DUP_PRO_Constants
         self::$TEMPLATES_SUBMENU_SLUG = self::PLUGIN_SLUG . '-templates';
         self::$TOOLS_SUBMENU_SLUG = self::PLUGIN_SLUG . '-tools';
         self::$SETTINGS_SUBMENU_SLUG = self::PLUGIN_SLUG . '-settings';
+		self::$DEBUG_SUBMENU_SLUG = self::PLUGIN_SLUG . '-debug';
 
 
         self::$LOCKING_FILE_FILENAME = DUPLICATOR_PRO_PLUGIN_PATH . '/dup_pro_lock.bin';

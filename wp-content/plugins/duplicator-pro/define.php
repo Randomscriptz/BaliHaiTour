@@ -2,7 +2,7 @@
 //Prevent directly browsing to the file
 if (function_exists('plugin_dir_url'))
 {    
-	define('DUPLICATOR_PRO_VERSION', '3.4.0.2');
+	define('DUPLICATOR_PRO_VERSION', '3.4.8');
     define('DUPLICATOR_PRO_PLUGIN_URL', plugin_dir_url(__FILE__));
     define('DUPLICATOR_PRO_SITE_URL', get_site_url());
 	define('DUPLICATOR_PRO_IMG_URL', DUPLICATOR_PRO_PLUGIN_URL . '/assets/img');
@@ -32,18 +32,22 @@ if (function_exists('plugin_dir_url'))
     define("DUPLICATOR_PRO_DUMP_PATH", DUPLICATOR_PRO_SSDIR_PATH . '/dump');
 	define('DUPLICATOR_PRO_EMBEDDED_SCAN_FILENAME', 'scan.json');
 	define("DUPLICATOR_PRO_ENHANCED_INSTALLER_DIRECTORY", DUPLICATOR_PRO_WPROOTPATH . 'dpro-installer');
+    define('DUPLICATOR_PRO_LIB_PATH',	DUPLICATOR_PRO_PLUGIN_PATH . '/lib');
     
     //RESTRAINT CONSTANTS
     define("DUPLICATOR_PRO_PHP_MAX_MEMORY", '5000M');
     define("DUPLICATOR_PRO_DB_MAX_TIME", 5000);
     define("DUPLICATOR_PRO_DB_EOF_MARKER", 'DUPLICATOR_PRO_MYSQLDUMP_EOF');
-    define("DUPLICATOR_PRO_SCAN_SITE_WARNING_SIZE", 524288000); //500MB
-	define("DUPLICATOR_PRO_SCAN_SITE_SHELL_EXEC_WARNING_SIZE", 5368709120); //5 GB
-    define("DUPLICATOR_PRO_SCAN_WARNFILESIZE", 6291456); //6MB
-    define("DUPLICATOR_PRO_SCAN_CACHESIZE", 524288); //512K
-    define("DUPLICATOR_PRO_SCAN_DBSIZE", 104857600); //100MB
-    define("DUPLICATOR_PRO_SCAN_DBROWS", 250000);
-    define("DUPLICATOR_PRO_SCAN_TIMEOUT", 25);   //Seconds
+    define("DUPLICATOR_PRO_SCAN_SITE_WARNING_SIZE", 367001600); //350MB
+	define("DUPLICATOR_PRO_SCAN_SITE_SHELL_EXEC_WARNING_SIZE", 1610612736); //1.5 GB
+   
+    define("DUPLICATOR_PRO_SCAN_WARNFILESIZE",	4194304);	//4MB
+    define("DUPLICATOR_PRO_SCAN_CACHESIZE",		1048576);	//1MB
+    define("DUPLICATOR_PRO_SCAN_DB_ALL_SIZE",	104857600); //100MB
+    define("DUPLICATOR_PRO_SCAN_DB_ALL_ROWS",	1000000);	//1 million rows
+	define('DUPLICATOR_PRO_SCAN_DB_TBL_ROWS',	100000);    //100K rows per table
+	define('DUPLICATOR_PRO_SCAN_DB_TBL_SIZE',	10485760);  //10MB Table
+    define("DUPLICATOR_PRO_SCAN_TIMEOUT", 25);	//Seconds
     define("DUPLICATOR_PRO_SCAN_MIN_WP", "3.7.0");
     $GLOBALS['DUPLICATOR_PRO_SERVER_LIST'] = array('Apache', 'LiteSpeed', 'Nginx', 'Lighttpd', 'IIS', 'WebServerX', 'uWSGI');
     $GLOBALS['DUPLICATOR_PRO_OPTS_DELETE'] = array('duplicator_pro_ui_view_state', 'duplicator_pro_package_active', 'duplicator_pro_settings');   
@@ -83,7 +87,9 @@ if (function_exists('plugin_dir_url'))
 		$_dup_pro_wp_content . '/plugins/all-in-one-wp-migration/storage',
 		$_dup_pro_wp_content . '/updraft',
 		$_dup_pro_wp_content . '/wishlist-backup',
-		$_dup_pro_wp_content . '/wfcache',		
+		$_dup_pro_wp_content . '/wfcache',
+        $_dup_pro_wp_content . '/plugins/really-simple-captcha/tmp',
+        $_dup_pro_wp_content . '/plugins/wordfence/tmp',
 		
 				
 		//WP-CONTENT-UPLOADS
@@ -97,7 +103,8 @@ if (function_exists('plugin_dir_url'))
 		$_dup_pro_wp_content_upload . '/sucuri',
 		$_dup_pro_wp_content_upload . '/wp-clone',
 		$_dup_pro_wp_content_upload . '/wp_all_backup',
-		$_dup_pro_wp_content_upload . '/wpbackitup_backups'
+		$_dup_pro_wp_content_upload . '/wpbackitup_backups',
+        $_dup_pro_wp_content_upload . '/backup-guard'
 	);
 }
 else

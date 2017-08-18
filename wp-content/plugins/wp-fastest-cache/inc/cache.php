@@ -23,6 +23,28 @@
 			$this->set_content_url();
 		}
 
+		public function detect_current_page_type(){
+			if(preg_match("/\?/", $_SERVER["REQUEST_URI"])){
+				return true;
+			}
+			
+			if(preg_match("/^\/wp-json/", $_SERVER["REQUEST_URI"])){
+				return true;
+			}
+
+			if(is_front_page()){
+				echo "<!--WPFC_PAGE_TYPE_homepage-->";
+			}else if(is_category()){
+				echo "<!--WPFC_PAGE_TYPE_category-->";
+			}else if(is_tag()){
+				echo "<!--WPFC_PAGE_TYPE_tag-->";
+			}else if(is_singular('post')){
+				echo "<!--WPFC_PAGE_TYPE_post-->";
+			}else if(is_page()){
+				echo "<!--WPFC_PAGE_TYPE_page-->";
+			}
+		}
+
 		public function set_content_url(){
 			$content_url = content_url();
 
@@ -33,18 +55,6 @@
 				if(isset($hide_my_wp["new_content_path"]) && $hide_my_wp["new_content_path"]){
 					$hide_my_wp["new_content_path"] = trim($hide_my_wp["new_content_path"], "/");
 					$content_url = str_replace(basename(WPFC_WP_CONTENT_DIR), $hide_my_wp["new_content_path"], $content_url);
-				}
-			}
-
-			// WP Hide & Security Enhancer
-			if($this->isPluginActive('wp-hide-security-enhancer/wp-hide.php')){
-				$wph_settings = get_option("wph_settings");
-
-				if(isset($wph_settings["module_settings"])){
-					if(isset($wph_settings["module_settings"]["new_content_path"]) && $wph_settings["module_settings"]["new_content_path"]){
-						$wph_settings["module_settings"]["new_content_path"] = trim($wph_settings["module_settings"]["new_content_path"], "/");
-						$content_url = str_replace(basename(WPFC_WP_CONTENT_DIR), $wph_settings["module_settings"]["new_content_path"], $content_url);
-					}
 				}
 			}
 
@@ -69,8 +79,9 @@
 			}else{
 				if($this->isPluginActive('gtranslate/gtranslate.php')){
 					if(isset($_SERVER["HTTP_X_GT_LANG"])){
-						$this->cacheFilePath = $this->getWpContentDir()."/cache/all/".$_SERVER["HTTP_X_GT_LANG"];
-					}else if(isset($_SERVER["REDIRECT_URL"])){
+						//$this->cacheFilePath = $this->getWpContentDir()."/cache/all/".$_SERVER["HTTP_X_GT_LANG"];
+						$this->cacheFilePath = $this->getWpContentDir()."/cache/all/".$_SERVER["HTTP_X_GT_LANG"].$_SERVER["REQUEST_URI"];
+					}else if(isset($_SERVER["REDIRECT_URL"]) && $_SERVER["REDIRECT_URL"] != "/index.php"){
 						$this->cacheFilePath = $this->getWpContentDir()."/cache/all/".$_SERVER["REDIRECT_URL"];
 					}else if(isset($_SERVER["REQUEST_URI"])){
 						$this->cacheFilePath = $this->getWpContentDir()."/cache/all/".$_SERVER["REQUEST_URI"];
@@ -88,7 +99,11 @@
 				if(!preg_match("/\.html/i", $_SERVER["REQUEST_URI"])){
 					if($this->is_trailing_slash()){
 						if(!preg_match("/\/$/", $_SERVER["REQUEST_URI"])){
-							$this->cacheFilePath = false;
+							if(defined('WPFC_CACHE_QUERYSTRING') && WPFC_CACHE_QUERYSTRING){
+								//toDo
+							}else{
+								$this->cacheFilePath = false;
+							}
 						}
 					}else{
 						//toDo
@@ -96,12 +111,9 @@
 				}
 			}
 
-			if(isset($_COOKIE) && isset($_COOKIE['safirmobilswitcher'])){
-				if($_COOKIE['safirmobilswitcher'] == "mobil"){
-					$this->cacheFilePath = str_replace("/cache/all/", "/cache/wpfc-mobile-cache/", $this->cacheFilePath);
-				}else if($_COOKIE['safirmobilswitcher'] == "masaustu"){
-					$this->cacheFilePath = str_replace("/cache/wpfc-mobile-cache/", "/cache/all/", $this->cacheFilePath);
-				}
+			// to decode path if it is not utf-8
+			if($this->cacheFilePath){
+				$this->cacheFilePath = urldecode($this->cacheFilePath);
 			}
 		}
 
@@ -147,11 +159,27 @@
 		public function createCache(){		
 			if(isset($this->options->wpFastestCacheStatus)){
 
+				// to check logged-in user
 				if(isset($this->options->wpFastestCacheLoggedInUser) && $this->options->wpFastestCacheLoggedInUser == "on"){
-					// to check logged-in user
 					foreach ((array)$_COOKIE as $cookie_key => $cookie_value){
 						if(preg_match("/wordpress_logged_in/i", $cookie_key)){
+							ob_start(array($this, "cdn_rewrite"));
+
 							return 0;
+						}
+					}
+				}
+
+				// to exclude admin users
+				$users_groups = get_users(array("role" => "administrator", "fields" => array("user_login")));
+				foreach ((array)$_COOKIE as $cookie_key => $cookie_value){
+					if(preg_match("/wordpress_logged_in/i", $cookie_key)){
+						foreach ($users_groups as $user_key => $user_value) {
+							if(preg_match("/^".preg_quote($user_value->user_login, "/")."/", $cookie_value)){
+								ob_start(array($this, "cdn_rewrite"));
+
+								return 0;
+							}
 						}
 					}
 				}
@@ -159,8 +187,26 @@
 				// to check comment author
 				foreach ((array)$_COOKIE as $cookie_key => $cookie_value){
 					if(preg_match("/comment_author_/i", $cookie_key)){
+						ob_start(array($this, "cdn_rewrite"));
+
 						return 0;
 					}
+				}
+
+				// to check wp_woocommerce_session cookie
+				foreach ((array)$_COOKIE as $cookie_key => $cookie_value){
+					if(preg_match("/^wp\_woocommerce\_session/", $cookie_key)){
+						//"<!-- \$_COOKIE['wp_woocommerce_session'] has been set -->";
+						ob_start(array($this, "cdn_rewrite"));
+						
+						return 0;
+					}
+				}
+
+				if(isset($_COOKIE) && isset($_COOKIE['safirmobilswitcher'])){
+					ob_start(array($this, "cdn_rewrite"));
+
+					return 0;
 				}
 
 				if(preg_match("/\?/", $_SERVER["REQUEST_URI"]) && !preg_match("/\/\?fdx\_switcher\=true/", $_SERVER["REQUEST_URI"])){ // for WP Mobile Edition
@@ -192,7 +238,13 @@
 
 				if(!preg_match("/^https/i", get_option("home")) && is_ssl()){
 					//must be normal connection
-					return 0;
+					if(!$this->isPluginActive('really-simple-ssl/rlrsssl-really-simple-ssl.php')){
+						if(!$this->isPluginActive('really-simple-ssl-pro/really-simple-ssl-pro.php')){
+							if(!$this->isPluginActive('ssl-insecure-content-fixer/ssl-insecure-content-fixer.php')){
+								return 0;
+							}
+						}
+					}
 				}
 
 				if(preg_match("/www\./", get_option("home")) && !preg_match("/www\./", $_SERVER['HTTP_HOST'])){
@@ -203,13 +255,13 @@
 					return 0;
 				}
 
-				// http://mobiledetect.net/ does not contain the following user-agents
-				if(preg_match("/Nokia309|Casper_VIA/i", $_SERVER['HTTP_USER_AGENT'])){
+				if($this->exclude_page()){
+					//echo "<!-- Wp Fastest Cache: Exclude Page -->"."\n";
 					return 0;
 				}
 
-				if($this->exclude_page()){
-					//echo "<!-- Wp Fastest Cache: Exclude Page -->"."\n";
+				// http://mobiledetect.net/ does not contain the following user-agents
+				if(preg_match("/Nokia309|Casper_VIA/i", $_SERVER['HTTP_USER_AGENT'])){
 					return 0;
 				}
 
@@ -258,7 +310,8 @@
 					if($create_cache){
 						$this->startTime = microtime(true);
 
-						add_action( 'get_footer', array($this, "wp_print_scripts_action"));
+						add_action('wp', array($this, "detect_current_page_type"));
+						add_action('get_footer', array($this, "wp_print_scripts_action"));
 
 						ob_start(array($this, "callback"));
 					}
@@ -274,6 +327,7 @@
 			$list = array(
 						"\/wp\-comments\-post\.php",
 						"\/sitemap\.xml",
+						"\/sitemap_index\.xml",
 						"\/wp\-login\.php",
 						"\/robots\.txt",
 						"\/wp\-cron\.php",
@@ -308,6 +362,14 @@
 				array_push($list, "\/cart", "\/checkout", "\/receipt", "\/confirmation", "\/wc-api\/");
 			}
 
+			if($this->isPluginActive('wp-easycart/wpeasycart.php')){
+				array_push($list, "\/cart");
+			}
+
+			if($this->isPluginActive('easy-digital-downloads/easy-digital-downloads.php')){
+				array_push($list, "\/cart", "\/checkout");
+			}
+
 			if(preg_match("/".implode("|", $list)."/i", $_SERVER["REQUEST_URI"])){
 				return true;
 			}
@@ -315,7 +377,7 @@
 			return false;
 		}
 
-		public function exclude_page(){
+		public function exclude_page($buffer = false){
 			$preg_match_rule = "";
 			$request_url = trim($_SERVER["REQUEST_URI"], "/");
 
@@ -324,12 +386,12 @@
 				foreach((array)$this->exclude_rules as $key => $value){
 					$value->type = isset($value->type) ? $value->type : "page";
 
-					if(isset($value->prefix) && $value->prefix && $value->type == "page"){
+					if($buffer && isset($value->prefix) && $value->prefix && ($value->type == "page")){
 						$value->content = trim($value->content);
 						$value->content = trim($value->content, "/");
 
-						if($value->prefix == "homepage"){
-							if($request_url == "/" || $request_url == ""){
+						if(preg_match("/^(homepage|category|tag|post|page)$/", $value->prefix)){
+							if(preg_match('/<\!--WPFC_PAGE_TYPE_'.$value->prefix.'-->/i', $buffer)){
 								return true;
 							} 
 						}else if($value->prefix == "exact"){
@@ -352,8 +414,10 @@
 							return true;
 						}
 					}else if($value->type == "cookie"){
-						if(preg_match("/".preg_quote($value->content, "/")."/i", $_SERVER['HTTP_COOKIE'])){
-							return true;
+						if(isset($_SERVER['HTTP_COOKIE'])){
+							if(preg_match("/".preg_quote($value->content, "/")."/i", $_SERVER['HTTP_COOKIE'])){
+								return true;
+							}
 						}
 					}
 				}
@@ -362,12 +426,20 @@
 			return false;
 		}
 
-		public function is_json(){
+		public function is_json($buffer){
 			if(isset($_SERVER["HTTP_ACCEPT"]) && preg_match("/json/i", $_SERVER["HTTP_ACCEPT"])){
 				return true;
 			}
 
 			if(preg_match("/^\/wp-json/", $_SERVER["REQUEST_URI"])){
+				return true;
+			}
+
+			if(preg_match("/^\s*\{\s*[\"\']/i", $buffer)){
+				return true;
+			}
+
+			if(preg_match("/^\s*\[\s*\{\s*[\"\']/i", $buffer)){
 				return true;
 			}
 
@@ -391,22 +463,23 @@
 				}
 			}
 
+			if($this->exclude_page($buffer)){
+				$buffer = preg_replace('/<\!--WPFC_PAGE_TYPE_[a-z]+-->/i', '', $buffer);	
+				return $buffer;
+			}
+
+			$buffer = preg_replace('/<\!--WPFC_PAGE_TYPE_[a-z]+-->/i', '', $buffer);
+
 			if(preg_match("/Mediapartners-Google|Google\sWireless\sTranscoder/i", $_SERVER['HTTP_USER_AGENT'])){
 				return $buffer;
 			}else if($this->is_xml($buffer)){
 				return $buffer;
 			}else if (is_user_logged_in() || $this->isCommenter()){
 				return $buffer;
-			}else if($this->is_json()){
+			}else if($this->is_json($buffer)){
 				return $buffer;
 			}else if(isset($_COOKIE["wptouch-pro-view"])){
 				return $buffer."<!-- \$_COOKIE['wptouch-pro-view'] has been set -->";
-			}else if($this->checkWoocommerceSession()){
-				if($this->checkHtml($buffer)){
-					return $buffer;
-				}else{
-					return $buffer."<!-- \$_COOKIE['wp_woocommerce_session'] has been set -->";
-				}
 			}else if($this->isPasswordProtected($buffer)){
 				return $buffer."<!-- Password protected content has been detected -->";
 			}else if($this->isWpLogin($buffer)){
@@ -427,7 +500,7 @@
 				return $buffer;
 			}else if(!$this->cacheFilePath){
 				return $buffer."<!-- permalink_structure ends with slash (/) but REQUEST_URI does not end with slash (/) -->";
-			}else{				
+			}else{
 				$content = $buffer;
 
 				if(isset($this->options->wpFastestCacheRenderBlocking) && method_exists("WpFastestCachePowerfulHtml", "render_blocking")){
@@ -515,22 +588,27 @@
 				}else{
 					$content = $this->cacheDate($content);
 					$content = $this->minify($content);
-					
-					if($this->cdn){
-						$content = preg_replace_callback("/(srcset|src|href|data-lazyload)\s{0,2}\=[\'\"]([^\'\"]+)[\'\"]/i", array($this, 'cdn_replace_urls'), $content);
-						// url()
-						$content = preg_replace_callback("/(url)\(([^\)]+)\)/i", array($this, 'cdn_replace_urls'), $content);
-						// {"concatemoji":"http:\/\/your_url.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7"}
-						$content = preg_replace_callback("/\{\"concatemoji\"\:\"[^\"]+\"\}/i", array($this, 'cdn_replace_urls'), $content);
-					}
-					
 
+					$content = $this->cdn_rewrite($content);
+					
+					
 					$content = str_replace("<!--WPFC_FOOTER_START-->", "", $content);
 
 
 					if(isset($this->options->wpFastestCacheLazyLoad)){
-						// to excude Lazy Load if the page is amp
-						if(!preg_match("/<html[^\>]+amp[^\>]*>/i", $content)){
+						$execute_lazy_load = true;
+						
+						// to disable Lazy Load if the page is amp
+						if(preg_match("/<html[^\>]+amp[^\>]*>/i", $content)){
+							$execute_lazy_load = false;
+						}
+						
+						// to disable for Ajax Load More on the pages
+						if($this->isPluginActive('ajax-load-more/ajax-load-more.php') && preg_match("/\/page\/\d+\//", $_SERVER["REQUEST_URI"])){
+							$execute_lazy_load = false;
+						}
+
+						if($execute_lazy_load){
 							if(!class_exists("WpFastestCacheLazyLoad")){
 								include_once $this->get_premium_path("lazy-load.php");
 							}
@@ -547,6 +625,12 @@
 						}
 					}
 
+					// WP Hide & Security Enhancer
+					if($this->isPluginActive('wp-hide-security-enhancer/wp-hide.php')){
+						global $wph;
+						$content = $wph->functions->content_urls_replacement($content, $wph->functions->get_replacement_list());
+					}
+
 					if($this->cacheFilePath){
 						$this->createFolder($this->cacheFilePath, $content);
 					}
@@ -554,6 +638,20 @@
 					return $content."<!-- need to refresh to see cached version -->";
 				}
 			}
+		}
+
+		public function cdn_rewrite($content){
+			if($this->cdn){
+				$content = preg_replace_callback("/(srcset|src|href|data-bg-url|data-lazyload|data-source-url|data-srcsmall|data-srclarge|data-srcfull|data-slide-img|data-lazy-original)\s{0,2}\=[\'\"]([^\'\"]+)[\'\"]/i", array($this, 'cdn_replace_urls'), $content);
+				//url()
+				$content = preg_replace_callback("/(url)\(([^\)\>]+)\)/i", array($this, 'cdn_replace_urls'), $content);
+				//{"concatemoji":"http:\/\/your_url.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7"}
+				$content = preg_replace_callback("/\{\"concatemoji\"\:\"[^\"]+\"\}/i", array($this, 'cdn_replace_urls'), $content);
+				//<script>var loaderRandomImages=["https:\/\/www.site.com\/wp-content\/uploads\/2016\/12\/image.jpg"];</script>
+				$content = preg_replace_callback("/[\"\']([^\'\"]+)[\"\']\s*\:\s*[\"\']https?\:\\\\\/\\\\\/[^\"\']+[\"\']/i", array($this, 'cdn_replace_urls'), $content);
+			}
+
+			return $content;
 		}
 
 		public function get_header($content){
@@ -637,8 +735,6 @@
 				}
 			}
 
-			$cachFilePath = urldecode($cachFilePath);
-
 			if($create){
 				if (!is_user_logged_in() && !$this->isCommenter()){
 					if(!is_dir($cachFilePath)){
@@ -701,7 +797,7 @@
 		public function is_amp($content){
 			$request_uri = trim($_SERVER["REQUEST_URI"], "/");
 
-			if(preg_match("/amp$/", $request_uri)){
+			if(preg_match("/^amp/", $request_uri) || preg_match("/amp$/", $request_uri)){
 				if(preg_match("/<html[^\>]+amp[^\>]*>/i", $content)){
 					return true;
 				}
@@ -722,16 +818,6 @@
 					return true;
 				}
 			}
-		}
-
-		public function checkWoocommerceSession(){
-			foreach($_COOKIE as $key => $value){
-			  if(preg_match("/^wp\_woocommerce\_session/", $key)){
-			  	return true;
-			  }
-			}
-
-			return false;
 		}
 
 		public function isWpLogin($buffer){
@@ -808,7 +894,7 @@
 					return true;     
 				break;
 
-				case (preg_match('/android/i',$user_agent));
+				case (preg_match('/android/i',$user_agent) && preg_match('/mobile/i',$user_agent));
 					return true;
 				break;
 

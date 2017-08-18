@@ -1,4 +1,5 @@
 <?php
+
 	/**
 	 * Navigation tabs
 	 *
@@ -27,10 +28,15 @@
 	}
 	
 	function yikes_easy_mc_welcome_body() {
-		$section = isset( $_GET['section'] ) ? $_GET['section'] : 'getting-started';
-		if( isset( $section ) ) {
-			include_once( plugin_dir_path( dirname( __FILE__ ) ) . '/welcome-page/welcome-sections/' . $section . '-section.php' );
-		}
+
+		$allowed_sections = array( 
+			'add-ons' => true, 
+			'getting-started' => true,
+			'knowledge-base' => true, 
+			'whats-new' => true 
+		);
+		$section = isset( $_GET['section'], $allowed_sections[ $_GET['section'] ] ) ? $_GET['section'] : 'getting-started';
+		include_once( plugin_dir_path( dirname( __FILE__ ) ) . '/welcome-page/welcome-sections/' . $section . '-section.php' );
 	}
 		
 	// Display custom PHP warning if <= 5.3

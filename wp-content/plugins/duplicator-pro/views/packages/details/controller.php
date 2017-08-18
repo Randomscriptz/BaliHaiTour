@@ -7,7 +7,7 @@ require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/assets/js/javascript.php');
 require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/views/inc.header.php');
 
 $current_tab = isset($_REQUEST['tab']) ? esc_html($_REQUEST['tab']) : 'detail';
-$package_id = isset($_REQUEST["id"]) ? $_REQUEST["id"] : 0;
+$package_id = isset($_REQUEST["id"])   ? esc_html($_REQUEST["id"]) : 0;
 
 
 $package = DUP_PRO_Package::get_by_id($package_id);
@@ -20,6 +20,11 @@ if ($package_found) {
     $err_link_log		= "<a target='_blank' href='#' onclick='{$err_link_pack}'>" . DUP_PRO_U::__('Package Log') . '</a>';
     $err_link_faq		= '<a target="_blank" href="https://snapcreek.com/duplicator/docs/faqs-tech/">' . DUP_PRO_U::__('FAQ Pages') . '</a>';
     $err_link_ticket	= '<a target="_blank" href="https://snapcreek.com/ticket/">' . DUP_PRO_U::__('Help Ticket') . '</a>';
+
+	$packages_url = DUP_PRO_U::getMenuPageURL(DUP_PRO_Constants::$PACKAGES_SUBMENU_SLUG, false);
+	$packages_tab_url = DUP_PRO_U::appendQueryValue($packages_url, 'tab', 'packages');
+	$edit_package_url = DUP_PRO_U::appendQueryValue($packages_tab_url, 'inner_page', 'new1');
+	$active_package_present = DUP_PRO_Package::is_active_package_present();
 }
 ?>
 
@@ -49,7 +54,13 @@ if ($package_found) {
 	<a href="?page=duplicator-pro&action=detail&tab=detail&id=<?php echo $package_id ?>" class="nav-tab <?php echo ($current_tab == 'detail') ? 'nav-tab-active' : '' ?>"> <?php DUP_PRO_U::_e('Details'); ?></a> 
 	<a <?php if($enable_transfer_tab === false) { echo 'onclick="DupPro.Pack.TransferDisabled(); return false;"';} ?> href="?page=duplicator-pro&action=detail&tab=transfer&id=<?php echo $package_id ?>" class="nav-tab <?php echo ($current_tab == 'transfer') ? 'nav-tab-active' : '' ?>"> <?php DUP_PRO_U::_e('Transfer'); ?></a> 		
 </h2>
-<div class="all-packages"><a href="?page=duplicator-pro" class="add-new-h2"><i class="fa fa-archive"></i> <?php DUP_PRO_U::_e('All Packages'); ?></a></div>
+<div class="all-packages">
+	<a href="?page=duplicator-pro" class="add-new-h2"><i class="fa fa-archive"></i> <?php DUP_PRO_U::_e('Packages'); ?></a>
+	<a id="dup-pro-create-new" onclick="if (jQuery('#dup-pro-create-new').hasClass('disabled')) {
+			alert('<?php echo DUP_PRO_U::__('A package is being processed. Retry later.'); ?>');
+			return false;
+		}" href="<?php echo $edit_package_url; ?>" class="add-new-h2 <?php echo ($active_package_present ? 'disabled' : ''); ?>"><?php DUP_PRO_U::_e('Create New'); ?></a>
+</div>
 
 <div id='dpro-error' class="error">
 	<p>
@@ -68,7 +79,7 @@ switch ($current_tab) {
 ?>
 
 
-<script type="text/javascript">
+<script>
 	DupPro.Pack.TransferDisabled = function() {
 		alert("<?php DUP_PRO_U::_e('No package in default location so transfer is disabled.');?>")
 	}

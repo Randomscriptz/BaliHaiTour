@@ -9,7 +9,7 @@ require_once (DUPLICATOR_PRO_PLUGIN_PATH.'classes/utilities/class.u.shell.php');
 
 /**
  *  Creates a zip file using Shell_Exec and the system zip command
- *  Not availble on all system   */
+ *  Not available on all system   */
 class DUP_PRO_ShellZip extends DUP_PRO_Archive
 {
 
@@ -81,6 +81,7 @@ class DUP_PRO_ShellZip extends DUP_PRO_Archive
             $filterExts  = $archive->FilterExtsAll;
             $filterFiles = $archive->FilterFilesAll;
 
+			//DIRS LIST
             foreach ($filterDirs as $filterDir) {
                 if (trim($filterDir) != '') {
                     $relative_filter_dir = DUP_PRO_U::getRelativePath($compressDir, $filterDir);
@@ -95,10 +96,12 @@ class DUP_PRO_ShellZip extends DUP_PRO_Archive
                 }
             }
 
+			//EXT LIST
             foreach ($filterExts as $filterExt) {
                 $exclude_string .= "\*.$filterExt ";
             }
 
+			//FILE LIST
             foreach ($filterFiles as $filterFile) {
                 if (trim($filterFile) != '') {
                     $relative_filter_file = DUP_PRO_U::getRelativePath($compressDir, trim($filterFile));
@@ -106,6 +109,11 @@ class DUP_PRO_ShellZip extends DUP_PRO_Archive
                     $exclude_string .= "\"$relative_filter_file\" ";
                 }
             }
+
+			//DB ONLY
+			if ($archive->ExportOnlyDB) {
+				$contains_root = true;
+			}
 
 
             if ($contains_root == false) {
@@ -185,9 +193,7 @@ class DUP_PRO_ShellZip extends DUP_PRO_Archive
                         $fix_text = DUP_PRO_U::__("Go to: Settings > Packages Tab > Archive Engine to ZipArchive.");
 
                         $system_global = DUP_PRO_System_Global_Entity::get_instance();
-
                         $system_global->add_recommended_text_fix($error_text, $fix_text);
-
                         $system_global->save();
 
                         DUP_PRO_Log::error("$error_text  **RECOMMENDATION:$fix_text", '', false);

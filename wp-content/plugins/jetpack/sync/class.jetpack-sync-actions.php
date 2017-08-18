@@ -113,6 +113,7 @@ class Jetpack_Sync_Actions {
 	}
 
 	static function send_data( $data, $codec_name, $sent_timestamp, $queue_id, $checkout_duration, $preprocess_duration ) {
+		require_once dirname( __FILE__ ) . '/class.jetpack-sync-functions.php';
 		Jetpack::load_xml_rpc_client();
 
 		$query_args = array(
@@ -120,8 +121,8 @@ class Jetpack_Sync_Actions {
 			'codec'     => $codec_name,     // send the name of the codec used to encode the data
 			'timestamp' => $sent_timestamp, // send current server time so we can compensate for clock differences
 			'queue'     => $queue_id,       // sync or full_sync
-			'home'      => get_home_url(),  // Send home url option to check for Identity Crisis server-side
-			'siteurl'   => get_site_url(),  // Send siteurl option to check for Identity Crisis server-side
+			'home'      => Jetpack_Sync_Functions::home_url(),  // Send home url option to check for Identity Crisis server-side
+			'siteurl'   => Jetpack_Sync_Functions::site_url(),  // Send siteurl option to check for Identity Crisis server-side
 			'cd'        => sprintf( '%.4f', $checkout_duration),   // Time spent retrieving queue items from the DB
 			'pd'        => sprintf( '%.4f', $preprocess_duration), // Time spent converting queue items into data to send
 		);
@@ -265,7 +266,7 @@ class Jetpack_Sync_Actions {
 			}
 
 			$result = 'full_sync' === $type ? self::$sender->do_full_sync() : self::$sender->do_sync();
-		} while ( $result && ( $start_time + $time_limit ) > time() );
+		} while ( $result && ! is_wp_error( $result ) && ( $start_time + $time_limit ) > time() );
 	}
 
 	static function initialize_listener() {
@@ -282,14 +283,28 @@ class Jetpack_Sync_Actions {
 	}
 
 	static function initialize_woocommerce() {
-		if ( class_exists( 'WooCommerce' ) ) {
-			add_filter( 'jetpack_sync_modules', array( 'Jetpack_Sync_Actions', 'add_woocommerce_sync_module' ) );
+		if ( false === class_exists( 'WooCommerce' ) ) {
+			return;
 		}
+		add_filter( 'jetpack_sync_modules', array( 'Jetpack_Sync_Actions', 'add_woocommerce_sync_module' ) );
 	}
 
 	static function add_woocommerce_sync_module( $sync_modules ) {
 		require_once dirname( __FILE__ ) . '/class.jetpack-sync-module-woocommerce.php';
 		$sync_modules[] = 'Jetpack_Sync_Module_WooCommerce';
+		return $sync_modules;
+	}
+
+	static function initialize_wp_super_cache() {
+		if ( false === function_exists( 'wp_cache_is_enabled' ) ) {
+			return;
+		}
+		add_filter( 'jetpack_sync_modules', array( 'Jetpack_Sync_Actions', 'add_wp_super_cache_sync_module' ) );
+	}
+
+	static function add_wp_super_cache_sync_module( $sync_modules ) {
+		require_once dirname( __FILE__ ) . '/class.jetpack-sync-module-wp-super-cache.php';
+		$sync_modules[] = 'Jetpack_Sync_Module_WP_Super_Cache';
 		return $sync_modules;
 	}
 
@@ -417,14 +432,19 @@ class Jetpack_Sync_Actions {
 	}
 }
 
+// Check for WooCommerce support
+add_action( 'plugins_loaded', array( 'Jetpack_Sync_Actions', 'initialize_woocommerce' ), 5 );
+
+// Check for WP Super Cache
+add_action( 'plugins_loaded', array( 'Jetpack_Sync_Actions', 'initialize_wp_super_cache' ), 5 );
+
 /*
  * Init after plugins loaded and before the `init` action. This helps with issues where plugins init
  * with a high priority or sites that use alternate cron.
  */
 add_action( 'plugins_loaded', array( 'Jetpack_Sync_Actions', 'init' ), 90 );
 
-// Check for WooCommerce support
-add_action( 'plugins_loaded', array( 'Jetpack_Sync_Actions', 'initialize_woocommerce' ), 5 );
+
 
 // We need to define this here so that it's hooked before `updating_jetpack_version` is called
 add_action( 'updating_jetpack_version', array( 'Jetpack_Sync_Actions', 'do_initial_sync' ), 10, 2 );

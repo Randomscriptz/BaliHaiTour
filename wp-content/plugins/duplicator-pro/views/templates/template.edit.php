@@ -16,55 +16,43 @@ $view_state = DUP_PRO_UI_ViewState::getArray();
 $ui_css_archive = (isset($view_state['dup-template-archive-panel']) && $view_state['dup-template-archive-panel']) ? 'display:block' : 'display:none';
 $ui_css_install = (isset($view_state['dup-template-install-panel']) && $view_state['dup-template-install-panel']) ? 'display:block' : 'display:none';
 
-/* @var $package_template DUP_PRO_Package_Template_Entity */
-if ($package_template_id == -1)
-{
-    $package_template = new DUP_PRO_Package_Template_Entity();
-    $edit_create_text = DUP_PRO_U::__('Add New');
-}
-else
-{
-    $package_template = DUP_PRO_Package_Template_Entity::get_by_id($package_template_id);
-    DUP_PRO_LOG::traceObject("getting template $package_template_id", $package_template);
-    $edit_create_text = DUP_PRO_U::__('Edit') . ' ' . $package_template->name;
+if ($package_template_id == -1) {
+	$package_template	 = new DUP_PRO_Package_Template_Entity();
+	$edit_create_text	 = DUP_PRO_U::__('Add New');
+} else {
+	$package_template	 = DUP_PRO_Package_Template_Entity::get_by_id($package_template_id);
+	DUP_PRO_LOG::traceObject("getting template $package_template_id", $package_template);
+	$edit_create_text	 = DUP_PRO_U::__('Edit').' '.$package_template->name;
 }
 
-if (isset($_REQUEST['action']))
-{
-    check_admin_referer($nonce_action);
-    if ($_REQUEST['action'] == 'save')
-    {
-        if (isset($_REQUEST['_database_filter_tables']))
-        {
-            $package_template->database_filter_tables = implode(',', $_REQUEST['_database_filter_tables']);
-        }
-        else
-        {
-            $package_template->database_filter_tables = '';
-        }
+if (isset($_REQUEST['action'])) {
+	check_admin_referer($nonce_action);
+	if ($_REQUEST['action'] == 'save') {
+		if (isset($_REQUEST['_database_filter_tables'])) {
+			$package_template->database_filter_tables = implode(',', $_REQUEST['_database_filter_tables']);
+		} else {
+			$package_template->database_filter_tables = '';
+		}
 
-        $package_template->archive_filter_dirs = isset($_REQUEST['_archive_filter_dirs']) ? DUP_PRO_Package::parse_directory_filter($_REQUEST['_archive_filter_dirs']) : '';
-        $package_template->archive_filter_exts = isset($_REQUEST['_archive_filter_exts']) ? DUP_PRO_Package::parse_extension_filter($_REQUEST['_archive_filter_exts']) : '';
-        $package_template->archive_filter_files = isset($_REQUEST['_archive_filter_files']) ? DUP_PRO_Package::parse_file_filter($_REQUEST['_archive_filter_files']) : '';
+		$package_template->archive_filter_dirs	 = isset($_REQUEST['_archive_filter_dirs']) ? DUP_PRO_Archive::parseDirectoryFilter($_REQUEST['_archive_filter_dirs']) : '';
+		$package_template->archive_filter_exts	 = isset($_REQUEST['_archive_filter_exts']) ? DUP_PRO_Archive::parseExtensionFilter($_REQUEST['_archive_filter_exts']) : '';
+		$package_template->archive_filter_files	 = isset($_REQUEST['_archive_filter_files']) ? DUP_PRO_Archive::parseFileFilter($_REQUEST['_archive_filter_files']) : '';
 
-        DUP_PRO_LOG::traceObject('request', $_REQUEST);
+		DUP_PRO_LOG::traceObject('request', $_REQUEST);
 
-        // Checkboxes don't set post values when off so have to manually set these
-        $package_template->set_post_variables($_REQUEST);
-        $package_template->save();
-        $was_updated = true;
-        $edit_create_text = DUP_PRO_U::__('Edit') . ': ' . $package_template->name;
-    }
-    else if ($_REQUEST['action'] == 'copy-template')
-    {
-        $source_template_id = $_REQUEST['duppro-source-template-id'];
-         
-        if($source_template_id != -1)
-        {
-            $package_template->copy_from_source_id($source_template_id);
-            $package_template->save();
-        }
-    }
+		// Checkboxes don't set post values when off so have to manually set these
+		$package_template->set_post_variables($_REQUEST);
+		$package_template->save();
+		$was_updated		 = true;
+		$edit_create_text	 = DUP_PRO_U::__('Edit').': '.$package_template->name;
+	} else if ($_REQUEST['action'] == 'copy-template') {
+		$source_template_id = $_REQUEST['duppro-source-template-id'];
+
+		if ($source_template_id != -1) {
+			$package_template->copy_from_source_id($source_template_id);
+			$package_template->save();
+		}
+	}
 }
 
 $installer_pass = (base64_decode($package_template->installer_opts_secure_pass)) ? base64_decode($package_template->installer_opts_secure_pass) : '';
@@ -82,10 +70,12 @@ $upload_dir = DUP_PRO_U::safePath($uploads['basedir']);
     div.dpro-template-general {margin:8px 0 10px 0}
     div.dpro-template-general label {font-weight: bold}
     div.dpro-template-general input, textarea {width:100%}
-	b.dpro-hdr {display:block; font-size:14px;  margin:3px 0 3px 0; padding:3px 0 3px 0; border-bottom: 1px solid #dfdfdf}
+	b.dpro-hdr {display:block; font-size:14px;  margin:3px 0 10px 0; padding:3px 0 3px 0; border-bottom: 1px solid #dfdfdf}
 	form#dpro-template-form textarea, input[type="text"], input[type="password"] {width:100%}
 
 	/*ARCHIVE*/
+	div#dup-exportdb-items-checked, div#dup-exportdb-items-off {min-height:275px;}
+	div#dup-exportdb-items-checked {padding:0 5px 5px 5px; max-width:800px}
     textarea#_archive_filter_dirs {width:100%; height:75px}
     textarea#_archive_filter_files {width:100%; height:75px}
     input#_archive_filter_exts {width:100%}
@@ -137,7 +127,7 @@ TOOL-BAR -->
 			<?php endif; ?>
 		</td>
 		<td>
-			<a href="<?php echo $templates_tab_url; ?>" class="add-new-h2"><i class="fa fa-files-o"></i> <?php DUP_PRO_U::_e('All Templates'); ?></a>
+			<a href="<?php echo $templates_tab_url; ?>" class="add-new-h2"><i class="fa fa-files-o"></i> <?php DUP_PRO_U::_e('Templates'); ?></a>
 			<span><?php echo $edit_create_text; ?></span>
 		</td>
 	</tr>
@@ -167,38 +157,68 @@ ARCHIVE -->
 		FILES -->
 		<b class="dpro-hdr"><i class="fa fa-files-o"></i> <?php DUP_PRO_U::_e('FILES'); ?></b>
 
-		<input id="archive_filter_on" type="checkbox" <?php DUP_PRO_UI::echoChecked($package_template->archive_filter_on) ?> name="archive_filter_on" />
-		<label for="archive_filter_on"><?php _e("Enable File Filter"); ?></label>
-		<br/><br/>
+		<input id="archive_export_onlydb" type="checkbox" <?php DUP_PRO_UI::echoChecked($package_template->archive_export_onlydb) ?> name="archive_export_onlydb"   onclick="DupPro.Template.ExportOnlyDB()"  />
+		<label for="archive_export_onlydb"><?php _e("Archive Only the Database"); ?></label> <br/>
 
-		<label><?php _e("Directories"); ?>:</label>
-		<div class='dup-quick-links'>
-			<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludePath('<?php echo rtrim(DUPLICATOR_PRO_WPROOTPATH, '/'); ?>')">[<?php DUP_PRO_U::_e("root path") ?>]</a>
-			<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludePath('<?php echo rtrim($upload_dir, '/'); ?>')">[<?php DUP_PRO_U::_e("wp-uploads") ?>]</a>
-			<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludePath('<?php echo DUP_PRO_U::safePath(WP_CONTENT_DIR); ?>/cache')">[<?php DUP_PRO_U::_e("cache") ?>]</a>
-			<a href="javascript:void(0)" onclick="jQuery('#_archive_filter_dirs').val('')"><?php DUP_PRO_U::_e("(clear)") ?></a>
+		<div id="dup-exportdb-items-off">
+
+			<input id="archive_filter_on" type="checkbox" <?php DUP_PRO_UI::echoChecked($package_template->archive_filter_on) ?> name="archive_filter_on" />
+			<label for="archive_filter_on"><?php _e("Enable File Filter"); ?></label>
+			<br/>
+
+			<label><?php _e("Directories"); ?>:</label>
+			<div class='dup-quick-links'>
+				<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludePath('<?php echo rtrim(DUPLICATOR_PRO_WPROOTPATH, '/'); ?>')">[<?php DUP_PRO_U::_e("root path") ?>]</a>
+				<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludePath('<?php echo rtrim($upload_dir, '/'); ?>')">[<?php DUP_PRO_U::_e("wp-uploads") ?>]</a>
+				<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludePath('<?php echo DUP_PRO_U::safePath(WP_CONTENT_DIR); ?>/cache')">[<?php DUP_PRO_U::_e("cache") ?>]</a>
+				<a href="javascript:void(0)" onclick="jQuery('#_archive_filter_dirs').val('')"><?php DUP_PRO_U::_e("(clear)") ?></a>
+			</div>
+			<textarea name="_archive_filter_dirs" id="_archive_filter_dirs" placeholder="/full_path/exclude_path1;/full_path/exclude_path2;">
+				<?php echo str_replace(";", ";\n", esc_textarea($package_template->archive_filter_dirs)) ?>
+			</textarea>
+			<br/>
+
+			<label><?php _e("Extensions"); ?>:</label>
+			<div class='dup-quick-links'>
+				<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludeExts('avi;mov;mp4;mpeg;mpg;swf;wmv;aac;m3u;mp3;mpa;wav;wma')">[<?php DUP_PRO_U::_e("media") ?>]</a>
+				<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludeExts('zip;rar;tar;gz;bz2;7z')">[<?php DUP_PRO_U::_e("archive") ?>]</a>
+				<a href="javascript:void(0)" onclick="jQuery('#_archive_filter_exts').val('')"><?php DUP_PRO_U::_e("(clear)") ?></a>
+			</div>
+			<input type="text" name="_archive_filter_exts" id="_archive_filter_exts" value="<?php echo $package_template->archive_filter_exts; ?>" placeholder="ext1;ext2;ext3">
+			<br/>
+
+			<label><?php _e("Files"); ?>:</label>
+			<div class='dup-quick-links'>
+				<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludeFilePath('<?php echo rtrim(DUPLICATOR_PRO_WPROOTPATH, '/'); ?>')">[<?php DUP_PRO_U::_e("file path") ?>]</a>
+				<a href="javascript:void(0)" onclick="jQuery('#_archive_filter_files').val('')"><?php DUP_PRO_U::_e("(clear)") ?></a>
+			</div>
+			<textarea name="_archive_filter_files" id="_archive_filter_files" placeholder="/full_path/exclude_file_1.ext;/full_path/exclude_file2.ext"><?php echo str_replace(";", ";\n", esc_textarea($package_template->archive_filter_files)) ?></textarea>
 		</div>
-		<textarea name="_archive_filter_dirs" id="_archive_filter_dirs" placeholder="/full_path/exclude_path1;/full_path/exclude_path2;">
-			<?php echo str_replace(";", ";\n", esc_textarea($package_template->archive_filter_dirs)) ?>
-		</textarea>
 		<br/>
 
-		<label><?php _e("Extensions"); ?>:</label>
-		<div class='dup-quick-links'>
-			<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludeExts('avi;mov;mp4;mpeg;mpg;swf;wmv;aac;m3u;mp3;mpa;wav;wma')">[<?php DUP_PRO_U::_e("media") ?>]</a>
-			<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludeExts('zip;rar;tar;gz;bz2;7z')">[<?php DUP_PRO_U::_e("archive") ?>]</a>
-			<a href="javascript:void(0)" onclick="jQuery('#_archive_filter_exts').val('')"><?php DUP_PRO_U::_e("(clear)") ?></a>
-		</div>
-		<input type="text" name="_archive_filter_exts" id="_archive_filter_exts" value="<?php echo $package_template->archive_filter_exts; ?>" placeholder="ext1;ext2;ext3">
-		<br/>
+		<!-- DB ONLY ENABLED -->
+		<div id="dup-exportdb-items-checked">
+			<?php
+				DUP_PRO_U::_e("<b>Overview:</b><br/> This advanced option excludes all files from the archive.  Only the database and a copy of the installer.php "
+				. "will be included in the archive.zip file. The option can be used for backing up and moving only the database. <i>Please note that this option is currently in *Beta*.</i>");
 
-		<label><?php _e("Files"); ?>:</label>
-		<div class='dup-quick-links'>
-			<a href="javascript:void(0)" onclick="DupPro.Template.AddExcludeFilePath('<?php echo rtrim(DUPLICATOR_PRO_WPROOTPATH, '/'); ?>')">[<?php DUP_PRO_U::_e("file path") ?>]</a>
-			<a href="javascript:void(0)" onclick="jQuery('#_archive_filter_files').val('')"><?php DUP_PRO_U::_e("(clear)") ?></a>
+				echo '<br/><br/>';
+
+				DUP_PRO_U::_e("<b><i class='fa fa-exclamation-circle'></i> Notice:</b><br/>  Installing only the database over an existing site may have unintended consequences.  "
+				 . "Be sure to know the state of your system before installing the database without the associated files. ");
+
+				echo '<br/><br/>';
+
+				DUP_PRO_U::_e("For example, if you have WordPress 4.6 on this site and you copy this sites database to a host that has WordPress 4.8 files then the source code of the files "
+					. " will not be in sync with the database causing possible errors.");
+
+				echo '<br/><br/>';
+
+				DUP_PRO_U::_e("This can also be true of plugins and themes.   When moving only the database be sure to know the database will be compatible with ALL source code files."
+				. "  Please use this advanced feature with caution!");
+			?>
+			<br/><br/>
 		</div>
-		<textarea name="_archive_filter_files" id="_archive_filter_files" placeholder="/full_path/exclude_file_1.ext;/full_path/exclude_file2.ext"><?php echo str_replace(";", ";\n", esc_textarea($package_template->archive_filter_files)) ?></textarea>
-		<br/>
 
 		<!-- =================
 		DATABASE -->
@@ -406,19 +426,7 @@ INSTALLER -->
 		<!--table style="margin-left:10px; width: 100%;">
 			<tr>
 				<td colspan="4"><b class="dpro-hdr"><?php DUP_PRO_U::_e('Advanced Options'); ?></b></td>
-			</tr>				
-			<tr valign="top">
-				<td style="width:130px"><?php DUP_PRO_U::_e("SSL") ?></td>
-				<td style="padding-right: 20px; white-space: nowrap; width:150px">
-					<input type="checkbox" <?php DUP_PRO_UI::echoChecked($package_template->installer_opts_ssl_admin) ?> name="_installer_opts_ssl_admin"  id="_installer_opts_ssl_admin" />
-					<label for="_installer_opts_ssl_admin"><?php _e("Enforce On Admin"); ?></label>
-
-				</td>
-				<td>
-					<input type="checkbox" <?php DUP_PRO_UI::echoChecked($package_template->installer_opts_ssl_login) ?> name="_installer_opts_ssl_login"  id="_installer_opts_ssl_login" />
-					<label for="_installer_opts_ssl_login"><?php _e("Enforce on Logins"); ?></label>
-				</td>
-			</tr>	
+			</tr>					
 			<tr>
 				<td><?php DUP_PRO_U::_e("Cache") ?></td>									
 				<td style="padding-right: 20px; white-space: nowrap">
@@ -431,17 +439,6 @@ INSTALLER -->
 				</td>
 			</tr>						
 		</table-->
-		
-        <input type="hidden"  name="installer_opts_url_new" value="">
-		<!-- ===================
-		STEP2  OPTS 
-		<b class="dpro-hdr"><i class="fa fa-caret-square-o-right"></i> <?php DUP_PRO_U::_e('STEP 2 - INPUTS'); ?></b>
-		<table class="form-table">
-			<tr valign="top">
-				<th scope="row"><label><?php _e("New URL"); ?></label></th>
-				<td><input type="text" placeholder="http://mynewsite.com" name="installer_opts_url_new" value="<?php echo $package_template->installer_opts_url_new; ?>"></td>
-			</tr>
-		</table>-->
 
         <small><?php DUP_PRO_U::_e("All other inputs can be entered at install time.") ?></small>
         <br/><br/>
@@ -467,6 +464,15 @@ jQuery(document).ready(function ($)
 			$cb.closest("label").css('textDecoration', 'none');
 		}
 	}
+
+	DupPro.Template.ExportOnlyDB = function ()
+	{
+		console.log($("#archive_export_onlydb").is(':checked'));
+		$('#dup-exportdb-items-off, #dup-exportdb-items-checked').hide();
+		$("#archive_export_onlydb").is(':checked')
+			? $('#dup-exportdb-items-checked').show()
+			: $('#dup-exportdb-items-off').show();
+	};
 
 	/* METHOD: Formats file directory path name on seperate line of textarea */
 	DupPro.Template.AddExcludePath = function (path) 
@@ -515,6 +521,7 @@ jQuery(document).ready(function ($)
 	DupPro.Template.ToggleInstallerPassword();
 	//Default to cPanel tab if used
 	$('#cpnl-enable').is(":checked") ? $('#dpro-cpnl-tab-lbl').trigger("click") : null;
+	DupPro.Template.ExportOnlyDB();
 
 });
 </script>

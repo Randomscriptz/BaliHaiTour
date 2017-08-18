@@ -15,12 +15,12 @@ abstract class DUP_PRO_Upload_Status
 class DUP_PRO_Package_Upload_Info
 {
     public $storage_id;
-    public $archive_offset   = 0;         // Next byte of archive to copy
+    public $archive_offset   = 0;		// Next byte of archive to copy
     public $copied_installer = false;   // Whether installer has been copied
-    public $copied_archive   = false;     // Whether archive has been copied
-    public $progress         = 0;               // 0-100 where this particular storage is at
-    public $num_failures     = 0;           // How many times operation has failed and
-    public $failed           = false;             // If catastrophic failure has been experienced or num_failures exceeded threshold
+    public $copied_archive   = false;	// Whether archive has been copied
+    public $progress         = 0;		// 0-100 where this particular storage is at
+    public $num_failures     = 0;		// How many times operation has failed and
+    public $failed           = false;   // If catastrophic failure has been experienced or num_failures exceeded threshold
     public $cancelled        = false;
     public $upload_id        = null;
     public $failure_count    = 0;

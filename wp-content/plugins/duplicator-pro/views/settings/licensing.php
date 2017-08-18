@@ -3,6 +3,8 @@ global $wp_version;
 global $wpdb;
 
 $global = DUP_PRO_Global_Entity::get_instance();
+$sglobal = DUP_PRO_Secure_Global_Entity::getInstance();
+
 $force_refresh = true;
 $nonce_action = 'duppro-settings-licensing-edit';
 
@@ -94,8 +96,10 @@ if (isset($_POST['action']))
 				if($password == $password_confirmation)
 				{
 					$global->license_key_visible = false;
-					$global->lkp = $password;
-					$global->save();
+                    $sglobal->lkp = $password;
+					
+                    $global->save();
+                    $sglobal->save();
 
 					$action_response = DUP_PRO_U::__("Key now hidden.");
 				}
@@ -110,12 +114,14 @@ if (isset($_POST['action']))
 			// RSR TODO: Passwords must match. If they do then set the password and set visibility
 			$password = $_REQUEST['_key_password'];
 			
-			if($password == $global->lkp)
+            if($password == $sglobal->lkp)
 			{
 				$global->license_key_visible = true;
-				$global->lkp = '';
-				$global->save();
-				
+				$sglobal->lkp = '';
+
+                $global->save();
+				$sglobal->save();
+                
 				$action_response = DUP_PRO_U::__("Key now visible.");
 			}
 			else
@@ -309,7 +315,7 @@ function DUP_PRO_Type_Viewer($opts)
     </table>   
 </form>
 
-<script type="text/javascript">
+<script>
     jQuery(document).ready(function($) 
 	{
         DupPro.Licensing = new Object();

@@ -6,13 +6,15 @@
 <meta name="resource-type" content="document" />
 <meta name="description" content="Offering boat tours off the Kauai coast" />
 <meta name="rating" content="General" />
-<meta name="author" content="Deana R. Shelby" />
+<meta name="author" content="ZRaven" />
 <meta http-equiv=Content-Type content="text/html; charset=us-ascii">
 
    <title>Bali Hai Tours: Reserve Seats/ Credit Card info</title>
 
 <script language="JavaScript" src="js/routines.js" type="text/javascript"></script>
-<script language="JavaScript" type="text/javascript">
+    <link  rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link type="text/javascript" href="bootstrap.min.js" >
+    <script type="text/javascript" language="JavaScript" >
 <!--
 function CheckForm(form)
 {
@@ -129,13 +131,108 @@ function CheckForm(form)
 }
 //-->
 </script>
+    <style>
+
+        .navbar-light .navbar-brand, .navbar-light .navbar-toggler {
+            olor: #f8dab4 !important;
+        }
+        .navbar-light .navbar-nav .nav-link {
+            color: #f8dab4 !important;
+        }
+        .bg-faded{
+
+            background: #1d6976 !important;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        .footer {
+            background: #1d6976;
+            color: #f8dab4;
+        }
+        .footer .widget__title {
+            font-size: 1.200em;
+            color: #fff;
+            opacity: 0.9;
+        }
+        .footer .widget .textwidget {
+            text-align: left;
+        }
+        .widget-contact-info__item {
+            display: table;
+            width: 100%;
+            margin-bottom: 10px;
+            vertical-align: middle;
+        }
+        .widget-contact-info__item__text {
+            display: table-cell;
+            padding-left: 10px;
+        }
+        .widget-contact-info__item__icon i {
+            width: 1.688em;
+            height: 1.688em;
+            line-height: 1.688em;
+            border-radius: 100%;
+            background: #f8dab4;
+            color: #1d6976;
+            font-size: 1.071em;
+            text-align: center;
+        }
+        .footer .widget a {
+            color: #fff;
+            border-bottom: 1px dashed transparent;
+            opacity: 0.9;
+        }
+        .footer__bottom {
+            padding: 10px 0;
+            position: relative;
+            font-size: 0.867em;
+        }
+        .footer__arrow-top {
+            width: 50px;
+            height: 50px;
+            line-height: 45px;
+            background: #1d6976;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            -moz-transform: translate(-50%,0);
+            -ms-transform: translate(-50%,0);
+            -webkit-transform: translate(-50%,0);
+            -o-transform: translate(-50%,0);
+            transform: translate(-50%,0);
+            text-align: center;
+            border-radius: 100%;
+        }
+    </style>
 </head>
 
 <body bgcolor="#005599" lang=EN-US text="#0011AA" link="#007799" vlink="#00AA00">
-<form name="frmAddBilling" method="post" action="https://balihaitours.com/PrintThisPage.php" onsubmit="return CheckForm(this);" >
-<img src="../Pics/BaliHaiBanner.jpg" width="100%" BORDER="0" ALT="Bali Hai Banner">
 
-<font color=#ffffff>
+<nav class="navbar fixed-top navbar-toggleable-md navbar-light bg-faded">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">
+        <img src="https://balihaitours.com/wp-content/uploads/2017/03/Bali-Hai-Logo-PNG-low-res-1000x.png" width="50" height="50" class="d-inline-block align-top" alt="">
+
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="https://balihaitours.com/">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="https://balihaitours.com/tours/">Tours</a>
+            <a class="nav-item nav-link" href="https://balihaitours.com/about-us/">About Us</a>
+            <a class="nav-item nav-link disabled" href="https://balihaitours.com/faqs/">FAQ</a>
+            <a class="nav-item nav-link" href="https://balihaitours.com/gallery/">Gallery</a>
+            <a class="nav-item nav-link" href="https://balihaitours.com/blog//">Blog</a>
+            <a class="nav-item nav-link " href="https://balihaitours.com/contact-us/">Contact Us</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+<form name="frmAddBilling" method="post" action="https://balihaitours.com/PrintThisPage.php" onsubmit="return CheckForm(this);" >
+
+
 <?php
    include("php/routines.php");
    // PasswordCheck("");
@@ -199,7 +296,7 @@ function CheckForm(form)
 
 ?>
 
-<font color=#000000>
+
 
 <!-- whole site table-->
 
@@ -369,7 +466,7 @@ function CheckForm(form)
    <option value="WY">Wyoming</option>
    <option value="YT">Yukon</option>
     </select>
-    <td  valign="top">Province:<input type="text" name="BINotUSState" id="BINotUSState" size="30"  maxlength="30"    value="" /><br />
+    <td  valign="top">Province:<input type="text" name="BINotUSState" id="BINotUSState" size="30"  maxlength="30"  value=""/><br />
     <td>Country:<input type="text" name="BINotUSCountry" id="BINotUSCountry" size="20" maxlength="20"    value="" /><br />
     </td></tr>
     <tr valign="top"><td align="right" nowrap="nowrap">
@@ -396,117 +493,117 @@ function CheckForm(form)
     <img title="Discover" src="Pics/Discover.gif" alt="Discover" border="0"/>
     <img title="MasterCard" src="Pics/MasterCard.gif" alt="MasterCard" border="0"/>
     <img title="Visa" src="Pics/Visa.gif" alt="Visa" border="0"/>
-<!--
-    <img title="AmericanExpress" src="Pics/AmEx.gif" alt="AmericanExpress" border="0"/>
-    <img title="Discover" src="Pics/Discover.gif" alt="Discover" border="0"/> -->
+        <table border="0" cellpadding="3" cellspacing="0" width="100%">
+            <tr valign="top"><td width="45%">
+                    <table><tr><td align="right" valign="top">
+                                <label for="CCType"><b>
+                                        Payment method:</b></label></td>
+                            <td nowrap="nowrap">
+                                <select name="CCType" id="CCType">
+                                    <option>AmericanExpress</option>
+                                    <option>Discover</option>
+                                    <option>MasterCard</option>
+                                    <option>Visa</option>
+                                    <!--
+                                    <option value="3" >American Express</option>
+                                    <option value="4" >Discover</option> -->
+                                </select>
+                            </td></tr>
+                        <tr><td valign="top" align="right">
+                                <label for="CCNumber">
+             <p>Card number:</p></label>
+         </td>
+         <td><input type="text" name="CCNumber" id="CCNumber" size="20"  maxlength="20" value=""/>
+         </td></tr>
+       <tr><td align="right">
+               <label for="CCCcv"><b>
+                       <p>CCV code:</b></label>
+           </td>
+           <td><input type="text" name="CCCcv" id="CCCcv" size="4"  maxlength="4" value=""/>
+           </td>
+           <td>
+               <img title="CCV" src="Pics/SampleCards.gif" alt="Sample cards with CCV indicated" border="0"/>
+           </td></tr>
+       <tr><td align="right">
+               <label for="CCExpMonth"><b>
+                       <p>Expiration date:</b></label>
+           </td>
+           <td><select name="CCExpMonth" id="CCExpMonth">
+                   <option  value="">Month</option>
+                   <option  value="01">01 (January)</option>
+                   <option  value="02">02 (February)</option>
+                   <option  value="03">03 (March)</option>
+                   <option  value="04">04 (April)</option>
+                   <option  value="05">05 (May)</option>
+                   <option  value="06">06 (June)</option>
+                   <option  value="07">07 (July)</option>
+                   <option  value="08">08 (August)</option>
+                   <option  value="09">09 (September)</option>
+                   <option  value="10">10 (October)</option>
+                   <option  value="11">11 (November)</option>
+                   <option  value="12">12 (December)</option>
+               </select>&nbsp;&nbsp;
+               <select name="CCExpYear" id="CCExpYear">
+                   <option  value="">Year</option>
+                   <option  value="2012">2012</option>
+                   <option  value="2013">2013</option>
+                   <option  value="2014">2014</option>
+                   <option  value="2015">2015</option>
+                   <option  value="2016">2016</option>
+                   <option  value="2017">2017</option>
+                   <option  value="2018">2018</option>
+                   <option  value="2019">2019</option>
+                   <option  value="2020">2020</option>
+                   <option  value="2021">2021</option>
+                   <option  value="2022">2022</option>
+                   <option  value="2023">2023</option>
+                   <option  value="2024">2024</option>
+                   <option  value="2025">2025</option>
+                   <option  value="2026">2026</option>
+                   <option  value="2027">2027</option>
+                   <option  value="2028">2028</option>
+                   <option  value="2029">2029</option>
+               </select>
+
+           </td></tr>
+       <tr><th valign=bottom align="right">Cardholder's name:</th>
+
+           <td valign=bottom align="left"><input type="text" name="CCNameOnCard"   id="CCNameOnCard" size="35" maxlength="40" value="" /><br />
+           </td></tr>
+       <tr><td></td>
+           <td>
+               (as it appears on the card)
+           </td></tr>
+   </table></td>
+
+
+    <!--   <td width="20%" align="right"><center>
+       <a href="http://www.rapidssl.com" target="_blank">
+       <img title="SSL Certificate info" src="Pics/rapidssl_ssl_certificate.gif" alt="SSL Certificate" border="0">    </a><br><font size="2">RapidSSL.com,<br> a subsidiary<br> of GeoTrust,<br>
+       <img title="GeoTrust" src="Pics/equifax.jpg" alt="GeoTrust" border="0"></center>
+   </td></tr></table></td>
+   </tr></table><font size="3">-->
     </td></tr>
   </table>
 
   <img title="" class="spacer" src="Pics/spacer.gif" height="5" width="1" border="0" alt=""/>
 
-  <table border="0" cellpadding="3" cellspacing="0" width="100%">
-    <tr valign="top"><td width="45%">
-    <table><tr><td align="right" valign="top">
-    <label for="CCType"><b>
-    Payment method:</b></label></td>
-    <td nowrap="nowrap">
-    <select name="CCType" id="CCType">
-      <option>AmericanExpress</option>
-      <option>Discover</option>
-      <option>MasterCard</option>
-      <option>Visa</option>
-      <!--
-      <option value="3" >American Express</option>
-      <option value="4" >Discover</option> -->
-    </select>
-    </td></tr>
-    <tr><td valign="top" align="right">
-    <label for="CCNumber"><b>
-    <p>Card number:</b></label>
-    </td>
-    <td><input type="text" name="CCNumber" id="CCNumber" size="20"  maxlength="20" value=""/>
-    </td></tr>
-    <tr><td align="right">
-    <label for="CCCcv"><b>
-    <p>CCV code:</b></label>
-    </td>
-    <td><input type="text" name="CCCcv" id="CCCcv" size="4"  maxlength="4" value=""/>
-    </td>
-    <td>
-    <img title="CCV" src="Pics/SampleCards.gif" alt="Sample cards with CCV indicated" border="0"/>
-    </td></tr>
-    <tr><td align="right">
-    <label for="CCExpMonth"><b>
-    <p>Expiration date:</b></label>
-    </td>
-    <td><select name="CCExpMonth" id="CCExpMonth">
-   <option  value="">Month</option>
-   <option  value="01">01 (January)</option>
-   <option  value="02">02 (February)</option>
-   <option  value="03">03 (March)</option>
-   <option  value="04">04 (April)</option>
-   <option  value="05">05 (May)</option>
-   <option  value="06">06 (June)</option>
-   <option  value="07">07 (July)</option>
-   <option  value="08">08 (August)</option>
-   <option  value="09">09 (September)</option>
-   <option  value="10">10 (October)</option>
-   <option  value="11">11 (November)</option>
-   <option  value="12">12 (December)</option>
-    </select>&nbsp;&nbsp;
-    <select name="CCExpYear" id="CCExpYear">
-   <option  value="">Year</option>
-   <option  value="2012">2012</option>
-   <option  value="2013">2013</option>
-   <option  value="2014">2014</option>
-   <option  value="2015">2015</option>
-   <option  value="2016">2016</option>
-   <option  value="2017">2017</option>
-   <option  value="2018">2018</option>
-   <option  value="2019">2019</option>
-   <option  value="2020">2020</option>
-   <option  value="2021">2021</option>
-   <option  value="2022">2022</option>
-   <option  value="2023">2023</option>
-   <option  value="2024">2024</option>
-   <option  value="2025">2025</option>
-   <option  value="2026">2026</option>
-   <option  value="2027">2027</option>
-   <option  value="2028">2028</option>
-   <option  value="2029">2029</option>
-    </select>
 
-    </td></tr>
-    <tr><th valign=bottom align="right">Cardholder's name:</th>
+</div>
+    <h6>Terms:</h6>
+<p>1) Your card will be charged 30% of the passenger fee (plus tax) to reserve your seat(s) and there will be NO refund if you do not give a 48 hour cancellation notice.</p>
+<p>2) With a full 48 hour cancellation notice, your card will be credited this 30%.</p>
+<p>3) Once your party shows up at the destination location, the total cost will be charged to your card.</p>
+<p>4) All trips are subject to acceptable weather conditions. Tour destinations will be determined based on passenger safety and comfort.</p>
+<p>5) You <b>MUST</b> call Joe @ 808 634-2317 after 7pm the night before your departure date to confirm take off location and favorable weather conditions. Please make a note of this number <u>now</u>.</p>
+Hey...are you ready for some fun...
+<input type="submit" class="btn btn-primary" name="AddCCbutton" id="AddCCbutton" value="Reserve those seat(s)" />
+    </div>
 
-    <td valign=bottom align="left"><input type="text" name="CCNameOnCard"   id="CCNameOnCard" size="35" maxlength="40" value="" /><br />
-    </td></tr>
-    <tr><td></td>
-    <td>
-   <font valign=top size="2">(as it appears on the card)</font>
-    </td></tr>
-    </table></td>
-    <td width="35%"></td>
-
-    <td width="20%" align="right"><center>
-    <a href="http://www.rapidssl.com" target="_blank">
-    <img title="SSL Certificate info" src="Pics/rapidssl_ssl_certificate.gif" alt="SSL Certificate" border="0">    </a><br><font size="2">RapidSSL.com,<br> a subsidiary<br> of GeoTrust,<br>
-    <img title="GeoTrust" src="Pics/equifax.jpg" alt="GeoTrust" border="0"></center>
-</td></tr></table></td>
-</tr></table><font size="3">
-
-<P>  <FONT size="4" face="Times New Roman"><i><b>Terms:
-<P>1) Your card will be charged 30% of the passenger fee (plus tax) to reserve your seat(s) and there will be NO refund if you do not give a 48 hour cancellation notice.
-<p>2) With a full 48 hour cancellation notice, your card will be credited this 30%.
-<p>3) Once your party shows up at the destination location, the total cost will be charged to your card.
-<p>4) All trips are subject to acceptable weather conditions. Tour destinations will be determined based on passenger safety and comfort.
-<p>5) You <b>MUST</b> call Joe @ 808 634-2317 after 7pm the night before your departure date to confirm take off location and favorable weather conditions. Please make a note of this number <u>now</u>.
-<p> <FONT size="5">Hey...are you ready for some fun...
-<input type="submit" name="AddCCbutton" id="AddCCbutton" value="Reserve those seat(s)" />
-</b></i>
-</div></div>
 
 </form>
-</FONT>
-</BODY>
-</HTML>
+
+</body>
+</html>
+
+

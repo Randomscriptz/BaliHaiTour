@@ -11,12 +11,20 @@ class WPSEO_Premium_Prominent_Words_Recalculation implements WPSEO_WordPress_Int
 	const MODAL_DIALOG_HEIGHT_BASE = 282;
 	const PROGRESS_BAR_HEIGHT = 32;
 
+	/** @var WPSEO_Premium_Prominent_Words_Unindexed_Post_Query */
+	protected $post_query;
+
 	/**
 	 * Registers all hooks to WordPress
 	 */
 	public function register_hooks() {
-		add_action( 'wpseo_internal_linking', array( $this, 'add_internal_linking_interface' ) );
+		// When the language isn't supported, stop adding hooks.
+		$language_support = new WPSEO_Premium_Prominent_Words_Language_Support();
+		if ( ! $language_support->is_language_supported( WPSEO_Utils::get_language( get_locale() ) ) ) {
+			return;
+		}
 
+		add_action( 'wpseo_internal_linking', array( $this, 'add_internal_linking_interface' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 
 		if ( filter_input( INPUT_GET, 'page' ) === 'wpseo_dashboard' ) {
@@ -110,7 +118,10 @@ class WPSEO_Premium_Prominent_Words_Recalculation implements WPSEO_WordPress_Int
 	public function enqueue() {
 		$page = filter_input( INPUT_GET, 'page' );
 
-		wp_register_script( WPSEO_Admin_Asset_Manager::PREFIX . 'premium-site-wide-analysis', plugin_dir_url( WPSEO_PREMIUM_FILE ) . '/assets/js/dist/yoast-premium-site-wide-analysis-440' . WPSEO_CSSJS_SUFFIX . '.js', array(), WPSEO_VERSION, true );
+		$asset_manager = new WPSEO_Admin_Asset_Manager();
+		$version = $asset_manager->flatten_version( WPSEO_VERSION );
+
+		wp_register_script( WPSEO_Admin_Asset_Manager::PREFIX . 'premium-site-wide-analysis', plugin_dir_url( WPSEO_PREMIUM_FILE ) . '/assets/js/dist/yoast-premium-site-wide-analysis-' . $version . WPSEO_CSSJS_SUFFIX . '.js', array(), WPSEO_VERSION, true );
 
 		if ( $page === 'wpseo_dashboard' ) {
 			$data = array(
@@ -140,30 +151,18 @@ class WPSEO_Premium_Prominent_Words_Recalculation implements WPSEO_WordPress_Int
 	}
 
 	/**
-	 * Counts posts that have prominent words.
-	 *
-	 * @param string $post_type The post type to count.
-	 * @return int The amount of posts.
-	 */
-	protected function count_all_posts_by_type( $post_type ) {
-		$total_posts = new WP_Query( array(
-			'post_type' => $post_type,
-			'post_status' => array( 'future', 'draft', 'pending', 'private', 'publish' ),
-		) );
-
-		return (int) $total_posts->found_posts;
-	}
-
-	/**
 	 * Counts posts that have no prominent words.
 	 *
 	 * @param string $post_type The post type to count.
+	 *
 	 * @return int The amount of posts.
 	 */
 	protected function count_unindexed_posts_by_type( $post_type ) {
-		$post_query = new WPSEO_Premium_Prominent_Words_Unindexed_Post_Query();
+		if ( ! $this->post_query ) {
+			$this->post_query = new WPSEO_Premium_Prominent_Words_Unindexed_Post_Query();
+		}
 
-		return (int) $post_query->get_query( $post_type )->found_posts;
+		return $this->post_query->get_total( $post_type );
 	}
 
 	/**

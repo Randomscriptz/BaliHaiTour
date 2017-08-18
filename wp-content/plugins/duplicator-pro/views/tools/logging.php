@@ -5,6 +5,7 @@ require_once(DUPLICATOR_PRO_PLUGIN_PATH . '/views/inc.header.php');
 $trace_log_filepath = DUP_PRO_LOG::getTraceFilepath();
 $trace_filename = basename($trace_log_filepath);
 $logs = glob(DUPLICATOR_PRO_SSDIR_PATH . '/*.log');
+$global = DUP_PRO_Global_Entity::get_instance();
 
 if ($logs != false && count($logs))
 {  
@@ -32,7 +33,9 @@ if (!isset($logname) || !$logname)
     $logname = (count($logs) > 0) ? basename($logs[0]) : "";
 }
 
-$logurl = DUPLICATOR_PRO_SSDIR_URL . '/' . $logname;
+$nocache = @date("ymdHis");
+$logurl = DUPLICATOR_PRO_SSDIR_URL . "/{$logname}?{$nocache}";
+$logurl_base = DUPLICATOR_PRO_SSDIR_URL . "/{$logname}";
 $logfound = (strlen($logname) > 0) ? true : false;
 ?>
 
@@ -40,7 +43,7 @@ $logfound = (strlen($logname) > 0) ? true : false;
     span#dup-refresh-count {display:inline;}
     table#dpro-log-pnls {width:100%;}
 
-    td#dpro-log-pnl-left {width:75%; vertical-align: top}
+    td#dpro-log-pnl-left {width:80%; vertical-align: top}
     td#dpro-log-pnl-left div.name {float:left; margin: 0px 0px 5px 5px; font-weight: bold}
     td#dpro-log-pnl-left div.opts {float:right;}
     td#dpro-log-pnl-right {vertical-align: top; padding:5px 0 0 15px; max-width: 375px;}
@@ -55,9 +58,10 @@ $logfound = (strlen($logname) > 0) ? true : false;
     div.dpro-log-file-list span {color:green}
     div.dup-opts-items {border:1px solid silver; background: #efefef; padding: 5px; border-radius: 4px; margin:2px 0px 10px -2px;}
     label#dup-auto-refresh-lbl {display: inline-block;}
+	div#dpro-monitor-trace-area {bottom:70px}
 </style>
 
-<script type="text/javascript">
+<script>
 jQuery(document).ready(function ($) 
 {
 
@@ -178,21 +182,45 @@ jQuery(document).ready(function ($)
 					</div>
 				</div>
 
-				<div class="dpro-log-hdr"><?php DUP_PRO_U::_e('Trace Log') ?> </div>
+				<div class="dpro-log-hdr">
+					<?php DUP_PRO_U::_e('Trace Log:') ?> &nbsp;
+					<span style="font-size:11px; font-weight: normal">
+						<?php
+							$trace_on      = get_option('duplicator_pro_trace_log_enabled', false);
+							$profiling_on  = $global->trace_profiler_on;
+							$txt_clear_trace = DUP_PRO_U::__('Clear');
+							$txt_profile     = '';
+							if($profiling_on) {
+								$txt_profile = ' ' . DUP_PRO_U::__(' (P)');
+							}
+							
+							$html    = "";
+							if (!$trace_on) {
+								$url	= wp_nonce_url('admin.php?page=duplicator-pro-settings&_logging_mode=on&action=trace', 'duppro-settings-general-edit', '_wpnonce');
+								$html	= "<a href='{$url}' target='_blank'>" . DUP_PRO_U::__("Turn On") . $txt_profile . "</a>";
+							} else {
+								$url	= wp_nonce_url('admin.php?page=duplicator-pro-settings&_logging_mode=off&action=trace', 'duppro-settings-general-edit', '_wpnonce');
+								$html	= "<a href='{$url}' target='_blank'>" . DUP_PRO_U::__("Turn Off") . $txt_profile . "</a>";
+							}
+							$html   .= " | <a href='javascript:void(0)' onclick='DupPro.UI.ClearTraceLog();window.location.reload();'>{$txt_clear_trace}</a>";
+							echo $html;
+						?>
+					</span>
+				</div>
 				<div class="dpro-log-file-list">
 					<?php
 					$trace_log_filepath = DUP_PRO_LOG::getTraceFilepath();
                     if (file_exists($trace_log_filepath)) {
-                        $time	= date('m/d/y h:i:s', filemtime($trace_log_filepath));
+                        $time	= date('m/d/y h:i:s', @filemtime($trace_log_filepath));
                     } else {
                         $time = DUP_PRO_U::__('No trace log found');
                     }
-					$active_filename	= basename($logurl);                        
+					$active_filename	= basename($logurl_base);
 					$trace_log_url		= '?page=duplicator-pro-tools&logname=' . $trace_filename;
 					$is_trace_active	= ($active_filename == $trace_filename);
 
 					echo ($is_trace_active) 
-						? "<div style='color:green'>{$time}</div>"
+						? "<div style='color:green'><i class='fa fa-caret-right'></i> {$time}</div>"
 						: "<a href='javascript:void(0)' onclick='DupPro.Tools.GetLog(\"{$trace_log_url}\")'>{$time}</a>";
 					?>     
 				</div>
@@ -206,7 +234,7 @@ jQuery(document).ready(function ($)
 				<div class="dpro-log-file-list" style="white-space: nowrap">
 					<?php
 					$count = 0;
-					$active = basename($logurl);
+					$active = basename($logurl_base);
 					foreach ($logs as $log)
 					{
 						$time = date('m/d/y h:i:s', filemtime($log));
@@ -214,9 +242,9 @@ jQuery(document).ready(function ($)
 						$url  = '?page=duplicator-pro-tools&logname=' . $name;
 						if($name !== $trace_filename)
 						{
-							$shortname = substr($name, 0, 25) . '***.log';
-							echo ($active == $name) 
-								? "<span title='{$name}'>{$time}-{$shortname}</span><br/>" 
+							$shortname = substr($name, 0, 15) . '***.log';
+							echo ($active == $name)
+								? "<span title='{$name}'><i class='fa fa-caret-right'></i> {$time}-{$shortname}</span><br/>"
 								: "<a href='javascript:void(0)'  title='{$name}' onclick='DupPro.Tools.GetLog(\"{$url}\")'>{$time}-{$shortname}</a><br/>";                            
 							if ($count > 20)
 							break;

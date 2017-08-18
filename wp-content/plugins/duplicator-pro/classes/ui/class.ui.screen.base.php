@@ -33,8 +33,8 @@ class DUP_PRO_UI_Screen
     /**
      * Get the help support tab view content shown in the help system
      *
-     * @param string $guide		The target url to navigate to on the online user guide
-     * @param string $faq		The target url to navigate to on the online user tech faq
+     * @param string $guide		The target URL to navigate to on the online user guide
+     * @param string $faq		The target URL to navigate to on the online user tech FAQ
      *
      * @return null
      */
@@ -51,7 +51,7 @@ class DUP_PRO_UI_Screen
                 ."<li>Perform the action you had problems with such as 'Creating a Package'</li>"
                 ."<li>Download the Trace Log in the lower right corner of this screen and attach it to your support ticket.</li></ul>"
                 ."<a href='https://snapcreek.com/ticket/ticket.php' target='_sc-faq'>Existing Ticket</a> | "
-                ."<a href='https://snapcreek.com/ticket/index.php?a=add' target='_sc-faq'>New Ticket</a>");
+                ."<a href='https://snapcreek.com/ticket/' target='_sc-faq'>New Ticket</a>");
 
         $this->screen->add_help_tab(array(
             'id' => 'dpro_help_tab_callback',

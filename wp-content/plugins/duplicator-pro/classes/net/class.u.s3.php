@@ -199,7 +199,9 @@ if (DUP_PRO_U::PHP53()) {
                     $time_passed = 0;
 
                     while (!$s3_client_uploadinfo->is_complete && !feof($handle) && ($time_passed < $max_upload_time_in_sec)) {
-                        usleep($server_load_delay);
+                        if($server_load_delay !== 0) {
+                            usleep($server_load_delay);
+                        }
 
                         $amount_left = $filesize - $s3_client_uploadinfo->next_offset;
 
@@ -322,8 +324,9 @@ if (DUP_PRO_U::PHP53()) {
         public static function get_s3_client($region, $access_key, $secret_key)
         {
             $client = Aws\S3\S3Client::factory(array(
-                    'version' => 'latest',
+                    'version' => '2006-03-01',
                     'region' => $region,
+                    'signature' => 'v4',
                     'credentials' => array('key' => $access_key, 'secret' => $secret_key),
             ));
 

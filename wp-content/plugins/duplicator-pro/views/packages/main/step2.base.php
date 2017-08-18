@@ -157,9 +157,11 @@ TOOL-BAR -->
 <div id="dup-progress-area">
 	<!--  PROGRESS BAR -->
 	<div id="dup-progress-bar-area">
-		<div style="font-size:1.7em; margin-bottom:20px"><i class="fa fa-spinner fa-spin"></i> <?php DUP_PRO_U::_e('Scanning Site'); ?></div>
+		<div style="font-size:1.7em; margin-bottom:20px"><i class="fa fa-circle-o-notch fa-spin"></i> <?php DUP_PRO_U::_e('Scanning Site'); ?></div>
 		<div id="dup-progress-bar"></div>
-		<b><?php DUP_PRO_U::_e('Please Wait...'); ?></b>
+		<b><?php DUP_PRO_U::_e('Please Wait...'); ?></b><br/><br/>
+		<i><?php DUP_PRO_U::_e('Keep this window open during the scan process.'); ?></i><br/>
+		<i><?php DUP_PRO_U::_e('This can take several minutes.'); ?></i><br/>
 	</div>
 
 	<!--  SUCCESS MESSAGE -->

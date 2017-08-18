@@ -21,8 +21,11 @@ class DUP_PRO_Crypt_Blowfish
 
         $crypt = new pcrypt(MODE_ECB, "BLOWFISH", $key);
 
+        DUP_PRO_LOG::trace("!!!!!!!!!!!encrypt");
+        DUP_PRO_LOG::profile('blowfish encrypt', true);
         // to encrypt
         $encrypted_value = $crypt->encrypt($string);
+        DUP_PRO_LOG::profile('blowfish encrypt', false);
 
         $encrypted_value = base64_encode($encrypted_value);
 

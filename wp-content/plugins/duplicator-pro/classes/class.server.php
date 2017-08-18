@@ -7,7 +7,7 @@ require_once (DUPLICATOR_PRO_PLUGIN_PATH . 'classes/entities/class.storage.entit
 
 /**
  * Class used to get server statis
- * @package Dupicator\classes
+ * @package Duplicator\classes
  */
 class DUP_PRO_Server 
 {
@@ -81,35 +81,30 @@ class DUP_PRO_Server
     {
         $global = DUP_PRO_Global_Entity::get_instance();
 		$checks = array();
-		
+		   
 		//-----------------------------
-		//WEB SERVER 
-		$web_test1 = false;
+		//PHP SETTINGS
+		$php_test0 = false;
 		foreach ($GLOBALS['DUPLICATOR_PRO_SERVER_LIST'] as $value) {
 			if (stristr($_SERVER['SERVER_SOFTWARE'], $value)) {
-				$web_test1 = true;
+				$php_test0 = true;
 				break;
 			}
 		}
-		$checks['SRV']['WEB']['model'] = $web_test1;
-		$checks['SRV']['WEB']['ALL']   = ($web_test1) ? 'Good' : 'Warn';
-        
-		//-----------------------------
-		//PHP SETTINGS
 		$php_test1 = ini_get("open_basedir");
 		$php_test1 = empty($php_test1) ? true : false;
 		$php_test2 = ini_get("max_execution_time");
 		$php_test2 = ($php_test2 > DUPLICATOR_PRO_SCAN_TIMEOUT)  || (strcmp($php_test2 , 'Off') == 0 || $php_test2  == 0) ? true : false;                
 		$php_test3 = true;
-		if($package->contains_storage_type(DUP_PRO_Storage_Types::Dropbox))
-		{
-			$php_test3 = function_exists('openssl_csr_new');                          
+		if ($package->contains_storage_type(DUP_PRO_Storage_Types::Dropbox)) {
+			$php_test3 = function_exists('openssl_csr_new');
 		}
 		$php_test4	= function_exists('mysqli_connect');        
         $php_test5 = self::isURLFopenEnabled();
         $php_test6 = self::isCurlEnabled();
 		$php_test7 = DUP_PRO_U::PHP53() ? true : false;
-        
+
+		$checks['SRV']['PHP']['websrv']		    = $php_test0;
 		$checks['SRV']['PHP']['openbase']		= $php_test1;
 		$checks['SRV']['PHP']['maxtime']		= $php_test2;
 		$checks['SRV']['PHP']['openssl']		= $php_test3;
@@ -118,24 +113,18 @@ class DUP_PRO_Server
         $checks['SRV']['PHP']['curlavailable']	= $php_test6;
 		$checks['SRV']['PHP']['version']		= $php_test7;
         
-        if($package->contains_storage_type(DUP_PRO_Storage_Types::Dropbox))
-        {
-            $dropbox_transfer_test = true;
-            if($global->dropbox_transfer_mode == DUP_PRO_Dropbox_Transfer_Mode::cURL)
-            {
-                $dropbox_transfer_test = $php_test6;
-            }
-            else if($global->dropbox_transfer_mode == DUP_PRO_Dropbox_Transfer_Mode::FOpen_URL)
-            {
-                $dropbox_transfer_test = $php_test5;
-            }
-            $checks['SRV']['PHP']['ALL'] = ($php_test1 && $php_test2 && $php_test3 && $php_test4 && $php_test7 && $dropbox_transfer_test) ? 'Good' : 'Warn';    
-        }   
-        else
-        {
-            $checks['SRV']['PHP']['ALL'] = ($php_test1 && $php_test2 && $php_test4 && $php_test7) ? 'Good' : 'Warn';    
-        }
-        
+        if ($package->contains_storage_type(DUP_PRO_Storage_Types::Dropbox)) {
+			$dropbox_transfer_test = true;
+			if ($global->dropbox_transfer_mode == DUP_PRO_Dropbox_Transfer_Mode::cURL) {
+				$dropbox_transfer_test = $php_test6;
+			} else if ($global->dropbox_transfer_mode == DUP_PRO_Dropbox_Transfer_Mode::FOpen_URL) {
+				$dropbox_transfer_test = $php_test5;
+			}
+			$checks['SRV']['PHP']['ALL'] = ($php_test0 && $php_test1 && $php_test2 && $php_test3 && $php_test4 && $php_test7 && $dropbox_transfer_test) ? 'Good' : 'Warn';
+		} else {
+			$checks['SRV']['PHP']['ALL'] = ($php_test0 && $php_test1 && $php_test2 && $php_test4 && $php_test7) ? 'Good' : 'Warn';
+		}
+
 		//-----------------------------
 		//WORDPRESS SETTINGS
 		global $wp_version;
@@ -147,7 +136,8 @@ class DUP_PRO_Server
 		$wp_test2 = $files['wp-config.php'];
 		
 		$license		= DUP_PRO_License_U::getLicenseType();
-		$Package		= ($package == null) ? DUP_PRO_Package::get_temporary_package() : $package;
+		//$Package		= ($package == null) ? DUP_PRO_Package::get_temporary_package() : $package;
+        $Package = $package;    // $package can not be null!
 		$cache_path		= DUP_PRO_U::safePath(WP_CONTENT_DIR) .  '/cache';
 		$dirEmpty		= DUP_PRO_IO::isDirEmpty($cache_path);
 		$dirSize		= DUP_PRO_IO::getDirSize($cache_path); 
@@ -184,9 +174,10 @@ class DUP_PRO_Server
 		{
 			DUP_PRO_IO::deleteFile(DUPLICATOR_PRO_WPROOTPATH . $global->get_installer_backup_filename());	
 		}
-		
-		DUP_PRO_IO::deleteFile(DUPLICATOR_PRO_WPROOTPATH .  'database.sql');
-		DUP_PRO_IO::deleteFile(DUPLICATOR_PRO_WPROOTPATH .  DUPLICATOR_PRO_EMBEDDED_SCAN_FILENAME);
+
+        // No sense auto-deleting these
+	//	DUP_PRO_IO::deleteFile(DUPLICATOR_PRO_WPROOTPATH .  'database.sql');
+	//	DUP_PRO_IO::deleteFile(DUPLICATOR_PRO_WPROOTPATH .  DUPLICATOR_PRO_EMBEDDED_SCAN_FILENAME);
 		
 		$files = self::getInstallerFiles();
 
@@ -351,8 +342,8 @@ class DUP_PRO_Server
 	}
 	
 	/** 
-	* Get PHP memory useage 
-	* @return string   Returns human readable memory useage.
+	* Get PHP memory usage
+	* @return string   Returns human readable memory usage.
 	*/
 	public static function getPHPMemory($peak = false) 
 	{

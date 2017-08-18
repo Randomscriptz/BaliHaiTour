@@ -1,7 +1,7 @@
 <?php
-require_once(dirname(__FILE__) . '/../classes/util/class.u.php');
+require_once($GLOBALS['DUPX_INIT'] . '/classes/utilities/class.u.php');
 
-if(DUPX_U::try_CDN("ajax.googleapis.com", 443) ): ?>
+if(DUPX_U::tryCDN("ajax.googleapis.com", 443) ): ?>
 	<link rel='stylesheet' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css' type='text/css' media='all' />
 <?php else: ?>
 	<style type="text/css">

@@ -117,7 +117,7 @@ TOOL-BAR -->
             <?php endif; ?>
         </td>
         <td>
-            <a href="<?php echo $schedules_tab_url; ?>" class="add-new-h2"> <i class="fa fa-clock-o"></i> <?php DUP_PRO_U::_e('All Schedules'); ?></a>
+            <a href="<?php echo $schedules_tab_url; ?>" class="add-new-h2"> <i class="fa fa-clock-o"></i> <?php DUP_PRO_U::_e('Schedules'); ?></a>
             <span><?php echo $edit_create_text; ?></span>
         </td>
     </tr>
@@ -157,7 +157,7 @@ TOOL-BAR -->
             }
             ?>
             </select>
-            <i class="dpro-edit-info"><a href="admin.php?page=<?php echo DUP_PRO_Constants::$TEMPLATES_SUBMENU_SLUG ?>" target="_blank"><?php DUP_PRO_U::_e("Show All Templates"); ?></a></i>
+            <i class="dpro-edit-info"><a href="admin.php?page=<?php echo DUP_PRO_Constants::$TEMPLATES_SUBMENU_SLUG ?>" target="_blank"><?php DUP_PRO_U::_e("Show Templates"); ?></a></i>
         </td>
     </tr>	
 

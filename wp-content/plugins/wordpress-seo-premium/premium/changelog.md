@@ -1,3 +1,50 @@
+### 5.2.0: August 8th, 2017
+* Adds a watcher for private posts to be redirected correctly after trashing them.
+* Adds collecting technical environment data to send to Yoast.
+* Includes every change in Yoast SEO core 5.2.0, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
+### 5.1.0: July 25th, 2017
+* Adds Italian Insights and Linking Suggestions, props Abramo Tesoro.
+* Fixes a bug where multiple redirect notices pop up when having WooCommerce Tab Manager installed.
+* Includes every change in Yoast SEO core 5.1.0, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
+### 5.0.2: July 13th, 2017
+* Includes every change in Yoast SEO core 5.0.2, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/#developers).
+
+### 5.0.1: July 6th, 2017
+* Includes every change in Yoast SEO core 5.0.1, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/#developers).
+
+### 5.0.0: July 6th, 2017
+* Fixes a bug where the redirect notice popped up unnecessarily.
+* Introduces insights and linking suggestions for French, props Sylvain Perret and [Evoque](https://github.com/evoqueio).
+* Includes every change in Yoast SEO core 5.0.0, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
+### 4.9.0: June 7th, 2017
+* Includes every change in Yoast SEO core 4.9.0, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
+### 4.8.0: May 23rd, 2017
+* Fixes a bug where there is a double trailing slash in the javascript for the social previews that was causing errors.
+* Fixes a bug on the Redirects page where spaces were stripped when using the search field.
+* Removes the prominent words version for non-supported languages.
+* Changes the string 'current url' to 'old url' in the Search Console Redirect to match the language in the Redirect Manager. 
+* Includes every change in Yoast SEO core 4.8.0, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
+### 4.7.1: May 9th, 2017
+* Includes every change in Yoast SEO core 4.7.1, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
+### 4.7.0: May 2nd, 2017
+* Fixes a bug where 410 redirects could not be imported from `.htaccess`.
+* Fixes a bug where the 'email support tab' did not work on the edit post page.
+* Adds the slug of a deleted post to the redirect notification.
+* Includes every change in Yoast SEO core 4.7.0, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
+### 4.6.0: April 11th, 2017
+* Adds the ability to mark a post as cornerstone content and display this in the link suggestions box.
+* Fixes a bug where the post_modified was updated whenever the prominent words were calculated.
+* Fixes a bug where a JavaScript error was thrown when creating a new taxonomy with a custom field plugin active.
+* Fixes a bug where websites ran into timeouts due to a big query when calculating the prominent words.
+* Includes every change in Yoast SEO core 4.6.0, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).
+
 ### 4.5.0: March 21st, 2017
 * Fixes a bug where the SEO score wouldn’t be saved correctly, resulting in gray bullets on the post overview screen.
 * Includes every change in Yoast SEO core 4.5.0, see the [core changelog](https://wordpress.org/plugins/wordpress-seo/changelog/).

@@ -97,6 +97,8 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
     public $s3_storage_class             = 'STANDARD';
     public $s3_storage_folder            = '';
 
+    private static $sort_error = false;
+
     function __construct()
     {
         parent::__construct();
@@ -290,7 +292,7 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
         // Note it's possible dropbox is in disabled mode but we are still constructing it.  Should have better error handling
         $use_curl     = ($global->dropbox_transfer_mode == DUP_PRO_Dropbox_Transfer_Mode::cURL);
         $dropbox      = new DUP_PRO_DropboxV2Client($configuration, 'en', $use_curl);
-        $access_token = $this->get_dropbox_combined_access_token();
+        $access_token = $this->get_dropbox_combined_access_token($global->dropbox_transfer_mode === DUP_PRO_Dropbox_Transfer_Mode::cURL);
         $dropbox->SetAccessToken($access_token);
         return $dropbox;
     }
@@ -431,7 +433,7 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
         return $storage;
     }
 
-    public function get_dropbox_combined_access_token()
+    public function get_dropbox_combined_access_token($use_curl = true)
     {
         $access_token = array();
 
@@ -769,9 +771,9 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
             $upload_info->copied_installer = true;
         } else {
             $package->active_storage_id = $this->id;
-            $source_archive_filepath    = $package->Archive->get_safe_filepath();
+            $source_archive_filepath    = $package->Archive->getSafeFilePath();
             $source_installer_filepath  = $package->Installer->get_safe_filepath();
-            $source_database_filepath   = $package->Database->get_safe_filepath();
+            $source_database_filepath   = $package->Database->getSafeFilePath();
             $source_log_filepath        = $package->get_safe_log_filepath();
             $source_scan_filepath       = $package->get_safe_scan_filepath();
 
@@ -839,7 +841,7 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
         /* @var $package DUP_PRO_Package */
         DUP_PRO_LOG::trace("copying to drop box");
 
-        $source_archive_filepath = $package->Archive->get_safe_filepath();
+        $source_archive_filepath = $package->Archive->getSafeFilePath();
 
         $source_installer_filepath = $package->Installer->get_safe_filepath();
 
@@ -957,7 +959,7 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
         /* @var $package DUP_PRO_Package */
         DUP_PRO_LOG::trace("Copying to Google Drive");
 
-        $source_archive_filepath   = $package->Archive->get_safe_filepath();
+        $source_archive_filepath   = $package->Archive->getSafeFilePath();
         $source_installer_filepath = $package->Installer->get_safe_filepath();
 
         if (file_exists($source_archive_filepath)) {
@@ -1111,7 +1113,7 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
         /* @var $package DUP_PRO_Package */
         DUP_PRO_LOG::trace("Copying to S3");
 
-        $source_archive_filepath   = $package->Archive->get_safe_filepath();
+        $source_archive_filepath   = $package->Archive->getSafeFilePath();
         $source_installer_filepath = $package->Installer->get_safe_filepath();
 
         if (file_exists($source_archive_filepath)) {
@@ -1274,7 +1276,7 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
         /* @var $package DUP_PRO_Package */
         DUP_PRO_LOG::trace("copying to ftp");
 
-        $source_archive_filepath = $package->Archive->get_safe_filepath();
+        $source_archive_filepath = $package->Archive->getSafeFilePath();
         // $source_archive_filepath = DUP_PRO_U::$PLUGIN_DIRECTORY . '/lib/DropPHP/Poedit-1.6.4.2601-setup.bin';
 
         $source_installer_filepath = $package->Installer->get_safe_filepath();
@@ -1464,7 +1466,7 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
 
                     DUP_PRO_LOG::trace("$installer_filepath in array so deleting installer and archive");
 
-                    $sql_filepath  = str_replace('_archive.zip', 'database.sql', $archive_filepath);
+                    $sql_filepath  = str_replace('_archive.zip', '_database.sql', $archive_filepath);
                     $json_filepath = str_replace('_archive.zip', '_scan.json', $archive_filepath);
                     $log_filepath  = str_replace('_archive.zip', '.log', $archive_filepath);
 
@@ -1693,7 +1695,7 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
             if ($piece_count >= 4) {
                 $numeric_index = count($pieces) - 2; // Right before the _installer or _archive
                 if (is_numeric($pieces[$numeric_index])) {
-                    $retval = strtotime($pieces[$numeric_index]);
+                    $retval = (float)$pieces[$numeric_index];
                 } else {
                     DUP_PRO_LOG::trace("Problem parsing file $filename when doing a comparison for ftp purge. Non-numeric timestamp");
                     $retval = false;
@@ -1720,6 +1722,8 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
         DUP_PRO_LOG::trace("comparing a:$a_timestamp to b:$b_timestamp");
         if ($a_timestamp !== false) {
             if ($b_timestamp === false) {
+                self::$sort_error = true;
+
                 // b isn't valid timestamp wile a is valid so make b larger
                 $ret_val = -1;
             } else {
@@ -1732,6 +1736,8 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
                 }
             }
         } else {
+            self::$sort_error = true;
+
             if ($b_timestamp === false) {
                 // Both invalid so say equal
                 $ret_val = 0;
@@ -1752,13 +1758,30 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
         if ($file_list == false) {
             DUP_PRO_LOG::traceError("Error retrieving file list for ".$ftp_client->get_info());
         } else {
+            self::$sort_error = false;
+
+            $valid_file_list = array();
+
+            foreach ($file_list as $file_name)
+            {
+                DUP_PRO_LOG::trace("considering filename {$file_name}");
+                if(self::get_timestamp_from_filename($file_name) !== false)
+                {                    
+                    $valid_file_list[] = $file_name;
+                }
+            }
+
+            DUP_PRO_LOG::traceObject('valid file list', $valid_file_list);
+            
             // Sort list by the timestamp associated with it
-            usort($file_list, array('DUP_PRO_Storage_Entity', 'compare_package_filenames_by_date'));
+            usort($valid_file_list, array('DUP_PRO_Storage_Entity', 'compare_package_filenames_by_date'));
+
+            if(self::$sort_error === false)
             {
                 $php_files = array();
                 $zip_files = array();
 
-                foreach ($file_list as $file_name) {
+                foreach ($valid_file_list as $file_name) {
                     $parts     = pathinfo($file_name);
                     $extension = $parts['extension'];
                     $file_path = "$this->ftp_storage_folder/$file_name";
@@ -1797,6 +1820,9 @@ class DUP_PRO_Storage_Entity extends DUP_PRO_JSON_Entity_Base
                         $index++;
                     }
                 }
+            }
+            else {
+                DUP_PRO_LOG::trace("Sort error when attempting to purge old FTP files");
             }
         }
     }

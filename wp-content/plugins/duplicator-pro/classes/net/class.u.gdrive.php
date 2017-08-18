@@ -314,7 +314,9 @@ if (DUP_PRO_U::PHP53())
 
                     while (!$upload_info->is_complete && !feof($handle) && ($time_passed < $max_upload_time_in_sec))
                     {
-                        usleep($server_load_delay);
+                        if($server_load_delay !== 0) {
+                            usleep($server_load_delay);
+                        }
 
                         $chunk = self::read_file_chunk($handle, $upload_chunk_size);
 

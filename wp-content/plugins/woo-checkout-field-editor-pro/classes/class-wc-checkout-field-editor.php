@@ -503,7 +503,7 @@ class WC_Checkout_Field_Editor {
 							$options['validate'] = '';
 						}
 												
-						if ( !isset( $options['required'] ) || $options['required'] == 1 ) {
+						if ( isset( $options['required'] ) && $options['required'] == 1 ) {
 							$options['required'] = '1';
 						} else {
 							$options['required'] = '0';
